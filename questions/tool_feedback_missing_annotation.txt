@@ -1,0 +1,12 @@
+Feedback images WITHOUT necessary annotation (cannot highlight Related tools/targets)
+
+1. No annotation (lap_others or no image path):
+
+2. Missing label (.json not found for lap frame):
+
+3. Labels not in scene (some related tools/targets not annotated in this frame):
+
+--- Summary ---
+  No annotation: 0
+  Missing label: 0
+  Labels not in scene (partial): 0

@@ -1,0 +1,44 @@
+{
+  "question_type": "MCQ",
+  "option_number": 3,
+  "stem": {
+    "text": "What is the primary function of the grasper in laparoscopic cholecystectomy?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "To apply clips to the cystic duct",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": null,
+        "image": "007321_highlighted.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": "To provide traction and retract the gallbladder to expose the dissection plane",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": null,
+        "image": "002658_highlighted.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": "To dissect connective tissue using electrocautery",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": null,
+        "image": "002063_highlighted.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

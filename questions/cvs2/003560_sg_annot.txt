@@ -1,0 +1,3 @@
+relevant scene graph:
+- (cysticduct, separate, cysticartery, low)
+source: lap1

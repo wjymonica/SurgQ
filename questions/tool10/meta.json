@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "During isolation of the cystic artery, minor bleeding occurs. Which instrument should be used first to secure hemostasis?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Grasper",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "The grasper may temporarily compress but does not definitively secure the vessel.",
+        "image": null
+      }
+    },
+    {
+      "id": 1,
+      "text": "Hook",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "It achieves hemostasis by delivering thermal energy (coagulation mode) to coagulate small vessels. It is effective for, but not limited to, the liver bed.",
+        "image": "frame_01-40-55_0006_highlighted.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": "Clip applier",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The clip applier provides definitive hemostasis.",
+        "image": "frame_01-02-59_0001_highlighted.jpg"
+      }
+    },
+    {
+      "id": 3,
+      "text": "Scissors",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Scissors divide tissue but cannot secure bleeding vessels.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

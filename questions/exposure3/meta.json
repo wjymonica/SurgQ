@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "000034.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the gallbladder is present, the exposure for dissection is inadequate due to the missing neck and the lack of a grasper to retract the gallbladder properly. Additionally, the attachment of fat is positioned too high, which further compromises the exposure needed for dissection.",
+        "image": "000034_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "000795.jpg",
+      "answer": "Y",
+      "feedback": {
+        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are present, the scene does not provide sufficient exposure for dissection, which is essential for a successful laparoscopic cholecystectomy.",
+        "image": "000795_feedback.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": null,
+      "image": "000986.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the required objects (gall and neck) are present, the exposure for dissection is inadequate due to the high attachment of the neck to fat and the absence of a grasper to properly retract the gallbladder.",
+        "image": "000986_feedback.jpg"
+      }
+    },
+    {
+      "id": 3,
+      "text": null,
+      "image": "001376.jpg",
+      "answer": "Y",
+      "feedback": {
+        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are present, the scene does not indicate sufficient exposure for dissection, as there is no mention of proper visualization or clearance around the structures.",
+        "image": "001376_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

@@ -1,0 +1,3 @@
+relevant scene graph:
+- (grasper1, retract, gall, true)
+source: lap4

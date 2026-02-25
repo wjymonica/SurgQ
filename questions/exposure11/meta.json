@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "001300.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the gallbladder is visible and attached to fat and the intestine, it lacks sufficient exposure for dissection due to the absence of the neck and the required grasper for retraction. Additionally, the connection to the surrounding tissue is not adequately shown.",
+        "image": "001300_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "002658.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the required objects (gall and neck) are present and some attachments are fulfilled, the neck is incorrectly shown as attaching to the intestine at a medium level, which does not provide adequate exposure for dissection.",
+        "image": "002658_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

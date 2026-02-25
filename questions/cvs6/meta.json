@@ -1,0 +1,20 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Does the following image show CVS? Explain your answer.",
+    "image": "059241.jpg"
+  },
+  "rubric": [
+    "yes",
+    "(gall, , dissected, )",
+    "(cysticduct, separate, cysticartery, high)",
+    "required objects shown:",
+    "(\"cysticartery\")",
+    "(\"cysticduct\")",
+    "(\"dissected\")"
+  ],
+  "feedback": {
+    "text": "The answer is incorrect because while the image shows the required objects (cystic artery, cystic duct, and dissected gallbladder), it does not provide sufficient context to confirm that it depicts CVS (Cholecystectomy View). The specific anatomical relationships and positioning necessary to identify CVS are unfulfilled.",
+    "image": "059241_feedback.jpg"
+  }
+}

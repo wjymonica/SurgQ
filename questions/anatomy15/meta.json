@@ -1,0 +1,44 @@
+{
+  "question_type": "MCQ",
+  "option_number": 3,
+  "stem": {
+    "text": "Which structure is gall in the following image?",
+    "image": "006628_question.jpg"
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "A",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": null,
+        "image": null
+      }
+    },
+    {
+      "id": 1,
+      "text": "B",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": null,
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "C",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": null,
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": "006628_feedback.jpg"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "002503.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the required objects \"gall\" and \"neck\" are present, the exposure for dissection is inadequate due to the missing grasper needed to retract the gallbladder. Additionally, the connections to the surrounding tissues are not optimal, as indicated by the unfulfilled criteria regarding the attachment of connective tissue.",
+        "image": "002503_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "002658.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the gallbladder and neck are present and properly positioned, the neck is incorrectly attached to the intestine at a medium level, which does not provide adequate exposure for dissection.",
+        "image": "002658_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

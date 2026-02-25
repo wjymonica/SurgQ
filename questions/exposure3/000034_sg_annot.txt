@@ -1,0 +1,3 @@
+relevant scene graph:
+- (gall, attach, fat, high)
+source: lap2

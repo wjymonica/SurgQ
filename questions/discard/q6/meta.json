@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "which of following image shows critical view of safety",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "019945.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "TThe cystic artery is not clearly identified, and residual fat remains attached to the gallbladder and cystic duct, preventing clear isolation of the two structures required for CVS.",
+        "image": "019945_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "034546.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "This image does not yet show the Critical View of Safety. Although the hook is actively isolating the cystic artery, the cystic duct and cystic artery are not fully separated and individually skeletonized, so the requirement of clear, independent identification of both structures is not yet met.",
+        "image": "034546_feedback.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": null,
+      "image": "035945.jpg",
+      "answer": "Y",
+      "feedback": {
+        "text": "This image does show the Critical View of Safety. The cystic duct and cystic artery are clearly separated, the cystic duct has already been clipped, and the lower third of the gallbladder is dissected free from the liver bed, satisfying all CVS criteria.",
+        "image": "035945_feedback.jpg"
+      }
+    },
+    {
+      "id": 3,
+      "text": null,
+      "image": "025606.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "This image does not show the Critical View of Safety. The cystic duct and cystic artery are not clearly and independently skeletonized, and residual fat obscure their full course, so the requirement of unequivocally identifying only two structures entering the gallbladder is not met.",
+        "image": "025606_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "Critical View of Safety (CVS) requires all three: 1. the hepatocystic triangle is completely cleared of fat and fibrous tissue, 2. the lower third of the gallbladder is dissected off the liver bed, and 3. only two structures—the cystic duct and cystic artery—are clearly separated and seen entering the gallbladder., 3. only two structures—the cystic duct and cystic artery—are clearly separated and seen entering the gallbladder.",
+    "image": null
+  }
+}

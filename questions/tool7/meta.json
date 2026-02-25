@@ -1,0 +1,16 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Why is traction from the grasper critical before using the hook for dissection?",
+    "image": null
+  },
+  "rubric": [
+    "creates tension planes",
+    "improves visualization/exposure",
+    "reduces the risk of injuring adjacent structures during energy dissection."
+  ],
+  "feedback": {
+    "text": "Traction creates tension planes, improves visualization, and reduces the risk of injuring adjacent structures during energy dissection.",
+    "image": "000082_highlighted.jpg"
+  }
+}

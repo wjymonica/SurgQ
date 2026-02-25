@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "002595.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the required objects \"gall\" and \"neck\" are present, the scene graph indicates that the neck is improperly attached to the intestine at a high position, which does not provide adequate exposure for dissection.",
+        "image": "002595_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "014248.jpg",
+      "answer": "Y",
+      "feedback": {
+        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are shown, the scene does not indicate that there is sufficient exposure for dissection. Without clear visibility and access to the surgical area, the exposure cannot be deemed adequate.",
+        "image": "014248_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

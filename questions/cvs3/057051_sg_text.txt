@@ -1,0 +1,9 @@
+fulfilled:
+- (gall, , dissected, )
+- required objects shown:
+- ("cysticartery")
+- ("cysticduct")
+- ("dissected")
+
+unfulfilled:
+- wrong:(cysticduct, separate, cysticartery, low)

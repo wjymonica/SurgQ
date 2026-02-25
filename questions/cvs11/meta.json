@@ -1,0 +1,16 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Does the following image show CVS? Explain your answer.",
+    "image": "007124.jpg"
+  },
+  "rubric": [
+    "no",
+    "required objects missing:",
+    "(\"dissected\")"
+  ],
+  "feedback": {
+    "text": "The answer is incorrect because, while the image shows the cystic artery and cystic duct as required, it is missing the necessary depiction of a dissected area, which is crucial for confirming CVS.",
+    "image": "007124_feedback.jpg"
+  }
+}

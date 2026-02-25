@@ -1,0 +1,6 @@
+fulfilled:
+- required objects shown:
+- ("gall")
+- ("neck")
+
+unfulfilled:

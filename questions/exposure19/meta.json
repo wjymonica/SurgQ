@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "000423.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the required objects \"gall\" and \"neck\" are present, the exposure for dissection is inadequate due to the high attachment of the gallbladder to fat and the absence of a grasper to properly retract the gallbladder.",
+        "image": "000423_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "001326.jpg",
+      "answer": "Y",
+      "feedback": {
+        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are present, the scene graph does not indicate sufficient exposure for dissection, as there are no mentions of adequate retraction or visibility of critical structures.",
+        "image": "001326_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

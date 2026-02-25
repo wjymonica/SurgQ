@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "Which instrument should be used to secure the cystic duct before division?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Hook",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "The hook is used for cautery dissection, not clip placement.",
+        "image": null
+      }
+    },
+    {
+      "id": 1,
+      "text": "Dissector",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "The dissector helps isolate structures but does not apply clips.",
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "Clip applier",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The clip applier is specifically designed to ligate the duct or artery.",
+        "image": "063134_highlighted.jpg"
+      }
+    },
+    {
+      "id": 3,
+      "text": "Grasper",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "The grasper provides traction but cannot secure vessels or ducts.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

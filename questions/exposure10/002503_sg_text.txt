@@ -1,0 +1,13 @@
+fulfilled:
+- (gall, attach, intestine, low)
+- (gall, attach, fat, low)
+- (neck, attach, intestine, low)
+- (neck, attach, fat, low)
+- required objects shown:
+- ("gall")
+- ("neck")
+
+unfulfilled:
+- wrong:(gall, attach, connected tissue, high)
+- wrong:(connected tissue, attach, neck, medium)
+- missing:(grasper1, retract, gall, true)

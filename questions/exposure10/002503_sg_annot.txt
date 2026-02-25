@@ -1,0 +1,4 @@
+relevant scene graph:
+- (gall, attach, connected tissue, high)
+- (connected tissue, attach, neck, medium)
+source: lap1

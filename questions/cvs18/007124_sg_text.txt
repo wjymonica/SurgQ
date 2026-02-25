@@ -1,0 +1,9 @@
+fulfilled:
+- (cysticartery, separate, cysticduct, high)
+- required objects shown:
+- ("cysticartery")
+- ("cysticduct")
+
+unfulfilled:
+- required objects missing:
+- ("dissected")

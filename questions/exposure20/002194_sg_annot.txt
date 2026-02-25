@@ -1,0 +1,4 @@
+relevant scene graph:
+- (fat, attach, gall, high)
+- (connected tissue, attach, gall, high)
+source: lap4

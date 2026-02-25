@@ -1,0 +1,4 @@
+relevant scene graph:
+- (grasper1, retract, gall, true)
+- (gall, attach, intestine, high)
+source: lap1

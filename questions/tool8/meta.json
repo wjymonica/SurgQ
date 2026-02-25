@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "Which instrument is most appropriate for controlled electrocautery dissection along the gallbladder neck?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Hook",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The hook allows precise cautery dissection.",
+        "image": "005594_highlighted.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": "Clip applier",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "The clip applier is for ligation, not dissection.",
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "Grasper",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "The grasper provides traction only.",
+        "image": null
+      }
+    },
+    {
+      "id": 3,
+      "text": "Scissors (without energy)",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Scissors without energy lack cautery capability.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

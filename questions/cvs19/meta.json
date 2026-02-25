@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows critical view of safety?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "007242.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because the image does not show the required objects for the critical view of safety, specifically the cystic artery and cystic duct, which are missing. Additionally, the image lacks evidence of proper dissection, making it unfulfilled for this question.",
+        "image": "007242_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "016814.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because the image does not show the required objects for the critical view of safety, specifically the cystic artery and cystic duct, which are missing. Additionally, the image lacks evidence of dissection, which is essential for this view.",
+        "image": "016814_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

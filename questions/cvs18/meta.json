@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows critical view of safety?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "007124.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the cystic artery and cystic duct are shown separately and positioned high, the required object of a dissected area is missing from the image. This absence means the critical view of safety is not fully demonstrated.",
+        "image": "007124_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "057051.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the gallbladder is dissected and the required objects are present, the cystic duct and cystic artery are not shown as separate and clearly defined, which is essential for demonstrating the critical view of safety.",
+        "image": "057051_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

@@ -1,0 +1,4 @@
+relevant scene graph:
+- (gall, attach, fat, high)
+- (gall, attach, intestine, medium)
+source: lap1

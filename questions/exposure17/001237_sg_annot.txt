@@ -1,0 +1,5 @@
+relevant scene graph:
+- (grasper1, retract, gall, true)
+- (intestine, attach, neck, medium)
+- (connected tissue, attach, neck, medium)
+source: lap3

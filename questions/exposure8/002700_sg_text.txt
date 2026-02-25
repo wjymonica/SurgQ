@@ -1,0 +1,9 @@
+fulfilled:
+- (grasper1, retract, gall, true)
+- required objects shown:
+- ("gall")
+
+unfulfilled:
+- wrong:(gall, attach, intestine, high)
+- required objects missing:
+- ("neck")

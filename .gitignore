@@ -1,0 +1,20 @@
+# Large image / video data (lap datasets)
+lap1/
+lap2/
+lap3/
+lap4/
+lap_others/
+
+# OS and editor
+.DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# Node (if used later)
+node_modules/
+
+# Env and secrets (if added)
+.env
+.env.local
+*.pem

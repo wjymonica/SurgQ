@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "000942.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the gallbladder is present, the image does not show adequate exposure for dissection due to the missing neck and the incorrect attachment of the gallbladder to the fat. Additionally, a grasper for retraction is also absent, which is essential for proper dissection.",
+        "image": "000942_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "001261.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the gallbladder is being retracted properly and the neck is positioned low, the scene graph indicates that the gallbladder is incorrectly attached to the intestine at a high position, which does not provide adequate exposure for dissection.",
+        "image": "001261_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "Which instruments are appropriate for tissue dissection in the hepatocystic triangle? (Select all that apply.)",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Hook",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The hook is commonly used for sharp/electrocautery dissection.",
+        "image": "034546_highlighted.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": "Dissector",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The dissector is used for blunt and fine tissue separation.",
+        "image": "041322_highlighted.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": "Suction Irrigation",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. Suction may be used for take away of tissue.",
+        "image": "frame_0010_highlighted.jpg"
+      }
+    },
+    {
+      "id": 3,
+      "text": "Clip applier",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. The clip applier is used for vessel or duct ligation, not dissection.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

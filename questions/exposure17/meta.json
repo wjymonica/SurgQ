@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "001237.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the gallbladder is properly retracted and the required objects are present, the exposure is insufficient as the intestine and connected tissue are still attached to the neck at a medium level, which does not allow for adequate dissection.",
+        "image": "001237_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "001283.jpg",
+      "answer": "Y",
+      "feedback": {
+        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are present, the scene graph does not indicate adequate exposure for dissection, as there is no mention of sufficient retraction or visibility of critical structures.",
+        "image": "001283_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "After clips are applied, which instruments can be used to divide the cystic duct or artery? (Select all that apply.)",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Scissors",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. Scissors are commonly used for controlled division.",
+        "image": "frame_010643_0001_highlighted.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": "Hook",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. Using hook cautery is unsafe because the thermal energy can either conduct through metal clips to cause severe injury to the common bile duct or melt polymer clips, destroying the seal and causing catastrophic bleeding or bile leaks.",
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "Grasper",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "The grasper holds tissue but is not designed for cutting.",
+        "image": null
+      }
+    },
+    {
+      "id": 3,
+      "text": "Dissector",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "The dissector separates tissue but is not primarily a cutting tool.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

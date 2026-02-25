@@ -1,0 +1,16 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Does the following image show enough exposure for dissection? Explain your answer.",
+    "image": "001049.jpg"
+  },
+  "rubric": [
+    "no",
+    "wrong:(neck, attach, fat, high)",
+    "missing:(grasper2, retract, gall, true)"
+  ],
+  "feedback": {
+    "text": "The answer is incorrect because, while the image shows the gallbladder and neck adequately attached to the intestine and fat, it lacks sufficient exposure for dissection due to the high attachment of the neck to fat and the absence of a second grasper to properly retract the gallbladder.",
+    "image": "001049_feedback.jpg"
+  }
+}

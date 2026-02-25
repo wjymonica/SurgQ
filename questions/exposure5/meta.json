@@ -1,0 +1,18 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Does the following image show enough exposure for dissection? Explain your answer.",
+    "image": "001388.jpg"
+  },
+  "rubric": [
+    "yes",
+    "(grasper2, retract, gall, true)",
+    "required objects shown:",
+    "(\"gall\")",
+    "(\"neck\")"
+  ],
+  "feedback": {
+    "text": "The answer is incorrect because, while the gallbladder and its neck are present and being retracted by the grasper, there is insufficient exposure for dissection as the scene does not indicate adequate visualization of surrounding structures.",
+    "image": "001388_feedback.jpg"
+  }
+}

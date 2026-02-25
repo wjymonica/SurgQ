@@ -1,0 +1,17 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Does the following image show enough exposure for dissection? Explain your answer.",
+    "image": "000125.jpg"
+  },
+  "rubric": [
+    "no",
+    "wrong:(fat, attach, gall, medium)",
+    "required objects missing:",
+    "(\"neck\")"
+  ],
+  "feedback": {
+    "text": "The answer is incorrect because, although the gallbladder is present, the neck of the gallbladder is missing, which is essential for adequate exposure for dissection. Additionally, the presence of fat and attachments further complicates the dissection, indicating insufficient exposure.",
+    "image": "000125_feedback.jpg"
+  }
+}

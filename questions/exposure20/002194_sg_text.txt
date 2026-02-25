@@ -1,0 +1,10 @@
+fulfilled:
+- required objects shown:
+- ("gall")
+
+unfulfilled:
+- wrong:(fat, attach, gall, high)
+- wrong:(connected tissue, attach, gall, high)
+- missing:(grasper1, retract, gall, true)
+- required objects missing:
+- ("neck")

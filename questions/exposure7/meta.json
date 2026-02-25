@@ -1,0 +1,15 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Does the following image show enough exposure for dissection? Explain your answer.",
+    "image": "001125.jpg"
+  },
+  "rubric": [
+    "no",
+    "wrong:(neck, attach, fat, high)"
+  ],
+  "feedback": {
+    "text": "The answer is incorrect because, although the required objects (gall and neck) are present and attached to the intestine and fat, the neck is incorrectly shown as attaching to fat at a high position, which does not provide adequate exposure for dissection.",
+    "image": "001125_feedback.jpg"
+  }
+}

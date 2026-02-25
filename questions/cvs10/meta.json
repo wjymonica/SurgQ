@@ -1,0 +1,17 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Does the following image show CVS? Explain your answer.",
+    "image": "019034.jpg"
+  },
+  "rubric": [
+    "no",
+    "wrong:(cysticduct, separate, cysticartery, low)",
+    "required objects missing:",
+    "(\"dissected\")"
+  ],
+  "feedback": {
+    "text": "The answer is incorrect because, although the cystic artery and cystic duct are present, the scene is missing the required object of a dissected area, which is essential for confirming CVS. Additionally, the positioning of the cystic duct and artery is not appropriate for the context.",
+    "image": "019034_feedback.jpg"
+  }
+}

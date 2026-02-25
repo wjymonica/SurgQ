@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "Which structure is cystic artery in the following image?",
+    "image": "007321_question.jpg"
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "A",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": null,
+        "image": null
+      }
+    },
+    {
+      "id": 1,
+      "text": "B",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": null,
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "C",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": null,
+        "image": null
+      }
+    },
+    { 
+      "id": 3,
+      "text": "D",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": null,
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+      "image": "007321_feedback.jpg"
+  }
+}

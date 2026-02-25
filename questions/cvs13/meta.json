@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows critical view of safety?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "036745.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the cystic duct and cystic artery are shown as separate and high, the image is missing the required depiction of the dissected area, which is essential for demonstrating the critical view of safety.",
+        "image": "036745_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "041322.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the cystic duct is present, the critical view of safety is not achieved as the cystic artery and the dissected area are missing from the image. Both of these elements are essential for confirming the critical view of safety in a laparoscopic cholecystectomy.",
+        "image": "041322_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

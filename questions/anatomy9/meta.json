@@ -1,0 +1,14 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Identify the anatomical structure indicated in the image.",
+    "image": "006836_oe_question.jpg"
+  },
+  "rubric": [
+    "neck"
+  ],
+  "feedback": {
+    "text": "The structure is neck.",
+    "image": "006836_oe_feedback.jpg"
+  }
+}

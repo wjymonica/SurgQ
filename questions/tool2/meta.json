@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "Which instrument action is most appropriate to improve exposure of the gallbladder neck during dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Grasping the gallbladder fundus and pulling it inferiorly",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "This describes retracting the fundus (upper part), not the neck; neck retraction is needed to expose Calot's triangle.",
+        "image": "000082_highlighted.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": "Grasping the gallbladder neck and retracting it laterally and inferiorly",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Proper neck retraction opens Calot's triangle and exposes the dissection plane.",
+        "image": "001376_highlighted.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": "Using a hook to push the gallbladder toward the liver",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "The hook is typically used for dissection, not for pushing the gallbladder.",
+        "image": null
+      }
+    },
+    {
+      "id": 3,
+      "text": "Applying clips to the cystic duct to stabilize the field",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Clips are used to ligate the duct or artery, not to stabilize or improve exposure of the field.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": "Proper neck retraction opens Calot’s triangle and exposes the dissection plane.",
+    "image": "001283_feedback.jpg"
+  }
+}

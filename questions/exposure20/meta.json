@@ -1,0 +1,34 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "002194.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because the image does not show sufficient exposure for dissection; it is missing the necessary neck of the gallbladder and lacks a grasper for proper retraction. Additionally, the presence of excessive fat and connected tissue further obstructs the view, making dissection difficult.",
+        "image": "002194_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "013107.jpg",
+      "answer": "Y",
+      "feedback": {
+        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are shown, the scene does not indicate that there is sufficient exposure for dissection. More context or visual clarity regarding the exposure is needed to confirm adequacy.",
+        "image": "013107_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "question_type": "MCQ",
+  "option_number": 3,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "002168.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the required objects \"gall\" and \"neck\" are present, the exposure is inadequate as the gallbladder is incorrectly attached to the intestine at a high position, which does not provide sufficient access for dissection.",
+        "image": "002168_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "002420.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the gallbladder and neck are present, the exposure for dissection is inadequate due to the high attachment of the gallbladder to the connective tissue and neck, which is not fulfilled. Proper exposure requires a lower attachment to facilitate dissection.",
+        "image": "002420_feedback.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": null,
+      "image": "002595.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "The answer is incorrect because, although the required objects \"gall\" and \"neck\" are present, the scene graph indicates that the neck is attached to the intestine at a high position, which does not provide adequate exposure for dissection.",
+        "image": "002595_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

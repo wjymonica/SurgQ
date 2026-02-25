@@ -1,0 +1,8 @@
+fulfilled:
+- required objects shown:
+- ("cysticduct")
+
+unfulfilled:
+- required objects missing:
+- ("cysticartery")
+- ("dissected")

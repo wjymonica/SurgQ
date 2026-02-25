@@ -1,0 +1,18 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Does the following image show enough exposure for dissection? Explain your answer.",
+    "image": "001132.jpg"
+  },
+  "rubric": [
+    "no",
+    "wrong:(gall, attach, fat, high)",
+    "missing:(grasper1, retract, gall, true)",
+    "required objects missing:",
+    "(\"neck\")"
+  ],
+  "feedback": {
+    "text": "The answer is incorrect because, although the gallbladder is present, the scene is missing key elements such as the neck of the gallbladder and necessary instruments like the grasper and retractor for adequate exposure. Without these components, proper dissection cannot be achieved.",
+    "image": "001132_feedback.jpg"
+  }
+}

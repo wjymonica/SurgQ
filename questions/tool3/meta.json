@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "What is the primary function of the grasper during dissection of Calot’s triangle?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Apply clips to the cystic duct",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Clip application is performed by the clip applier, not the grasper.",
+        "image": "035945_highlighted.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": "Provide traction and countertraction for exposure",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The grasper provides traction to expose anatomy and create tension for safe dissection.",
+        "image": "001283_highlighted.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": "Divide the cystic duct",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Vessel division is performed after clipping, typically using scissors.",
+        "image": "063672_highlighted.jpg"
+      }
+    },
+    {
+      "id": 3,
+      "text": "Perform electrocautery dissection",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Electrocautery dissection is performed with the hook, not the grasper.",
+        "image": "016814_highlighted.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

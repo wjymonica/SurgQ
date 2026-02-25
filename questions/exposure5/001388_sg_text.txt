@@ -1,0 +1,7 @@
+fulfilled:
+- (grasper2, retract, gall, true)
+- required objects shown:
+- ("gall")
+- ("neck")
+
+unfulfilled:

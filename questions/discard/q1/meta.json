@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "Which of the following images shows sufficient exposure for safe dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "000034.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "This image does not have sufficient exposure, as fatty tissue still significantly occludes the gallbladder, preventing clear visualization of the dissection plane.",
+        "image": "000034_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "001376.jpg",
+      "answer": "Y",
+      "feedback": {
+        "text": "This image has sufficient exposure for dissection, as the gallbladder neck is actively retracted by the grasper and is no longer significantly obscured. The scene shows minimal fat attachment and negligible intestinal occlusion, indicating that the critical area is adequately exposed.",
+        "image": "001376_feedback.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": null,
+      "image": "000795.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "Although the gallbladder is being lifted by the grasper, critical structures around the neck are not visible",
+        "image": "000795_feedback.jpg"
+      }
+    },
+    {
+      "id": 3,
+      "text": null,
+      "image": "000986.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "Despite minimal fat occlusion, the neck remains partially obscured by adjacent intestine",
+        "image": "000986_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "Enough exposure for dissection means the dissection plane is clearly opened, critical structures at the gallbladder neck are fully visible, and there is minimal occlusion from fat or intestine under proper retraction. If anatomy is still obscured or ambiguous, exposure is insufficient.",
+    "image": null
+  }
+}

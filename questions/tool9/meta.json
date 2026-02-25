@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "Which instruments are primarily used for blunt dissection? (Select all that apply.)",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Dissector",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The dissector is designed for blunt tissue separation.",
+        "image": "020435_highlighted.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": "Atraumatic grasper",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. An atraumatic grasper can gently separate tissue planes.",
+        "image": "005275_highlighted.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": "Hook",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Hook electrocautery (or hook diathermy) is not primarily designed for blunt dissection because its working principle is based on active thermal energy (cutting and coagulating), whereas blunt dissection requires an atraumatic, non-energy, or cold approach to separate tissues.",
+        "image": "frame_45-26_0013_highlighted.jpg"
+      }
+    },
+    {
+      "id": 3,
+      "text": "Scissors",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Scissors are commonly used for controlled division.",
+        "image": "001496_highlighted.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

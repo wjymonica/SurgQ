@@ -1,0 +1,276 @@
+=== tool1 ===
+
+Question stem:
+What is the primary function of the grasper in laparoscopic cholecystectomy?
+
+  Option 0 (answer=N): To apply clips to the cystic duct
+    Related tools: clip
+    Related targets: cysticduct
+    Feedback text: (none)
+    Feedback image: lap1/lap1_label/007321.jpg
+
+  Option 1 (answer=Y): To provide traction and retract the gallbladder to expose the dissection plane
+    Related tools: grasper1
+    Related targets: neck
+    Feedback text: (none)
+    Feedback image: lap1/lap1_label/002658.jpg
+
+  Option 2 (answer=N): To dissect connective tissue using electrocautery
+    Related tools: hook
+    Related targets: connective tissue
+    Feedback text: (none)
+    Feedback image: lap1/lap1_label/002063.jpg
+
+
+=== tool10 ===
+
+Question stem:
+During isolation of the cystic artery, minor bleeding occurs. Which instrument should be used first to secure hemostasis?
+
+  Option 0 (answer=N): Grasper
+    Related tools: grasper0
+    Related targets: fat, gall
+    Feedback text: The grasper may temporarily compress but does not definitively secure the vessel.
+    Feedback image: (none)
+
+  Option 1 (answer=Y): Hook
+    Related tools: hook
+    Related targets: bleeding area
+    Feedback text: It achieves hemostasis by delivering thermal energy (coagulation mode) to coagulate small vessels. It is effective for, but not limited to, the liver bed.
+    Feedback image: lap_others/frame_01-40-55_0006.jpg
+
+  Option 2 (answer=Y): Clip applier
+    Related tools: clipapplier
+    Related targets: bleeding area
+    Feedback text: Correct. The clip applier provides definitive hemostasis.
+    Feedback image: lap_others/frame_01-02-59_0001.jpg
+
+  Option 3 (answer=N): Scissors
+    Related tools: scissors
+    Related targets: intestine, connected tissue, gall, fat
+    Feedback text: Scissors divide tissue but cannot secure bleeding vessels.
+    Feedback image: (none)
+
+
+=== tool2 ===
+
+Question stem:
+Which instrument action is most appropriate to improve exposure of the gallbladder neck during dissection?
+
+  Option 0 (answer=N): Grasping the gallbladder fundus and pulling it inferiorly
+    Related tools: grasper
+    Related targets: gallbladder
+    Feedback text: This describes retracting the fundus (upper part), not the neck; neck retraction is needed to expose Calot's triangle.
+    Feedback image: lap1/lap1_label/000082.jpg
+
+  Option 1 (answer=Y): Grasping the gallbladder neck and retracting it laterally and inferiorly
+    Related tools: grasper
+    Related targets: neck
+    Feedback text: Proper neck retraction opens Calot's triangle and exposes the dissection plane.
+    Feedback image: lap2/lap2_label/001376.jpg
+
+  Option 2 (answer=N): Using a hook to push the gallbladder toward the liver
+    Related tools: (none)
+    Related targets: (none)
+    Feedback text: The hook is typically used for dissection, not for pushing the gallbladder.
+    Feedback image: (none)
+
+  Option 3 (answer=N): Applying clips to the cystic duct to stabilize the field
+    Related tools: (none)
+    Related targets: (none)
+    Feedback text: Clips are used to ligate the duct or artery, not to stabilize or improve exposure of the field.
+    Feedback image: (none)
+
+
+
+=== tool3 ===
+
+Question stem:
+What is the primary function of the grasper during dissection of Calot’s triangle?
+
+  Option 0 (answer=N): Apply clips to the cystic duct
+    Related tools: clip applier
+    Related targets: cysticduct
+    Feedback text: Clip application is performed by the clip applier, not the grasper.
+    Feedback image: lap2/lap2_label/035945.jpg
+
+  Option 1 (answer=Y): Provide traction and countertraction for exposure
+    Related tools: grasper1
+    Related targets: gall
+    Feedback text: Correct. The grasper provides traction to expose anatomy and create tension for safe dissection.
+    Feedback image: lap3/lap3_label/001283.jpg
+
+  Option 2 (answer=N): Divide the cystic duct
+    Related tools: scissors
+    Related targets: cysticduct
+    Feedback text: Vessel division is performed after clipping, typically using scissors.
+    Feedback image: lap4/lap4_label/063672.jpg
+
+  Option 3 (answer=N): Perform electrocautery dissection
+    Related tools: hook
+    Related targets: neck
+    Feedback text: Electrocautery dissection is performed with the hook, not the grasper.
+    Feedback image: lap4/lap4_label/016814.jpg
+
+
+=== tool4 ===
+
+Question stem:
+Which instruments are appropriate for tissue dissection in the hepatocystic triangle? (Select all that apply.)
+
+  Option 0 (answer=Y): Hook
+    Related tools: hook
+    Related targets: cysticartery
+    Feedback text: Correct. The hook is commonly used for sharp/electrocautery dissection.
+    Feedback image: lap2/lap2_label/034546.jpg
+
+  Option 1 (answer=Y): Dissector
+    Related tools: dissector
+    Related targets: neck
+    Feedback text: Correct. The dissector is used for blunt and fine tissue separation.
+    Feedback image: lap4/lap4_label/041322.jpg
+
+  Option 2 (answer=Y): Suction Irrigation
+    Related tools: suction
+    Related targets: neck
+    Feedback text: Correct. Suction may be used for take away of tissue.
+    Feedback image: lap_others/frame_0010.jpg
+
+  Option 3 (answer=N): Clip applier
+    Related tools: none
+    Related targets: none
+    Feedback text: Incorrect. The clip applier is used for vessel or duct ligation, not dissection.
+    Feedback image: (none)
+
+
+=== tool5 ===
+
+Question stem:
+Which instrument should be used to secure the cystic duct before division?
+
+  Option 0 (answer=N): Hook
+    Related tools: hook
+    Related targets: gall, fat, intestine
+    Feedback text: The hook is used for cautery dissection, not clip placement.
+    Feedback image: (none)
+
+  Option 1 (answer=N): Dissector
+    Related tools: dissector
+    Related targets: gall, cysticduct, cysticartery, connected tissue, neck
+    Feedback text: The dissector helps isolate structures but does not apply clips.
+    Feedback image: (none)
+
+  Option 2 (answer=Y): Clip applier
+    Related tools: clip
+    Related targets: cysticduct
+    Feedback text: Correct. The clip applier is specifically designed to ligate the duct or artery.
+    Feedback image: lap4/lap4_label/063134.jpg
+
+  Option 3 (answer=N): Grasper
+    Related tools: grasper0
+    Related targets: fat, gall
+    Feedback text: The grasper provides traction but cannot secure vessels or ducts.
+    Feedback image: (none)
+
+
+=== tool6 ===
+
+Question stem:
+After clips are applied, which instruments can be used to divide the cystic duct or artery? (Select all that apply.)
+
+  Option 0 (answer=Y): Scissors
+    Related tools: scissors
+    Related targets: cysticartery
+    Feedback text: Correct. Scissors are commonly used for controlled division.
+    Feedback image: lap_others/frame_010643_0001.jpg
+
+  Option 1 (answer=N): Hook
+    Related tools: hook, grasper1, grasper0
+    Related targets: gall, fat, intestine
+    Feedback text: Incorrect. Using hook cautery is unsafe because the thermal energy can either conduct through metal clips to cause severe injury to the common bile duct or melt polymer clips, destroying the seal and causing catastrophic bleeding or bile leaks.
+    Feedback image: (none)
+
+  Option 2 (answer=N): Grasper
+    Related tools: grasper0
+    Related targets: fat, gall
+    Feedback text: The grasper holds tissue but is not designed for cutting.
+    Feedback image: (none)
+
+  Option 3 (answer=N): Dissector
+    Related tools: dissector
+    Related targets: gall, cysticduct, cysticartery, connected tissue, neck
+    Feedback text: The dissector separates tissue but is not primarily a cutting tool.
+    Feedback image: (none)
+
+
+=== tool7 ===
+
+Question stem:
+Why is traction from the grasper critical before using the hook for dissection?
+
+  (open-ended)
+    Related tools: grasper0
+    Related targets: gall
+    Feedback text: Traction creates tension planes, improves visualization, and reduces the risk of injuring adjacent structures during energy dissection.
+    Feedback image: lap1/lap1_label/000082.jpg
+
+
+=== tool8 ===
+
+Question stem:
+Which instrument is most appropriate for controlled electrocautery dissection along the gallbladder neck?
+
+  Option 0 (answer=Y): Hook
+    Related tools: hook
+    Related targets: connected tissue
+    Feedback text: Correct. The hook allows precise cautery dissection.
+    Feedback image: lap4/lap4_label/005594.jpg
+
+  Option 1 (answer=N): Clip applier
+    Related tools: clip
+    Related targets: cysticartery, neck, cysticduct
+    Feedback text: The clip applier is for ligation, not dissection.
+    Feedback image: (none)
+
+  Option 2 (answer=N): Grasper
+    Related tools: grasper0
+    Related targets: fat, gall
+    Feedback text: The grasper provides traction only.
+    Feedback image: (none)
+
+  Option 3 (answer=N): Scissors (without energy)
+    Related tools: scissors
+    Related targets: intestine, connected tissue, gall, fat
+    Feedback text: Scissors without energy lack cautery capability.
+    Feedback image: (none)
+
+
+=== tool9 ===
+
+Question stem:
+Which instruments are primarily used for blunt dissection? (Select all that apply.)
+
+  Option 0 (answer=Y): Dissector
+    Related tools: dissector
+    Related targets: neck
+    Feedback text: Correct. The dissector is designed for blunt tissue separation.
+    Feedback image: lap2/lap2_label/020435.jpg
+
+  Option 1 (answer=Y): Atraumatic grasper
+    Related tools: grasper0
+    Related targets: connected tissue
+    Feedback text: Correct. An atraumatic grasper can gently separate tissue planes.
+    Feedback image: lap1/lap1_label/005275.jpg
+
+  Option 2 (answer=N): Hook
+    Related tools: hook
+    Related targets: gall
+    Feedback text: Hook electrocautery (or hook diathermy) is not primarily designed for blunt dissection because its working principle is based on active thermal energy (cutting and coagulating), whereas blunt dissection requires an atraumatic, non-energy, or cold approach to separate tissues.
+    Feedback image: lap_others/frame_45-26_0013.jpg
+
+  Option 3 (answer=Y): Scissors
+    Related tools: scissors
+    Related targets: connected tissue
+    Feedback text: Scissors are commonly used for controlled division.
+    Feedback image: lap1/lap1_label/001496.jpg
+

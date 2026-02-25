@@ -1,0 +1,9 @@
+fulfilled:
+- required objects shown:
+- ("gall")
+
+unfulfilled:
+- wrong:(gall, attach, fat, high)
+- wrong:(gall, attach, intestine, medium)
+- required objects missing:
+- ("neck")
