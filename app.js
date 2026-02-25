@@ -9,6 +9,7 @@ const mcqHint = document.getElementById("mcqHint");
 const toggleImagesButton = document.getElementById("toggleImages");
 const submitButton = document.getElementById("submitAnswer");
 const resetButton = document.getElementById("resetAnswer");
+const dontKnowButton = document.getElementById("dontKnowButton");
 const feedbackCard = document.getElementById("feedbackCard");
 const feedbackText = document.getElementById("feedbackText");
 const feedbackImage = document.getElementById("feedbackImage");
@@ -26,9 +27,27 @@ const authLinkFallback = document.getElementById("authLinkFallback");
 const sendLinkBtn = document.getElementById("sendLinkBtn");
 const userEmailEl = document.getElementById("userEmail");
 const signOutButton = document.getElementById("signOut");
+const progressPretestCount = document.getElementById("progressPretestCount");
+const progressPretestFill = document.getElementById("progressPretestFill");
+const progressMainCount = document.getElementById("progressMainCount");
+const progressMainFill = document.getElementById("progressMainFill");
+const progressPosttestCount = document.getElementById("progressPosttestCount");
+const progressPosttestFill = document.getElementById("progressPosttestFill");
+const questionPositionEl = document.getElementById("questionPosition");
+const prevButton = document.getElementById("prevQuestion");
+const nextButton = document.getElementById("nextQuestion");
+const imageLightbox = document.getElementById("imageLightbox");
+const lightboxImage = document.getElementById("lightboxImage");
+const lightboxClose = document.getElementById("lightboxClose");
 
 const EMAIL_LINK_STORAGE_KEY = "surgQ_emailForSignIn";
+const PRETEST_COUNT = 8;
+const POSTTEST_COUNT = 8;
 const PASSWORD_STORAGE_PREFIX = "surgQ_pw_";
+
+function isPretestOrPosttest() {
+  return currentFolder && (currentFolder.startsWith("pretest") || currentFolder.startsWith("posttest"));
+}
 
 function storageKeyForEmail(email) {
   try {
@@ -62,6 +81,8 @@ function randomPassword() {
 
 let currentMeta = null;
 let currentFolder = null;
+let currentQuestionIndex = 0;
+let questionList = []; // order from index.json
 let isSubmitting = false;
 let showingFeedbackImages = false;
 let userProgress = {}; // { questionId: { completed, selectedOptionIds?, openEndedAnswer?, submittedAt? } }
@@ -105,7 +126,7 @@ function showAppForUser(user) {
   appContent.classList.remove("hidden");
   if (userEmailEl) userEmailEl.textContent = user.email || "";
   loadUserProgress(user.uid).then(() => {
-    loadQuestionList().then(loadQuestion);
+    loadQuestionList();
   });
 }
 
@@ -182,6 +203,33 @@ function getCurrentUser() {
   return isFirebaseEnabled() && firebase.auth().currentUser;
 }
 
+function getSessionBoundaries() {
+  const n = questionList.length;
+  const pretestEnd = Math.min(PRETEST_COUNT, n);
+  const mainEnd = Math.max(pretestEnd, n - POSTTEST_COUNT);
+  return { pretestEnd, mainEnd, posttestStart: mainEnd };
+}
+
+function updateProgressBar() {
+  const n = questionList.length;
+  if (n === 0) return;
+  const { pretestEnd, mainEnd, posttestStart } = getSessionBoundaries();
+  const pretestTotal = pretestEnd;
+  const mainTotal = mainEnd - pretestEnd;
+  const posttestTotal = n - posttestStart;
+
+  const completedInPretest = questionList.slice(0, pretestEnd).filter((id) => userProgress[id] && userProgress[id].completed).length;
+  const completedInMain = mainTotal > 0 ? questionList.slice(pretestEnd, mainEnd).filter((id) => userProgress[id] && userProgress[id].completed).length : 0;
+  const completedInPosttest = posttestTotal > 0 ? questionList.slice(posttestStart).filter((id) => userProgress[id] && userProgress[id].completed).length : 0;
+
+  if (progressPretestCount) progressPretestCount.textContent = `${completedInPretest}/${pretestTotal}`;
+  if (progressPretestFill) progressPretestFill.style.width = pretestTotal ? (100 * completedInPretest / pretestTotal) + "%" : "0%";
+  if (progressMainCount) progressMainCount.textContent = `${completedInMain}/${mainTotal}`;
+  if (progressMainFill) progressMainFill.style.width = mainTotal ? (100 * completedInMain / mainTotal) + "%" : "0%";
+  if (progressPosttestCount) progressPosttestCount.textContent = `${completedInPosttest}/${posttestTotal}`;
+  if (progressPosttestFill) progressPosttestFill.style.width = posttestTotal ? (100 * completedInPosttest / posttestTotal) + "%" : "0%";
+}
+
 async function loadQuestionList() {
   try {
     const response = await fetch("./questions/index.json");
@@ -192,14 +240,9 @@ async function loadQuestionList() {
     if (!Array.isArray(list) || list.length === 0) {
       throw new Error("questions/index.json is empty.");
     }
-    questionSelect.innerHTML = "";
-    list.forEach((entry) => {
-      const option = document.createElement("option");
-      option.value = entry;
-      const completed = userProgress[entry] && userProgress[entry].completed;
-      option.textContent = completed ? entry + " ✓" : entry;
-      questionSelect.appendChild(option);
-    });
+    questionList = list;
+    updateProgressBar();
+    loadQuestionAtIndex(0);
   } catch (error) {
     showError(
       `${error.message} Add folder names to questions/index.json.`
@@ -219,6 +262,7 @@ function clearError() {
 
 function resetFeedback() {
   feedbackCard.classList.add("hidden");
+  feedbackCard.classList.remove("no-feedback-content");
   feedbackText.textContent = "";
   correctAnswer.textContent = "";
   feedbackImageWrapper.classList.add("hidden");
@@ -427,62 +471,69 @@ function toggleOptionImages() {
 }
 
 function showFeedback(selectedIds) {
-  const correctOptions = findCorrectOptions(currentMeta);
-  const correctIds = new Set(correctOptions.map((opt) => opt.id));
-  const selectedSet = new Set(selectedIds);
-  const correctIndexes = correctOptions
-    .map((opt) => currentMeta.options.findIndex((item) => item.id === opt.id))
-    .filter((index) => index >= 0);
-  const correctLabel =
-    correctIndexes.length === 0
-      ? "No correct options."
-      : `Correct answer: ${correctIndexes
-          .map((index) => String.fromCharCode(65 + index))
-          .join(", ")}`;
+  if (isPretestOrPosttest()) {
+    feedbackText.textContent = "";
+    correctAnswer.textContent = "";
+    feedbackImageWrapper.classList.add("hidden");
+    feedbackImage.removeAttribute("src");
+    feedbackCard.classList.add("no-feedback-content");
+  } else {
+    feedbackCard.classList.remove("no-feedback-content");
+    const correctOptions = findCorrectOptions(currentMeta);
+    const correctIds = new Set(correctOptions.map((opt) => opt.id));
+    const selectedSet = new Set(selectedIds);
+    const correctIndexes = correctOptions
+      .map((opt) => currentMeta.options.findIndex((item) => item.id === opt.id))
+      .filter((index) => index >= 0);
+    const correctLabel =
+      correctIndexes.length === 0
+        ? "No correct options."
+        : `Correct answer: ${correctIndexes
+            .map((index) => String.fromCharCode(65 + index))
+            .join(", ")}`;
 
-  const isCorrect =
-    correctIds.size === 0
-      ? selectedSet.size === 0
-      : selectedIds.length === correctIds.size &&
-        selectedIds.every((id) => correctIds.has(id));
+    feedbackText.textContent =
+      currentMeta.feedback?.text ?? "General feedback not provided.";
+    correctAnswer.textContent = correctLabel;
 
-  feedbackText.textContent =
-    currentMeta.feedback?.text ?? "General feedback not provided.";
-  correctAnswer.textContent = correctLabel;
-
-  const hasGeneralFeedback =
-    Boolean(currentMeta.feedback?.text) || Boolean(currentMeta.feedback?.image);
-  if (hasGeneralFeedback) {
-    let feedbackImageName = currentMeta.feedback?.image ?? null;
-    if (!feedbackImageName) {
-      const selectedWithImage = currentMeta.options.find(
-        (opt) => selectedSet.has(opt.id) && opt.feedback?.image
-      );
-      feedbackImageName = selectedWithImage?.feedback?.image ?? null;
-    }
-    if (feedbackImageName) {
-      feedbackImage.src = `./questions/${currentFolder}/${feedbackImageName}`;
-      feedbackImageWrapper.classList.remove("hidden");
+    const hasGeneralFeedback =
+      Boolean(currentMeta.feedback?.text) || Boolean(currentMeta.feedback?.image);
+    if (hasGeneralFeedback) {
+      let feedbackImageName = currentMeta.feedback?.image ?? null;
+      if (!feedbackImageName) {
+        const selectedWithImage = currentMeta.options.find(
+          (opt) => selectedSet.has(opt.id) && opt.feedback?.image
+        );
+        feedbackImageName = selectedWithImage?.feedback?.image ?? null;
+      }
+      if (feedbackImageName) {
+        feedbackImage.src = `./questions/${currentFolder}/${feedbackImageName}`;
+        feedbackImageWrapper.classList.remove("hidden");
+      } else {
+        feedbackImageWrapper.classList.add("hidden");
+        feedbackImage.removeAttribute("src");
+      }
     } else {
       feedbackImageWrapper.classList.add("hidden");
       feedbackImage.removeAttribute("src");
     }
-  } else {
-    feedbackImageWrapper.classList.add("hidden");
-    feedbackImage.removeAttribute("src");
   }
 
   feedbackCard.classList.remove("hidden");
+
+  userProgress[currentFolder] = { ...userProgress[currentFolder], completed: true, selectedOptionIds: selectedIds };
+  updateProgressBar();
+  updatePrevNextVisibility();
 
   const user = getCurrentUser();
   if (user && currentFolder) {
     saveProgress(user.uid, currentFolder, {
       completed: true,
       selectedOptionIds: selectedIds,
-    }).then(() => loadQuestionList());
+    });
   }
 
-  if (toggleImagesButton) {
+  if (!isPretestOrPosttest() && toggleImagesButton) {
     const optionCards = optionsGrid.querySelectorAll(".option-card");
     let hasFeedback = false;
     optionCards.forEach((card, index) => {
@@ -508,6 +559,8 @@ function showFeedback(selectedIds) {
     toggleImagesButton.textContent = "Show Original Images";
     toggleImagesButton.classList.toggle("hidden", !hasFeedback);
   }
+  updateProgressBar();
+  updatePrevNextVisibility();
 }
 
 async function gradeOpenEnded(answer) {
@@ -531,35 +584,47 @@ async function gradeOpenEnded(answer) {
       throw new Error("Unable to grade the answer.");
     }
     const result = await response.json();
-    const verdictRaw =
-      typeof result.verdict === "string" ? result.verdict.toLowerCase() : "";
-    const isCorrect = verdictRaw === "pass";
-    correctAnswer.textContent = isCorrect ? "Correct" : "Wrong";
-
-    if (isCorrect) {
-      feedbackText.textContent = result.reason ?? "Graded as correct.";
+    if (isPretestOrPosttest()) {
+      correctAnswer.textContent = "";
+      feedbackText.textContent = "";
       feedbackImageWrapper.classList.add("hidden");
       feedbackImage.removeAttribute("src");
+      feedbackCard.classList.add("no-feedback-content");
     } else {
-      feedbackText.textContent =
-        currentMeta?.feedback?.text ?? "Answer did not meet the rubric.";
-      if (currentMeta?.feedback?.image) {
-        feedbackImage.src = `./questions/${currentFolder}/${currentMeta.feedback.image}`;
-        feedbackImageWrapper.classList.remove("hidden");
-      } else {
+      feedbackCard.classList.remove("no-feedback-content");
+      const verdictRaw =
+        typeof result.verdict === "string" ? result.verdict.toLowerCase() : "";
+      const isCorrect = verdictRaw === "pass";
+      correctAnswer.textContent = isCorrect ? "Correct" : "Wrong";
+      if (isCorrect) {
+        feedbackText.textContent = result.reason ?? "Graded as correct.";
         feedbackImageWrapper.classList.add("hidden");
         feedbackImage.removeAttribute("src");
+      } else {
+        feedbackText.textContent =
+          currentMeta?.feedback?.text ?? "Answer did not meet the rubric.";
+        if (currentMeta?.feedback?.image) {
+          feedbackImage.src = `./questions/${currentFolder}/${currentMeta.feedback.image}`;
+          feedbackImageWrapper.classList.remove("hidden");
+        } else {
+          feedbackImageWrapper.classList.add("hidden");
+          feedbackImage.removeAttribute("src");
+        }
       }
     }
 
     feedbackCard.classList.remove("hidden");
+
+    userProgress[currentFolder] = { ...userProgress[currentFolder], completed: true, openEndedAnswer: answer };
+    updateProgressBar();
+    updatePrevNextVisibility();
 
     const user = getCurrentUser();
     if (user && currentFolder) {
       saveProgress(user.uid, currentFolder, {
         completed: true,
         openEndedAnswer: answer,
-      }).then(() => loadQuestionList());
+      });
     }
   } catch (error) {
     showError(error.message);
@@ -568,11 +633,8 @@ async function gradeOpenEnded(answer) {
   }
 }
 
-async function loadQuestion() {
-  const folder = questionSelect.value;
-  if (!folder) {
-    return;
-  }
+async function loadQuestionByFolder(folder) {
+  if (!folder) return;
   clearError();
   resetFeedback();
   try {
@@ -596,10 +658,104 @@ async function loadQuestion() {
     renderQuestion(meta, folder);
   } catch (error) {
     showError(error.message);
+    throw error;
   }
 }
 
-loadButton.addEventListener("click", loadQuestion);
+function updateQuestionPosition() {
+  if (questionPositionEl && questionList.length > 0) {
+    questionPositionEl.textContent = `Question ${currentQuestionIndex + 1} of ${questionList.length}`;
+  }
+}
+
+function updatePrevNextVisibility() {
+  if (prevButton) prevButton.style.display = currentQuestionIndex > 0 ? "" : "none";
+  if (nextButton) nextButton.style.display = currentQuestionIndex < questionList.length - 1 ? "" : "none";
+}
+
+function updateDontKnowVisibility() {
+  if (dontKnowButton) {
+    if (isPretestOrPosttest()) {
+      dontKnowButton.classList.remove("hidden");
+    } else {
+      dontKnowButton.classList.add("hidden");
+    }
+  }
+}
+
+async function loadQuestionAtIndex(i) {
+  if (i < 0 || i >= questionList.length) return;
+  currentQuestionIndex = i;
+  const folder = questionList[i];
+  await loadQuestionByFolder(folder);
+  updateQuestionPosition();
+  updateProgressBar();
+  updatePrevNextVisibility();
+  updateDontKnowVisibility();
+}
+
+function loadQuestion() {
+  if (questionList.length > 0) {
+    loadQuestionAtIndex(currentQuestionIndex);
+  } else if (questionSelect && questionSelect.value) {
+    loadQuestionByFolder(questionSelect.value);
+  }
+}
+
+if (loadButton) loadButton.addEventListener("click", loadQuestion);
+
+if (prevButton) {
+  prevButton.addEventListener("click", () => {
+    loadQuestionAtIndex(currentQuestionIndex - 1);
+  });
+}
+if (nextButton) {
+  nextButton.addEventListener("click", () => {
+    loadQuestionAtIndex(currentQuestionIndex + 1);
+  });
+}
+
+function openLightbox(imgSrc) {
+  if (!lightboxImage || !imageLightbox) return;
+  lightboxImage.src = imgSrc;
+  imageLightbox.classList.remove("hidden");
+  imageLightbox.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeLightbox() {
+  if (!imageLightbox) return;
+  imageLightbox.classList.add("hidden");
+  imageLightbox.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+document.body.addEventListener("click", (e) => {
+  if (e.target.tagName !== "IMG") return;
+  const img = e.target;
+  if (!img.src) return;
+  if (imageLightbox && imageLightbox.contains(img)) return;
+  if (img.id === "lightboxImage") return;
+  e.preventDefault();
+  openLightbox(img.src);
+});
+
+if (imageLightbox) {
+  imageLightbox.addEventListener("click", (e) => {
+    if (e.target === imageLightbox || e.target === lightboxClose) closeLightbox();
+  });
+}
+if (lightboxImage) {
+  lightboxImage.addEventListener("click", (e) => e.stopPropagation());
+}
+if (lightboxClose) {
+  lightboxClose.addEventListener("click", closeLightbox);
+}
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && imageLightbox && !imageLightbox.classList.contains("hidden")) {
+    closeLightbox();
+  }
+});
 
 submitButton.addEventListener("click", async () => {
   if (isOpenEndedQuestion(currentMeta)) {
@@ -619,7 +775,9 @@ submitButton.addEventListener("click", async () => {
     return;
   }
   clearError();
-  markOptions(selectedIds);
+  if (!isPretestOrPosttest()) {
+    markOptions(selectedIds);
+  }
   showFeedback(selectedIds);
 });
 
@@ -639,6 +797,41 @@ resetButton.addEventListener("click", () => {
   });
   resetFeedback();
 });
+
+if (dontKnowButton) {
+  dontKnowButton.addEventListener("click", async () => {
+    if (!currentFolder || !questionList.length) return;
+    const payload = currentMeta && isOpenEndedQuestion(currentMeta)
+      ? { completed: true, openEndedAnswer: "" }
+      : { completed: true, selectedOptionIds: [] };
+    userProgress[currentFolder] = { ...userProgress[currentFolder], ...payload };
+    updateProgressBar();
+    updatePrevNextVisibility();
+    const user = getCurrentUser();
+    if (user) {
+      saveProgress(user.uid, currentFolder, payload);
+    }
+    const nextIndex = currentQuestionIndex + 1;
+    if (nextIndex < questionList.length) {
+      feedbackCard.classList.add("hidden");
+      questionCard.classList.remove("hidden");
+      try {
+        await loadQuestionAtIndex(nextIndex);
+      } catch (err) {
+        showError(err && err.message ? err.message : "Failed to load next question.");
+      }
+    } else {
+      feedbackText.textContent = "";
+      correctAnswer.textContent = "";
+      feedbackImageWrapper.classList.add("hidden");
+      feedbackImage.removeAttribute("src");
+      feedbackCard.classList.add("no-feedback-content");
+      feedbackCard.classList.remove("hidden");
+      questionCard.classList.add("hidden");
+      updatePrevNextVisibility();
+    }
+  });
+}
 
 if (toggleImagesButton) {
   toggleImagesButton.addEventListener("click", () => {
@@ -752,7 +945,7 @@ function startApp() {
     authCard.classList.add("hidden");
     const headerUser = document.querySelector(".header-user");
     if (headerUser) headerUser.style.display = "none";
-    loadQuestionList().then(loadQuestion);
+    loadQuestionList();
   }
 }
 

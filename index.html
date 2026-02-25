@@ -40,10 +40,25 @@
               <button id="signOut" type="button" class="secondary">Sign out</button>
             </div>
           </div>
-          <div class="picker">
-            <label for="questionSelect">Question</label>
-            <select id="questionSelect"></select>
-            <button id="loadQuestion" type="button">Load</button>
+          <div class="progress-sessions">
+            <div class="progress-segment" id="progressPretest" title="Pretest">
+              <span class="progress-label">Pretest</span>
+              <span class="progress-count" id="progressPretestCount">0/8</span>
+              <div class="progress-bar"><div class="progress-fill" id="progressPretestFill"></div></div>
+            </div>
+            <div class="progress-segment" id="progressMain" title="Main">
+              <span class="progress-label">Main</span>
+              <span class="progress-count" id="progressMainCount">0/0</span>
+              <div class="progress-bar"><div class="progress-fill" id="progressMainFill"></div></div>
+            </div>
+            <div class="progress-segment" id="progressPosttest" title="Posttest">
+              <span class="progress-label">Posttest</span>
+              <span class="progress-count" id="progressPosttestCount">0/8</span>
+              <div class="progress-bar"><div class="progress-fill" id="progressPosttestFill"></div></div>
+            </div>
+          </div>
+          <div class="question-nav-info">
+            <span id="questionPosition">Question 1 of 1</span>
           </div>
         </header>
 
@@ -69,6 +84,7 @@
         <div class="actions">
           <button id="submitAnswer" type="button">Submit Answer</button>
           <button id="resetAnswer" type="button" class="secondary">Reset</button>
+          <button id="dontKnowButton" type="button" class="secondary">I don't know, next question</button>
         </div>
       </section>
 
@@ -79,11 +95,21 @@
           <img id="feedbackImage" alt="Feedback visual" />
         </div>
         <div id="correctAnswer" class="correct-answer"></div>
+        <div class="actions nav-after-feedback">
+          <button type="button" id="prevQuestion" class="secondary">Previous</button>
+          <button type="button" id="nextQuestion">Next question</button>
+        </div>
       </section>
 
       <section id="errorCard" class="card error hidden"></section>
       </div>
     </main>
+
+    <!-- Lightbox: click any image to enlarge -->
+    <div id="imageLightbox" class="lightbox hidden" aria-hidden="true">
+      <button type="button" id="lightboxClose" class="lightbox-close" aria-label="Close">×</button>
+      <img id="lightboxImage" alt="Enlarged view" />
+    </div>
 
     <script src="./firebase-config.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>

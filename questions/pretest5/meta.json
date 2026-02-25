@@ -1,0 +1,9 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "What instrument should be used next, and why?",
+    "image": "009489_cleanup.jpg"
+  },
+  "rubric": ["scissors", "cut the cystic artery or cystic duct"],
+  "feedback": {"text": null, "image": null}
+}

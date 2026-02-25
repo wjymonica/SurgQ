@@ -1,0 +1,15 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "At this point in the procedure, in which direction should the gallbladder neck be retracted with the left-hand instrument?",
+    "image": "002578.jpg"
+  },
+  "options": [
+    {"id": 0, "text": "Laterally and inferiorly", "image": null, "answer": "Y", "feedback": {"text": null, "image": null}},
+    {"id": 1, "text": "Medially and inferiorly", "image": null, "answer": "N", "feedback": {"text": null, "image": null}},
+    {"id": 2, "text": "Medially and superiorly", "image": null, "answer": "N", "feedback": {"text": null, "image": null}},
+    {"id": 3, "text": "Laterally and superiorly", "image": null, "answer": "N", "feedback": {"text": null, "image": null}}
+  ],
+  "feedback": {"text": null, "image": null}
+}

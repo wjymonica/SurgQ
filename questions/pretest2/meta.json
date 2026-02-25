@@ -1,0 +1,13 @@
+{
+  "question_type": "MCQ",
+  "option_number": 2,
+  "stem": {
+    "text": "Which tool is used at the bottom in the procedure?",
+    "image": "000976.jpg"
+  },
+  "options": [
+    {"id": 0, "text": "Atraumatic Grasper", "image": null, "answer": "Y", "feedback": {"text": null, "image": null}},
+    {"id": 1, "text": "Scissors", "image": null, "answer": "N", "feedback": {"text": null, "image": null}}
+  ],
+  "feedback": {"text": null, "image": null}
+}

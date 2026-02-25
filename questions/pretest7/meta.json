@@ -1,0 +1,9 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "Where should the grasper be placed on the gallbladder?",
+    "image": "000003.jpg"
+  },
+  "rubric": ["fundus"],
+  "feedback": {"text": null, "image": null}
+}

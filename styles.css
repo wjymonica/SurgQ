@@ -261,6 +261,13 @@ button.secondary {
   font-weight: 600;
 }
 
+#feedbackCard.no-feedback-content h2,
+#feedbackCard.no-feedback-content .feedback-text,
+#feedbackCard.no-feedback-content .feedback-image,
+#feedbackCard.no-feedback-content .correct-answer {
+  display: none;
+}
+
 .error {
   border-left: 6px solid #e24c4c;
   color: #b61c1c;
@@ -268,4 +275,121 @@ button.secondary {
 
 .hidden {
   display: none;
+}
+
+/* Progress bar: three sessions */
+.progress-sessions {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.progress-segment {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progress-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a4f57;
+}
+
+.progress-count {
+  font-size: 11px;
+  color: #8b909a;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e8eaef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #2f5bea;
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.2s ease;
+}
+
+.progress-segment#progressMain .progress-fill {
+  background: #1d9b5b;
+}
+
+.progress-segment#progressPosttest .progress-fill {
+  background: #7c3aed;
+}
+
+.question-nav-info {
+  font-size: 14px;
+  color: #4a4f57;
+}
+
+.nav-after-feedback {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e8eaef;
+}
+
+/* Lightbox: enlarge image on click */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: pointer;
+}
+
+.lightbox.hidden {
+  display: none;
+}
+
+.lightbox img {
+  max-width: 95vw;
+  max-height: 95vh;
+  object-fit: contain;
+  border-radius: 8px;
+  cursor: default;
+  pointer-events: none;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Clickable images: hint */
+.stem img,
+.options img,
+.feedback-image img,
+.option-card img {
+  cursor: zoom-in;
 }

@@ -1,0 +1,15 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "Based on the image below, where is the cystic artery located?",
+    "image": "002825.jpg"
+  },
+  "options": [
+    {"id": 0, "text": "Superior and medial to the cystic duct", "image": null, "answer": "Y", "feedback": {"text": null, "image": null}},
+    {"id": 1, "text": "Inferior to the cystic duct", "image": null, "answer": "N", "feedback": {"text": null, "image": null}},
+    {"id": 2, "text": "Lateral to the gallbladder body", "image": null, "answer": "N", "feedback": {"text": null, "image": null}},
+    {"id": 3, "text": "Within the liver parenchyma", "image": null, "answer": "N", "feedback": {"text": null, "image": null}}
+  ],
+  "feedback": {"text": null, "image": null}
+}
