@@ -12,7 +12,7 @@
       "image": null,
       "answer": "N",
       "feedback": {
-        "text": null,
+        "text": "connective tissue",
         "image": null
       }
     },
@@ -22,7 +22,7 @@
       "image": null,
       "answer": "N",
       "feedback": {
-        "text": null,
+        "text": "cystic artery",
         "image": null
       }
     },
@@ -32,7 +32,7 @@
       "image": null,
       "answer": "Y",
       "feedback": {
-        "text": null,
+        "text": "cystic duct",
         "image": null
       }
     }

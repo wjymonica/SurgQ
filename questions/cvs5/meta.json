@@ -10,9 +10,9 @@
       "id": 0,
       "text": null,
       "image": "036745.jpg",
-      "answer": "N",
+      "answer": "Y",
       "feedback": {
-        "text": "The answer is incorrect because, although the cystic duct and cystic artery are shown as separate and high, the required object \"dissected\" is missing from the image. This means the critical view of safety is not fully achieved.",
+        "text": "\u2705 \u2022 Hepatocystic triangle completely cleared of fat and fibrous tissue\n\u2705 \u2022 Cystic duct and artery clearly identified and skeletonized\n\u2705 \u2022 Cystic artery is visible\n\u2705 \u2022 Cystic duct is visible\n\u2705 \u2022 Lower third of the gallbladder dissected off the liver bed",
         "image": "036745_feedback.jpg"
       }
     },
@@ -22,7 +22,7 @@
       "image": "057315.jpg",
       "answer": "Y",
       "feedback": {
-        "text": "The answer is correct as the image shows the critical view of safety with the cystic duct and cystic artery clearly separated and the gallbladder dissected, fulfilling all required elements.",
+        "text": "\u2705 \u2022 Hepatocystic triangle completely cleared of fat and fibrous tissue\n\u2705 \u2022 Cystic duct and artery clearly identified and skeletonized\n\u2705 \u2022 Cystic artery is visible\n\u2705 \u2022 Cystic duct is visible\n\u2705 \u2022 Lower third of the gallbladder dissected off the liver bed",
         "image": "057315_feedback.jpg"
       }
     }

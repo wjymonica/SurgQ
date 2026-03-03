@@ -1,3 +1,5 @@
 relevant scene graph:
-- (gall, attach, intestine, high)
+- (gall, attach, intestine, medium)
+- (neck, occlude, intestine, high)
+- (neck, area, neck, small)
 source: lap1

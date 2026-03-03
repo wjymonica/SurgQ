@@ -1,0 +1,44 @@
+{
+  "question_type": "MCQ",
+  "option_number": 3,
+  "stem": {
+    "text": "Which of the following images shows enough exposure for dissection?",
+    "image": null
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": null,
+      "image": "002168.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Neck adequately retracted (lateral and inferior traction)\n\u274c \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
+        "image": "002168_feedback.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": null,
+      "image": "002420.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Neck adequately retracted (lateral and inferior traction)\n\u274c \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
+        "image": "002420_feedback.jpg"
+      }
+    },
+    {
+      "id": 2,
+      "text": null,
+      "image": "002595.jpg",
+      "answer": "N",
+      "feedback": {
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
+        "image": "002595_feedback.jpg"
+      }
+    }
+  ],
+  "feedback": {
+    "text": "",
+    "image": null
+  }
+}

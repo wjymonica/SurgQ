@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "What is the name of the instrument visible on the right side of the image?",
+    "image": "001283.jpg"
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Dissector (Maryland dissector)",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. This is the dissector (Maryland dissector), a blunt-tipped instrument used to gently separate tissue planes without electrical energy.",
+        "image": "001283_highlighted.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": "Hook electrocautery",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. The hook has a distinctive curved metal tip and delivers monopolar electrical energy for cutting and coagulation. The instrument shown has a blunt grasping tip.",
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "Clip applier",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. The clip applier has a bulkier jaw mechanism designed to deploy surgical clips. The instrument shown is a slender blunt dissector.",
+        "image": null
+      }
+    },
+    {
+      "id": 3,
+      "text": "Scissors",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. Scissors have paired cutting blades. The instrument shown has blunt grasping jaws for tissue separation.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

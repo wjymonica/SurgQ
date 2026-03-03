@@ -1,6 +1,7 @@
 fulfilled:
 - required objects shown:
 - ("gall")
-- ("neck")
 
 unfulfilled:
+- required objects missing:
+- ("neck")

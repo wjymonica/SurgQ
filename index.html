@@ -4,14 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Lap2 Q&A</title>
-    <link rel="stylesheet" href="./styles.css?v=3" />
+    <link rel="stylesheet" href="./styles.css?v=5" />
   </head>
   <body>
     <main class="page">
       <!-- Login / Sign up (shown when not logged in) -->
       <section id="authCard" class="card auth-card">
         <h2>Student Login</h2>
-        <p class="auth-hint">Enter your email to continue. First time: you’re in right away. Come back later on this device by entering the same email.</p>
+        <p class="auth-hint">Enter your email to continue. First time: you’re in right away. Returning: just enter the same email from any device.</p>
         <div id="authError" class="auth-error hidden"></div>
         <div id="authSuccess" class="auth-success hidden"></div>
         <form id="authForm" class="auth-form">
@@ -34,9 +34,13 @@
       <div id="appContent" class="hidden">
         <header class="header">
           <div class="header-row">
-            <h1>Lap2 Q&A</h1>
+            <div class="header-title">
+              <h1>Lap2 Q&A</h1>
+              <span id="versionBadge" class="version-badge hidden"></span>
+            </div>
             <div class="header-user">
               <span id="userEmail" class="user-email"></span>
+              <button id="exportFeedbackPdf" type="button" class="secondary">Export feedback (PDF)</button>
               <button id="signOut" type="button" class="secondary">Sign out</button>
             </div>
           </div>
@@ -59,8 +63,19 @@
           </div>
           <div class="question-nav-info">
             <span id="questionPosition">Question 1 of 1</span>
+            <span id="sessionTimer" class="session-timer hidden">Time remaining: <span id="sessionTimerDisplay">--:--</span></span>
           </div>
         </header>
+
+      <!-- Debug jump panel: only visible in debug mode -->
+      <div id="debugPanel" class="debug-panel hidden">
+        <span class="debug-badge">DEBUG MODE</span>
+        <div class="debug-jump">
+          <label for="debugJumpSelect">Jump to:</label>
+          <select id="debugJumpSelect"></select>
+          <button type="button" id="debugJumpGo">Go</button>
+        </div>
+      </div>
 
       <section id="questionCard" class="card hidden">
         <div id="questionStem" class="stem"></div>
@@ -83,7 +98,7 @@
         </div>
         <div class="actions">
           <button id="submitAnswer" type="button">Submit Answer</button>
-          <button id="resetAnswer" type="button" class="secondary">Reset</button>
+          <button id="nextQuestionInCard" type="button" class="hidden">Next question</button>
           <button id="dontKnowButton" type="button" class="secondary">I don't know, next question</button>
         </div>
       </section>
@@ -96,8 +111,15 @@
         </div>
         <div id="correctAnswer" class="correct-answer"></div>
         <div class="actions nav-after-feedback">
-          <button type="button" id="prevQuestion" class="secondary">Previous</button>
           <button type="button" id="nextQuestion">Next question</button>
+        </div>
+      </section>
+
+      <section id="transitionCard" class="card transition-card hidden">
+        <h2 id="transitionTitle">Section complete</h2>
+        <p id="transitionMessage" class="transition-message"></p>
+        <div class="actions">
+          <button type="button" id="transitionContinue">Continue</button>
         </div>
       </section>
 
@@ -115,6 +137,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    <script src="./app.js?v=5"></script>
+    <script src="./app.js?v=8"></script>
   </body>
 </html>

@@ -6,18 +6,9 @@
     "image": null
   },
   "options": [
+
     {
       "id": 0,
-      "text": "To apply clips to the cystic duct",
-      "image": null,
-      "answer": "N",
-      "feedback": {
-        "text": null,
-        "image": "007321_highlighted.jpg"
-      }
-    },
-    {
-      "id": 1,
       "text": "To provide traction and retract the gallbladder to expose the dissection plane",
       "image": null,
       "answer": "Y",
@@ -27,12 +18,12 @@
       }
     },
     {
-      "id": 2,
+      "id": 1,
       "text": "To dissect connective tissue using electrocautery",
       "image": null,
       "answer": "N",
       "feedback": {
-        "text": null,
+        "text": "It is the primary function of hook.",
         "image": "002063_highlighted.jpg"
       }
     }

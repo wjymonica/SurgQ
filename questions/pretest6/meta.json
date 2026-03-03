@@ -1,8 +1,8 @@
 {
   "question_type": "open_ended",
   "stem": {
-    "text": "Identify the structures that enter the gallbladder in the image below.",
-    "image": "009489_cleanup.jpg"
+    "text": "Identify the structures A and B that enter the gallbladder in the image below.",
+    "image": "009489_labeled.jpg"
   },
   "rubric": ["cystic duct", "cystic artery"],
   "feedback": {"text": null, "image": null}

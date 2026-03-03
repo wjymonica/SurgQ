@@ -1,9 +1,13 @@
 fulfilled:
+- (neck, attach, cysticartery, low)
 - required objects shown:
 - ("cysticartery")
 - ("cysticduct")
 
 unfulfilled:
+- wrong:(fat, attach, cysticduct, 179)
+- wrong:(fat, attach, cysticartery, 0)
+- wrong:(cysticduct, attach, neck, high)
 - wrong:(cysticduct, separate, cysticartery, low)
 - required objects missing:
 - ("dissected")

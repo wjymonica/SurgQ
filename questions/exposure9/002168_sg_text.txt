@@ -4,7 +4,10 @@ fulfilled:
 - (neck, attach, fat, low)
 - required objects shown:
 - ("gall")
-- ("neck")
 
 unfulfilled:
-- wrong:(gall, attach, intestine, high)
+- wrong:(gall, attach, intestine, medium)
+- wrong:(neck, occlude, intestine, high)
+- missing:(grasper1, retract, gall, true)
+- required objects missing:
+- ("neck")

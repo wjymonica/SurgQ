@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "What is the purpose of this instrument and on which structure is it being applied?",
+    "image": "063134.jpg"
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Ligate the cystic duct before division",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. This is the clip applier, being applied to the cystic duct to occlude it before division. Clips must be placed on both sides of the planned division point to prevent bile leak.",
+        "image": "063134_highlighted.jpg"
+      }
+    },
+    {
+      "id": 1,
+      "text": "Dissect connective tissue along the gallbladder neck",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. Connective tissue dissection is performed by the hook (electrocautery) or dissector, not the clip applier.",
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "Retract the gallbladder to expose the dissection plane",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. Retraction is the role of the grasper, not the clip applier.",
+        "image": null
+      }
+    },
+    {
+      "id": 3,
+      "text": "Ligate the cystic artery before division",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. Although the clip applier is also used on the cystic artery, in this image it is being applied to the cystic duct.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

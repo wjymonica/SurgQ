@@ -12,7 +12,7 @@
       "image": "001237.jpg",
       "answer": "N",
       "feedback": {
-        "text": "The answer is incorrect because, although the gallbladder is properly retracted and the required objects are present, the exposure is insufficient as the intestine and connected tissue are still attached to the neck at a medium level, which does not allow for adequate dissection.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
         "image": "001237_feedback.jpg"
       }
     },
@@ -22,7 +22,7 @@
       "image": "001283.jpg",
       "answer": "Y",
       "feedback": {
-        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are present, the scene graph does not indicate adequate exposure for dissection, as there is no mention of sufficient retraction or visibility of critical structures.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "001283_feedback.jpg"
       }
     }

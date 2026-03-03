@@ -2,8 +2,10 @@ fulfilled:
 - required objects shown:
 - ("cysticartery")
 - ("cysticduct")
+- (gall, , dissected, )
+- ("dissected")
 
 unfulfilled:
 - wrong:(cysticduct, separate, cysticartery, low)
-- required objects missing:
-- ("dissected")
+- wrong:(cysticduct, attach, neck, high)
+- wrong:(cysticartery, attach, neck, high)

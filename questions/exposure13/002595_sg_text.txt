@@ -2,9 +2,9 @@ fulfilled:
 - (gall, attach, intestine, low)
 - (gall, attach, fat, low)
 - (neck, attach, fat, low)
+- (neck, attach, intestine, low)
 - required objects shown:
 - ("gall")
 - ("neck")
 
 unfulfilled:
-- wrong:(neck, attach, intestine, high)

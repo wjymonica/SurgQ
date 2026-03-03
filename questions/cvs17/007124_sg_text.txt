@@ -1,9 +1,14 @@
 fulfilled:
 - (cysticartery, separate, cysticduct, high)
+- (connected tissue, attach, cysticartery, low)
+- (connected tissue, attach, cysticduct, low)
+- (cysticartery, attach, neck, low)
+- (cysticduct, attach, neck, low)
+- (gall, , dissected, )
+- required objects missing:
 - required objects shown:
 - ("cysticartery")
 - ("cysticduct")
+- ("dissected")
 
 unfulfilled:
-- required objects missing:
-- ("dissected")

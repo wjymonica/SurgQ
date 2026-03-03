@@ -1,4 +1,5 @@
 fulfilled:
+- (neck, attach, fat, low)
 - (neck, attach, intestine, low)
 - (gall, attach, fat, low)
 - (gall, attach, intestine, low)
@@ -7,5 +8,4 @@ fulfilled:
 - ("neck")
 
 unfulfilled:
-- wrong:(neck, attach, fat, high)
 - missing:(grasper2, retract, gall, true)

@@ -12,7 +12,7 @@
       "image": "002503.jpg",
       "answer": "N",
       "feedback": {
-        "text": "The answer is incorrect because, although the required objects \"gall\" and \"neck\" are present, the exposure for dissection is inadequate due to the missing grasper needed to retract the gallbladder. Additionally, the connections to the surrounding tissues are not optimal, as indicated by the unfulfilled criteria regarding the attachment of connective tissue.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u274c \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u274c \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
         "image": "002503_feedback.jpg"
       }
     },
@@ -22,7 +22,7 @@
       "image": "002658.jpg",
       "answer": "N",
       "feedback": {
-        "text": "The answer is incorrect because, although the gallbladder and neck are present and properly positioned, the neck is incorrectly attached to the intestine at a medium level, which does not provide adequate exposure for dissection.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
         "image": "002658_feedback.jpg"
       }
     }

@@ -6,18 +6,9 @@
     "image": null
   },
   "options": [
+
     {
       "id": 0,
-      "text": "Grasping the gallbladder fundus and pulling it inferiorly",
-      "image": null,
-      "answer": "N",
-      "feedback": {
-        "text": "This describes retracting the fundus (upper part), not the neck; neck retraction is needed to expose Calot's triangle.",
-        "image": "000082_highlighted.jpg"
-      }
-    },
-    {
-      "id": 1,
       "text": "Grasping the gallbladder neck and retracting it laterally and inferiorly",
       "image": null,
       "answer": "Y",
@@ -27,7 +18,7 @@
       }
     },
     {
-      "id": 2,
+      "id": 1,
       "text": "Using a hook to push the gallbladder toward the liver",
       "image": null,
       "answer": "N",
@@ -37,7 +28,7 @@
       }
     },
     {
-      "id": 3,
+      "id": 2,
       "text": "Applying clips to the cystic duct to stabilize the field",
       "image": null,
       "answer": "N",

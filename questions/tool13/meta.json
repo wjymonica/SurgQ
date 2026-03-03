@@ -1,0 +1,54 @@
+{
+  "question_type": "MCQ",
+  "option_number": 4,
+  "stem": {
+    "text": "What action does the instrument on the right plan to perform, and on which structure?",
+    "image": "001283.jpg"
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "Blunt dissection of the gallbladder neck to expose the cystic duct and artery",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The dissector is positioned at the gallbladder neck to bluntly open tissue planes, clearing connective tissue to expose the cystic duct and cystic artery — a key step toward achieving the critical view of safety.",
+        "image": null
+      }
+    },
+    {
+      "id": 1,
+      "text": "Electrocautery dissection of connective tissue along the cystic duct",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. Electrocautery dissection is performed by the hook. The dissector works by blunt mechanical separation without applying energy.",
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "Retract the gallbladder neck laterally and inferiorly",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. Retraction is the role of the grasper. The dissector is used to separate tissue planes, not to provide sustained traction on the gallbladder.",
+        "image": null
+      }
+    },
+    {
+      "id": 3,
+      "text": "Apply clips to secure the cystic duct",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "Incorrect. Clips are applied by the clip applier. Dissection with the dissector must be completed first before the duct is ready to be clipped.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": null
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "question_type": "MCQ",
+  "option_number": 3,
+  "stem": {
+    "text": "Which structure is the cystic duct in the following image?",
+    "image": "046008_question.jpg"
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "A",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "This is the gallbladder.",
+        "image": null
+      }
+    },
+    {
+      "id": 1,
+      "text": "B",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The cystic duct connects the gallbladder to the common bile duct.",
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "C",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "This is the cystic artery, which supplies blood to the gallbladder.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": "046008_feedback.jpg"
+  }
+}

@@ -12,7 +12,7 @@
       "image": "000942.jpg",
       "answer": "N",
       "feedback": {
-        "text": "The answer is incorrect because, although the gallbladder is present, the image does not show adequate exposure for dissection due to the missing neck and the incorrect attachment of the gallbladder to the fat. Additionally, a grasper for retraction is also absent, which is essential for proper dissection.",
+        "text": "\u274c \u2022 Gallbladder neck clearly visible\n\u274c \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u274c \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
         "image": "000942_feedback.jpg"
       }
     },
@@ -22,7 +22,7 @@
       "image": "001261.jpg",
       "answer": "N",
       "feedback": {
-        "text": "The answer is incorrect because, although the gallbladder is being retracted properly and the neck is positioned low, the scene graph indicates that the gallbladder is incorrectly attached to the intestine at a high position, which does not provide adequate exposure for dissection.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u274c \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "001261_feedback.jpg"
       }
     }

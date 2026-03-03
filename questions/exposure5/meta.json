@@ -12,7 +12,7 @@
     "(\"neck\")"
   ],
   "feedback": {
-    "text": "The answer is incorrect because, while the gallbladder and its neck are present and being retracted by the grasper, there is insufficient exposure for dissection as the scene does not indicate adequate visualization of surrounding structures.",
+    "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
     "image": "001388_feedback.jpg"
   }
 }

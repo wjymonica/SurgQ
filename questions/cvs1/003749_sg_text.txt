@@ -1,9 +1,11 @@
 fulfilled:
-- (gall, , dissected, )
 - required objects shown:
 - ("cysticartery")
 - ("cysticduct")
-- ("dissected")
 
 unfulfilled:
 - wrong:(cysticartery, separate, cysticduct, low)
+- wrong:(cysticartery, attach, neck, high)
+- wrong:(cysticduct, attach, connected tissue, high)
+- required objects missing:
+- ("dissected")

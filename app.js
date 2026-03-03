@@ -8,7 +8,7 @@ const openEndedAnswer = document.getElementById("openEndedAnswer");
 const mcqHint = document.getElementById("mcqHint");
 const toggleImagesButton = document.getElementById("toggleImages");
 const submitButton = document.getElementById("submitAnswer");
-const resetButton = document.getElementById("resetAnswer");
+const nextQuestionInCard = document.getElementById("nextQuestionInCard");
 const dontKnowButton = document.getElementById("dontKnowButton");
 const feedbackCard = document.getElementById("feedbackCard");
 const feedbackText = document.getElementById("feedbackText");
@@ -26,6 +26,7 @@ const authSuccess = document.getElementById("authSuccess");
 const authLinkFallback = document.getElementById("authLinkFallback");
 const sendLinkBtn = document.getElementById("sendLinkBtn");
 const userEmailEl = document.getElementById("userEmail");
+const exportFeedbackPdfBtn = document.getElementById("exportFeedbackPdf");
 const signOutButton = document.getElementById("signOut");
 const progressPretestCount = document.getElementById("progressPretestCount");
 const progressPretestFill = document.getElementById("progressPretestFill");
@@ -34,16 +35,71 @@ const progressMainFill = document.getElementById("progressMainFill");
 const progressPosttestCount = document.getElementById("progressPosttestCount");
 const progressPosttestFill = document.getElementById("progressPosttestFill");
 const questionPositionEl = document.getElementById("questionPosition");
-const prevButton = document.getElementById("prevQuestion");
 const nextButton = document.getElementById("nextQuestion");
+const transitionCard = document.getElementById("transitionCard");
+const transitionTitle = document.getElementById("transitionTitle");
+const transitionMessage = document.getElementById("transitionMessage");
+const transitionContinueBtn = document.getElementById("transitionContinue");
 const imageLightbox = document.getElementById("imageLightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const lightboxClose = document.getElementById("lightboxClose");
+const debugPanel = document.getElementById("debugPanel");
+const debugJumpSelect = document.getElementById("debugJumpSelect");
+const debugJumpGoBtn = document.getElementById("debugJumpGo");
+const versionBadge = document.getElementById("versionBadge");
+const sessionTimerEl = document.getElementById("sessionTimer");
+const sessionTimerDisplayEl = document.getElementById("sessionTimerDisplay");
 
 const EMAIL_LINK_STORAGE_KEY = "surgQ_emailForSignIn";
 const PRETEST_COUNT = 8;
 const POSTTEST_COUNT = 8;
+const SESSION_DURATIONS_MS = { pretest: 10 * 60 * 1000, main: 30 * 60 * 1000, posttest: 10 * 60 * 1000 };
 const PASSWORD_STORAGE_PREFIX = "surgQ_pw_";
+const IMAGE_V = Date.now(); // cache-bust images on every page load
+
+// ── Mode helpers ──────────────────────────────────────────
+function getAppMode() {
+  return (window.APP_CONFIG && window.APP_CONFIG.mode) || "debug";
+}
+function isDebugMode() { return getAppMode() === "debug"; }
+function getIndexUrl() {
+  const m = getAppMode();
+  if (m === "v1") return "./questions/index_v1.json";
+  if (m === "v2") return "./questions/index_v2.json";
+  return "./questions/index.json";
+}
+
+let transitionNextIndex = 0;
+
+function getSessionBoundaries() {
+  const n = questionList.length;
+  const pretestEnd = Math.min(PRETEST_COUNT, n);
+  const mainEnd = Math.max(pretestEnd, n - POSTTEST_COUNT);
+  return { pretestEnd, mainEnd, posttestStart: mainEnd };
+}
+
+function showTransitionToNextSession(nextIndex) {
+  const { pretestEnd, posttestStart } = getSessionBoundaries();
+  if (nextIndex === pretestEnd) {
+    if (transitionTitle) transitionTitle.textContent = "Pretest complete";
+    if (transitionMessage) transitionMessage.textContent = "You have finished the pretest. Click Continue to start the main session.";
+    transitionNextIndex = nextIndex;
+    if (transitionCard) transitionCard.classList.remove("hidden");
+    if (questionCard) questionCard.classList.add("hidden");
+    if (feedbackCard) feedbackCard.classList.add("hidden");
+    return true;
+  }
+  if (nextIndex === posttestStart) {
+    if (transitionTitle) transitionTitle.textContent = "Main session complete";
+    if (transitionMessage) transitionMessage.textContent = "You have finished the main session. Click Continue to start the posttest.";
+    transitionNextIndex = nextIndex;
+    if (transitionCard) transitionCard.classList.remove("hidden");
+    if (questionCard) questionCard.classList.add("hidden");
+    if (feedbackCard) feedbackCard.classList.add("hidden");
+    return true;
+  }
+  return false;
+}
 
 function isPretestOrPosttest() {
   return currentFolder && (currentFolder.startsWith("pretest") || currentFolder.startsWith("posttest"));
@@ -79,6 +135,30 @@ function randomPassword() {
   return s;
 }
 
+function emailToDbKey(email) {
+  // Firebase keys cannot contain . so replace with ,
+  return email.replace(/\./g, ",");
+}
+
+async function getPasswordFromDb(email) {
+  if (!db) return null;
+  try {
+    const snap = await db.ref("emailPasswords/" + emailToDbKey(email)).once("value");
+    return snap.val() || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function savePasswordToDb(email, password) {
+  if (!db) return;
+  try {
+    await db.ref("emailPasswords/" + emailToDbKey(email)).set(password);
+  } catch (e) {
+    console.warn("Failed to save password to db", e);
+  }
+}
+
 let currentMeta = null;
 let currentFolder = null;
 let currentQuestionIndex = 0;
@@ -88,6 +168,9 @@ let showingFeedbackImages = false;
 let userProgress = {}; // { questionId: { completed, selectedOptionIds?, openEndedAnswer?, submittedAt? } }
 let firebaseReady = false;
 let db = null;
+let sessionTimerInterval = null;
+let sessionTimerEndMs = {};  // { pretest: epochMs, main: epochMs, posttest: epochMs }
+let activeTimerSession = null;
 
 const GRADE_ENDPOINT = "http://localhost:8002/grade";
 
@@ -157,6 +240,8 @@ async function trySignInWithEmailLink() {
 }
 
 function showAuth() {
+  stopSessionTimer();
+  sessionTimerEndMs = {};
   appContent.classList.add("hidden");
   authCard.classList.remove("hidden");
   userProgress = {};
@@ -187,7 +272,11 @@ async function loadUserProgress(uid) {
 }
 
 async function saveProgress(uid, questionId, data) {
-  if (!db || !uid) return;
+  if (!uid) return;
+  if (!db) {
+    console.warn("Firebase Realtime Database not initialized. Add databaseURL to FIREBASE_CONFIG in firebase-config.js.");
+    return;
+  }
   try {
     await db.ref("users/" + uid + "/progress/" + questionId).set({
       ...data,
@@ -201,13 +290,6 @@ async function saveProgress(uid, questionId, data) {
 
 function getCurrentUser() {
   return isFirebaseEnabled() && firebase.auth().currentUser;
-}
-
-function getSessionBoundaries() {
-  const n = questionList.length;
-  const pretestEnd = Math.min(PRETEST_COUNT, n);
-  const mainEnd = Math.max(pretestEnd, n - POSTTEST_COUNT);
-  return { pretestEnd, mainEnd, posttestStart: mainEnd };
 }
 
 function updateProgressBar() {
@@ -228,25 +310,118 @@ function updateProgressBar() {
   if (progressMainFill) progressMainFill.style.width = mainTotal ? (100 * completedInMain / mainTotal) + "%" : "0%";
   if (progressPosttestCount) progressPosttestCount.textContent = `${completedInPosttest}/${posttestTotal}`;
   if (progressPosttestFill) progressPosttestFill.style.width = posttestTotal ? (100 * completedInPosttest / posttestTotal) + "%" : "0%";
+  syncDebugPanel();
+}
+
+// ── Debug panel ───────────────────────────────────────────
+function addDebugOptgroup(label, start, end) {
+  if (start >= end || !debugJumpSelect) return;
+  const grp = document.createElement("optgroup");
+  grp.label = label;
+  for (let i = start; i < end; i++) {
+    const q = questionList[i];
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = (userProgress[q]?.completed ? "✓ " : "") + q;
+    grp.appendChild(opt);
+  }
+  debugJumpSelect.appendChild(grp);
+}
+
+function buildDebugPanel() {
+  if (!isDebugMode() || !debugPanel || !debugJumpSelect) return;
+  if (questionList.length === 0) return;
+  debugPanel.classList.remove("hidden");
+  debugJumpSelect.innerHTML = "";
+  const { pretestEnd, posttestStart } = getSessionBoundaries();
+
+  // Pretest
+  addDebugOptgroup("Pretest", 0, pretestEnd);
+
+  // Main session — group by category prefix (strip trailing digits)
+  const seenCats = [];
+  const catMap = {};
+  for (let i = pretestEnd; i < posttestStart; i++) {
+    const q = questionList[i];
+    const cat = q.replace(/\d+$/, "");
+    if (!catMap[cat]) { catMap[cat] = []; seenCats.push(cat); }
+    catMap[cat].push(i);
+  }
+  seenCats.forEach(cat => {
+    const grp = document.createElement("optgroup");
+    grp.label = "Main – " + cat;
+    catMap[cat].forEach(absIdx => {
+      const q = questionList[absIdx];
+      const opt = document.createElement("option");
+      opt.value = absIdx;
+      opt.textContent = (userProgress[q]?.completed ? "✓ " : "") + q;
+      grp.appendChild(opt);
+    });
+    debugJumpSelect.appendChild(grp);
+  });
+
+  // Posttest
+  addDebugOptgroup("Posttest", posttestStart, questionList.length);
+
+  debugJumpSelect.value = String(currentQuestionIndex);
+}
+
+function syncDebugPanel() {
+  if (!isDebugMode() || !debugJumpSelect || questionList.length === 0) return;
+  Array.from(debugJumpSelect.options).forEach(opt => {
+    const idx = parseInt(opt.value, 10);
+    if (isNaN(idx) || !questionList[idx]) return;
+    const q = questionList[idx];
+    const base = opt.textContent.replace(/^✓ /, "");
+    opt.textContent = (userProgress[q]?.completed ? "✓ " : "") + base;
+  });
+  debugJumpSelect.value = String(currentQuestionIndex);
+}
+
+// ── Mode UI setup ─────────────────────────────────────────
+function updateModeUI() {
+  const mode = getAppMode();
+  // Version badge
+  if (versionBadge) {
+    if (mode === "v1") {
+      versionBadge.textContent = "Version 1";
+      versionBadge.className = "version-badge v1";
+    } else if (mode === "v2") {
+      versionBadge.textContent = "Version 2";
+      versionBadge.className = "version-badge v2";
+    } else {
+      versionBadge.className = "version-badge hidden";
+    }
+  }
+  // Export PDF: debug only
+  if (exportFeedbackPdfBtn) exportFeedbackPdfBtn.style.display = isDebugMode() ? "" : "none";
+  // Debug panel: hidden until questions load; hide entirely in non-debug modes
+  if (debugPanel && !isDebugMode()) debugPanel.classList.add("hidden");
+  // In debug mode, hide auth controls (no login)
+  if (isDebugMode()) {
+    if (userEmailEl) userEmailEl.style.display = "none";
+    if (signOutButton) signOutButton.style.display = "none";
+  }
 }
 
 async function loadQuestionList() {
   try {
-    const response = await fetch("./questions/index.json");
+    const response = await fetch(getIndexUrl());
     if (!response.ok) {
-      throw new Error("questions/index.json not found.");
+      throw new Error("Question index not found.");
     }
     const list = await response.json();
     if (!Array.isArray(list) || list.length === 0) {
-      throw new Error("questions/index.json is empty.");
+      throw new Error("Question index is empty.");
     }
     questionList = list;
     updateProgressBar();
-    loadQuestionAtIndex(0);
+    buildDebugPanel();
+    const firstIncomplete = list.findIndex((id) => !userProgress[id]?.completed);
+    const resumeIndex = firstIncomplete === -1 ? list.length - 1 : firstIncomplete;
+    loadQuestionAtIndex(resumeIndex);
   } catch (error) {
-    showError(
-      `${error.message} Add folder names to questions/index.json.`
-    );
+    showError(`${error.message} Check the question index file.`);
   }
 }
 
@@ -297,6 +472,94 @@ function isOpenEndedQuestion(meta) {
   return meta?.question_type === "open_ended";
 }
 
+function isDisplayQuestion(meta) {
+  return meta?.question_type === "display";
+}
+
+// ── Session timers (v1/v2 only) ───────────────────────────
+function isTimedMode() {
+  const m = getAppMode();
+  return m === "v1" || m === "v2";
+}
+
+function getCurrentSessionName() {
+  if (!questionList.length) return null;
+  const { pretestEnd, posttestStart } = getSessionBoundaries();
+  const i = currentQuestionIndex;
+  if (i < pretestEnd) return "pretest";
+  if (i < posttestStart) return "main";
+  return "posttest";
+}
+
+function formatTime(ms) {
+  const totalSec = Math.max(0, Math.ceil(ms / 1000));
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+}
+
+function stopSessionTimer() {
+  if (sessionTimerInterval !== null) {
+    clearInterval(sessionTimerInterval);
+    sessionTimerInterval = null;
+  }
+  activeTimerSession = null;
+  if (sessionTimerEl) sessionTimerEl.classList.add("hidden");
+}
+
+function onTimerExpired(session) {
+  stopSessionTimer();
+  const { pretestEnd, posttestStart } = getSessionBoundaries();
+  let nextIndex;
+  if (session === "pretest") {
+    nextIndex = pretestEnd;
+  } else if (session === "main") {
+    nextIndex = posttestStart;
+  } else {
+    return; // posttest end — nothing to advance to
+  }
+  if (nextIndex < questionList.length) {
+    if (questionCard) questionCard.classList.add("hidden");
+    if (feedbackCard) feedbackCard.classList.add("hidden");
+    loadQuestionAtIndex(nextIndex);
+  }
+}
+
+function startSessionTimer(session) {
+  if (activeTimerSession === session && sessionTimerInterval !== null) return;
+
+  if (sessionTimerInterval !== null) {
+    clearInterval(sessionTimerInterval);
+    sessionTimerInterval = null;
+  }
+
+  if (!sessionTimerEndMs[session]) {
+    sessionTimerEndMs[session] = Date.now() + SESSION_DURATIONS_MS[session];
+  }
+
+  activeTimerSession = session;
+  if (sessionTimerEl) sessionTimerEl.classList.remove("hidden");
+
+  function tick() {
+    const remaining = sessionTimerEndMs[session] - Date.now();
+    if (sessionTimerDisplayEl) sessionTimerDisplayEl.textContent = formatTime(remaining);
+    if (sessionTimerEl) sessionTimerEl.classList.toggle("timer-warning", remaining < 60 * 1000);
+    if (remaining <= 0) {
+      clearInterval(sessionTimerInterval);
+      sessionTimerInterval = null;
+      onTimerExpired(session);
+    }
+  }
+  tick();
+  sessionTimerInterval = setInterval(tick, 1000);
+}
+
+function updateSessionTimer() {
+  if (!isTimedMode()) return;
+  const session = getCurrentSessionName();
+  if (session) startSessionTimer(session);
+}
+
 function setSubmitting(state) {
   isSubmitting = state;
   submitButton.disabled = state;
@@ -312,8 +575,11 @@ function renderQuestion(meta, folder) {
   }
   if (meta.stem?.image) {
     const stemImage = document.createElement("img");
-    stemImage.src = `./questions/${folder}/${meta.stem.image}`;
+    stemImage.src = `./questions/${folder}/${meta.stem.image}?v=${IMAGE_V}`;
     stemImage.alt = meta.stem.image;
+    stemImage.onerror = function () {
+      this.title = "Image failed to load. Use a local server (e.g. python -m http.server 8000) from the project folder.";
+    };
     questionStem.appendChild(stemImage);
   }
   if (!meta.stem?.text && !meta.stem?.image) {
@@ -324,7 +590,15 @@ function renderQuestion(meta, folder) {
   optionsGrid.innerHTML = "";
   resetFeedback();
 
-  if (isOpenEndedQuestion(meta)) {
+  if (isDisplayQuestion(meta)) {
+    optionsGrid.classList.add("hidden");
+    openEndedContainer.classList.add("hidden");
+    if (mcqHint) mcqHint.classList.add("hidden");
+    if (toggleImagesButton) toggleImagesButton.classList.add("hidden");
+    if (submitButton) submitButton.classList.add("hidden");
+    if (dontKnowButton) dontKnowButton.classList.add("hidden");
+    if (nextQuestionInCard) nextQuestionInCard.classList.remove("hidden");
+  } else if (isOpenEndedQuestion(meta)) {
     optionsGrid.classList.add("hidden");
     openEndedContainer.classList.remove("hidden");
     if (mcqHint) {
@@ -335,6 +609,8 @@ function renderQuestion(meta, folder) {
     }
   } else {
     optionsGrid.classList.remove("hidden");
+    optionsGrid.classList.remove("options-disabled");
+    optionsGrid.classList.toggle("options-4", meta.options.length === 4);
     openEndedContainer.classList.add("hidden");
     if (mcqHint) {
       mcqHint.classList.remove("hidden");
@@ -370,16 +646,16 @@ function renderQuestion(meta, folder) {
       }
       if (optionData.image) {
         const img = document.createElement("img");
-        img.src = `./questions/${folder}/${optionData.image}`;
+        img.src = `./questions/${folder}/${optionData.image}?v=${IMAGE_V}`;
         img.alt = optionData.image ?? `Option ${idx + 1}`;
         img.dataset.originalSrc = img.src;
         img.dataset.hasOriginal = "true";
         const fallbackFeedback =
           optionData.image?.replace(".jpg", "_feedback.jpg") ?? null;
         img.dataset.feedbackSrc = optionData.feedback?.image
-          ? `./questions/${folder}/${optionData.feedback.image}`
+          ? `./questions/${folder}/${optionData.feedback.image}?v=${IMAGE_V}`
           : fallbackFeedback
-          ? `./questions/${folder}/${fallbackFeedback}`
+          ? `./questions/${folder}/${fallbackFeedback}?v=${IMAGE_V}`
           : "";
         wrapper.appendChild(img);
       }
@@ -507,7 +783,7 @@ function showFeedback(selectedIds) {
         feedbackImageName = selectedWithImage?.feedback?.image ?? null;
       }
       if (feedbackImageName) {
-        feedbackImage.src = `./questions/${currentFolder}/${feedbackImageName}`;
+        feedbackImage.src = `./questions/${currentFolder}/${feedbackImageName}?v=${IMAGE_V}`;
         feedbackImageWrapper.classList.remove("hidden");
       } else {
         feedbackImageWrapper.classList.add("hidden");
@@ -521,6 +797,13 @@ function showFeedback(selectedIds) {
 
   feedbackCard.classList.remove("hidden");
 
+  optionsGrid.classList.add("options-disabled");
+  optionsGrid.querySelectorAll("input[name=\"answer\"]").forEach((input) => {
+    input.disabled = true;
+  });
+  if (submitButton) submitButton.classList.add("hidden");
+  if (nextQuestionInCard) nextQuestionInCard.classList.remove("hidden");
+
   userProgress[currentFolder] = { ...userProgress[currentFolder], completed: true, selectedOptionIds: selectedIds };
   updateProgressBar();
   updatePrevNextVisibility();
@@ -530,7 +813,7 @@ function showFeedback(selectedIds) {
     saveProgress(user.uid, currentFolder, {
       completed: true,
       selectedOptionIds: selectedIds,
-    });
+    }).catch((e) => console.warn("Firebase save failed", e));
   }
 
   if (!isPretestOrPosttest() && toggleImagesButton) {
@@ -542,7 +825,7 @@ function showFeedback(selectedIds) {
       if (!feedbackName) {
         return;
       }
-      const feedbackSrc = `./questions/${currentFolder}/${feedbackName}`;
+      const feedbackSrc = `./questions/${currentFolder}/${feedbackName}?v=${IMAGE_V}`;
       let img = card.querySelector("img");
       if (!img) {
         img = document.createElement("img");
@@ -604,7 +887,7 @@ async function gradeOpenEnded(answer) {
         feedbackText.textContent =
           currentMeta?.feedback?.text ?? "Answer did not meet the rubric.";
         if (currentMeta?.feedback?.image) {
-          feedbackImage.src = `./questions/${currentFolder}/${currentMeta.feedback.image}`;
+          feedbackImage.src = `./questions/${currentFolder}/${currentMeta.feedback.image}?v=${IMAGE_V}`;
           feedbackImageWrapper.classList.remove("hidden");
         } else {
           feedbackImageWrapper.classList.add("hidden");
@@ -624,7 +907,7 @@ async function gradeOpenEnded(answer) {
       saveProgress(user.uid, currentFolder, {
         completed: true,
         openEndedAnswer: answer,
-      });
+      }).catch((e) => console.warn("Firebase save failed", e));
     }
   } catch (error) {
     showError(error.message);
@@ -637,6 +920,9 @@ async function loadQuestionByFolder(folder) {
   if (!folder) return;
   clearError();
   resetFeedback();
+  if (transitionCard) transitionCard.classList.add("hidden");
+  if (submitButton) submitButton.classList.remove("hidden");
+  if (nextQuestionInCard) nextQuestionInCard.classList.add("hidden");
   try {
     const cacheBuster = Date.now();
     const response = await fetch(
@@ -650,12 +936,21 @@ async function loadQuestionByFolder(folder) {
       if (!Array.isArray(meta?.rubric) || meta.rubric.length === 0) {
         throw new Error(`${folder}/meta.json has no rubric.`);
       }
-    } else if (!meta?.options?.length) {
+    } else if (!isDisplayQuestion(meta) && !meta?.options?.length) {
       throw new Error(`${folder}/meta.json has no options.`);
     }
     currentMeta = meta;
     currentFolder = folder;
     renderQuestion(meta, folder);
+    if (isDisplayQuestion(meta)) {
+      userProgress[folder] = { ...userProgress[folder], completed: true };
+      updateProgressBar();
+      updatePrevNextVisibility();
+      const user = getCurrentUser();
+      if (user) {
+        saveProgress(user.uid, folder, { completed: true }).catch((e) => console.warn("Firebase save failed", e));
+      }
+    }
   } catch (error) {
     showError(error.message);
     throw error;
@@ -663,23 +958,35 @@ async function loadQuestionByFolder(folder) {
 }
 
 function updateQuestionPosition() {
-  if (questionPositionEl && questionList.length > 0) {
-    questionPositionEl.textContent = `Question ${currentQuestionIndex + 1} of ${questionList.length}`;
+  if (!questionPositionEl || questionList.length === 0) return;
+  const { pretestEnd, mainEnd, posttestStart } = getSessionBoundaries();
+  const i = currentQuestionIndex;
+  let pos, total, label;
+  if (i < pretestEnd) {
+    pos = i + 1;
+    total = pretestEnd;
+    label = "pretest questions";
+  } else if (i < posttestStart) {
+    pos = i - pretestEnd + 1;
+    total = mainEnd - pretestEnd;
+    label = "main session questions";
+  } else {
+    pos = i - posttestStart + 1;
+    total = questionList.length - posttestStart;
+    label = "posttest questions";
   }
+  questionPositionEl.textContent = `Question ${pos} of ${total} ${label}`;
 }
 
 function updatePrevNextVisibility() {
-  if (prevButton) prevButton.style.display = currentQuestionIndex > 0 ? "" : "none";
-  if (nextButton) nextButton.style.display = currentQuestionIndex < questionList.length - 1 ? "" : "none";
+  const hasNext = currentQuestionIndex < questionList.length - 1;
+  if (nextButton) nextButton.style.display = hasNext ? "" : "none";
+  if (nextQuestionInCard) nextQuestionInCard.style.display = hasNext ? "" : "none";
 }
 
 function updateDontKnowVisibility() {
   if (dontKnowButton) {
-    if (isPretestOrPosttest()) {
-      dontKnowButton.classList.remove("hidden");
-    } else {
-      dontKnowButton.classList.add("hidden");
-    }
+    dontKnowButton.classList.add("hidden");
   }
 }
 
@@ -692,6 +999,15 @@ async function loadQuestionAtIndex(i) {
   updateProgressBar();
   updatePrevNextVisibility();
   updateDontKnowVisibility();
+  updateSessionTimer();
+  if (debugJumpSelect) debugJumpSelect.value = String(i);
+}
+
+function goToNextQuestion() {
+  const nextIndex = currentQuestionIndex + 1;
+  if (nextIndex >= questionList.length) return;
+  if (showTransitionToNextSession(nextIndex)) return;
+  loadQuestionAtIndex(nextIndex);
 }
 
 function loadQuestion() {
@@ -704,14 +1020,18 @@ function loadQuestion() {
 
 if (loadButton) loadButton.addEventListener("click", loadQuestion);
 
-if (prevButton) {
-  prevButton.addEventListener("click", () => {
-    loadQuestionAtIndex(currentQuestionIndex - 1);
-  });
-}
 if (nextButton) {
-  nextButton.addEventListener("click", () => {
-    loadQuestionAtIndex(currentQuestionIndex + 1);
+  nextButton.addEventListener("click", goToNextQuestion);
+}
+if (nextQuestionInCard) {
+  nextQuestionInCard.addEventListener("click", goToNextQuestion);
+}
+
+if (transitionContinueBtn) {
+  transitionContinueBtn.addEventListener("click", () => {
+    if (transitionCard) transitionCard.classList.add("hidden");
+    if (questionCard) questionCard.classList.remove("hidden");
+    loadQuestionAtIndex(transitionNextIndex);
   });
 }
 
@@ -757,6 +1077,20 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+// Debug jump
+if (debugJumpGoBtn && debugJumpSelect) {
+  debugJumpGoBtn.addEventListener("click", () => {
+    const idx = parseInt(debugJumpSelect.value, 10);
+    if (!isNaN(idx) && idx >= 0 && idx < questionList.length) {
+      loadQuestionAtIndex(idx);
+    }
+  });
+  // Also jump on Enter key inside select
+  debugJumpSelect.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") debugJumpGoBtn.click();
+  });
+}
+
 submitButton.addEventListener("click", async () => {
   if (isOpenEndedQuestion(currentMeta)) {
     const answer = openEndedAnswer.value.trim();
@@ -765,37 +1099,32 @@ submitButton.addEventListener("click", async () => {
       return;
     }
     clearError();
+    if (isPretestOrPosttest()) {
+      const payload = { completed: true, openEndedAnswer: answer };
+      userProgress[currentFolder] = { ...userProgress[currentFolder], ...payload };
+      updateProgressBar();
+      const user = getCurrentUser();
+      if (user) saveProgress(user.uid, currentFolder, payload).catch((e) => console.warn("Firebase save failed", e));
+      goToNextQuestion();
+      return;
+    }
     await gradeOpenEnded(answer);
     return;
   }
 
   const selectedIds = getSelectedOptionIds();
-  if (selectedIds.length === 0) {
-    showError("Select at least one option before submitting.");
-    return;
-  }
   clearError();
-  if (!isPretestOrPosttest()) {
-    markOptions(selectedIds);
-  }
-  showFeedback(selectedIds);
-});
-
-resetButton.addEventListener("click", () => {
-  if (isOpenEndedQuestion(currentMeta)) {
-    resetFeedback();
+  if (isPretestOrPosttest()) {
+    const payload = { completed: true, selectedOptionIds: selectedIds };
+    userProgress[currentFolder] = { ...userProgress[currentFolder], ...payload };
+    updateProgressBar();
+    const user = getCurrentUser();
+    if (user) saveProgress(user.uid, currentFolder, payload).catch((e) => console.warn("Firebase save failed", e));
+    goToNextQuestion();
     return;
   }
-
-  const checks = document.querySelectorAll("input[name=\"answer\"]");
-  checks.forEach((check) => {
-    check.checked = false;
-  });
-  const optionCards = optionsGrid.querySelectorAll(".option-card");
-  optionCards.forEach((card) => {
-    card.classList.remove("correct", "incorrect");
-  });
-  resetFeedback();
+  markOptions(selectedIds);
+  showFeedback(selectedIds);
 });
 
 if (dontKnowButton) {
@@ -809,12 +1138,13 @@ if (dontKnowButton) {
     updatePrevNextVisibility();
     const user = getCurrentUser();
     if (user) {
-      saveProgress(user.uid, currentFolder, payload);
+      saveProgress(user.uid, currentFolder, payload).catch((e) => console.warn("Firebase save failed", e));
     }
     const nextIndex = currentQuestionIndex + 1;
     if (nextIndex < questionList.length) {
       feedbackCard.classList.add("hidden");
       questionCard.classList.remove("hidden");
+      if (showTransitionToNextSession(nextIndex)) return;
       try {
         await loadQuestionAtIndex(nextIndex);
       } catch (err) {
@@ -873,17 +1203,30 @@ authForm.addEventListener("submit", async (e) => {
       }
     }
 
-    // 2) First time: create account with auto-generated password and go in
+    // 2) Try to create new account
     const password = randomPassword();
     try {
       const cred = await firebase.auth().createUserWithEmailAndPassword(email, password);
       setStoredPassword(email, password);
+      await savePasswordToDb(email, password);
       await ensureUserProfile(cred.user.uid, email);
       showAppForUser(cred.user);
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
-        if (authLinkFallback) authLinkFallback.classList.remove("hidden");
-        showAuthSuccess("Enter your email above, then click “Send sign-in link” to sign in on this device.");
+        // 3) Existing user on new device — look up password from DB and sign in directly
+        const dbPw = await getPasswordFromDb(email);
+        if (dbPw) {
+          try {
+            await firebase.auth().signInWithEmailAndPassword(email, dbPw);
+            setStoredPassword(email, dbPw);
+          } catch (signInErr) {
+            showAuthError(signInErr.message || "Sign in failed.");
+          }
+        } else {
+          // Old account without DB password — fall back to email link
+          if (authLinkFallback) authLinkFallback.classList.remove("hidden");
+          showAuthSuccess("This email is registered on another device. Use “Send sign-in link” to access your account.");
+        }
       } else {
         showAuthError(err.message || "Sign up failed.");
       }
@@ -922,11 +1265,161 @@ if (sendLinkBtn) {
   });
 }
 
+function escHtml(s) {
+  if (s == null) return "";
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/** Fetch image from same-origin URL and return as data URL so it is embedded in export and shows in PDF. */
+async function fetchImageAsDataUrl(url) {
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return null;
+    const blob = await r.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    });
+  } catch (_) {
+    return null;
+  }
+}
+
+async function openExportFeedbackHtml() {
+  let list;
+  try {
+    const r = await fetch(getIndexUrl());
+    if (!r.ok) throw new Error("Failed to load index");
+    list = await r.json();
+    if (!Array.isArray(list) || list.length === 0) throw new Error("Empty index");
+  } catch (e) {
+    showError(e.message || "Failed to load question list.");
+    return;
+  }
+  const questionsBase = new URL("./questions/", window.location.href).href;
+  const sections = [];
+  for (let i = 0; i < list.length; i++) {
+    const qid = list[i];
+    let meta;
+    try {
+      const r = await fetch(`./questions/${qid}/meta.json`);
+      if (!r.ok) throw new Error("Missing");
+      meta = await r.json();
+    } catch (_) {
+      sections.push(`<section class="q-block"><h2>Question ${i + 1}: ${escHtml(qid)}</h2><p>No meta.json found.</p></section>`);
+      continue;
+    }
+    const stem = meta.stem || {};
+    const stemText = stem.text || "(No stem text)";
+    const stemImage = stem.image;
+    const parts = [`<h2>Question ${i + 1}: ${escHtml(qid)}</h2>`, `<p class="stem">${escHtml(stemText)}</p>`];
+    if (stemImage) {
+      const stemSrc = `${questionsBase}${encodeURIComponent(qid)}/${encodeURIComponent(stemImage)}`;
+      const stemDataUrl = await fetchImageAsDataUrl(stemSrc);
+      parts.push(`<img src="${stemDataUrl || stemSrc}" alt="Stem" class="thumb" />`);
+    }
+    if (meta.question_type === "open_ended") {
+      const rubric = meta.rubric || [];
+      parts.push("<p class=\"rubric\"><strong>Rubric:</strong> " + escHtml(rubric.join(", ")) + "</p>");
+      const fb = (meta.feedback || {}).text || "";
+      if (fb) parts.push(`<pre class="feedback">${escHtml(fb)}</pre>`);
+    } else {
+      const options = meta.options || [];
+      for (let j = 0; j < options.length; j++) {
+        const opt = options[j];
+        const letter = String.fromCharCode(65 + j);
+        const correct = (opt.answer || "").toUpperCase() === "Y";
+        const optText = opt.text || opt.image || "(image option)";
+        parts.push(`<div class="option"><strong>Option ${letter}</strong> (${correct ? "Correct" : "Incorrect"}): ${escHtml(String(optText))}</div>`);
+        if (opt.image) {
+          const optSrc = `${questionsBase}${encodeURIComponent(qid)}/${encodeURIComponent(opt.image)}`;
+          const optDataUrl = await fetchImageAsDataUrl(optSrc);
+          parts.push(`<img src="${optDataUrl || optSrc}" alt="Option ${letter}" class="thumb" />`);
+        }
+        const fb = (opt.feedback || {}).text;
+        if (fb) parts.push(`<pre class="feedback option-feedback">${escHtml(fb)}</pre>`);
+        const fbImg = (opt.feedback || {}).image;
+        if (fbImg) {
+          const fbSrc = `${questionsBase}${encodeURIComponent(qid)}/${encodeURIComponent(fbImg)}`;
+          const fbDataUrl = await fetchImageAsDataUrl(fbSrc);
+          parts.push(`<img src="${fbDataUrl || fbSrc}" alt="Feedback ${letter}" class="thumb" />`);
+        }
+      }
+      const overall = (meta.feedback || {}).text;
+      if (overall) parts.push(`<pre class="feedback overall">${escHtml(overall)}</pre>`);
+    }
+    sections.push("<section class=\"q-block\">" + parts.join("\n") + "</section>");
+  }
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All question feedback</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 24px; color: #1b1d21; background: #fff; }
+    .print-note { margin-bottom: 24px; padding: 12px 16px; background: #e8eaef; border-radius: 8px; font-size: 14px; }
+    .print-note strong { display: block; margin-bottom: 4px; }
+    .q-block { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #e8eaef; page-break-inside: avoid; }
+    .q-block h2 { font-size: 1.1rem; margin: 0 0 8px; color: #2f5bea; }
+    .stem { margin: 0 0 12px; font-size: 15px; line-height: 1.5; }
+    .stem-img { margin: 0 0 8px; font-size: 13px; color: #6b7280; }
+    .rubric { margin: 8px 0; font-size: 14px; color: #4a4f57; }
+    .option { margin: 8px 0 4px; font-size: 14px; }
+    .feedback { white-space: pre-wrap; font-size: 13px; margin: 4px 0 12px; padding: 10px; background: #f8f9fc; border-radius: 6px; border-left: 3px solid #2f5bea; }
+    .option-feedback { margin-left: 16px; }
+    .thumb { max-width: 180px; height: auto; display: block; margin: 4px 0 8px; border-radius: 6px; }
+    @media print { body { padding: 16px; } .print-note { background: #f0f0f0; } }
+  </style>
+</head>
+<body>
+  <div class="print-note">
+    <strong>Export to PDF</strong>
+    Use your browser's Print dialog (Ctrl+P / Cmd+P) and choose <strong>Save as PDF</strong> or <strong>Print to PDF</strong>.
+  </div>
+  <h1>All question feedback</h1>
+  ${sections.join("\n")}
+</body>
+</html>`;
+  const w = window.open("", "_blank");
+  if (w) {
+    w.document.write(html);
+    w.document.close();
+  } else {
+    showError("Allow pop-ups to open the feedback page, then use Print → Save as PDF.");
+  }
+}
+
+if (exportFeedbackPdfBtn) {
+  exportFeedbackPdfBtn.addEventListener("click", () => {
+    clearError();
+    openExportFeedbackHtml();
+  });
+}
+
 signOutButton.addEventListener("click", () => {
   firebase.auth().signOut();
 });
 
 function startApp() {
+  updateModeUI();
+
+  if (isDebugMode()) {
+    // Debug mode: no auth, load all questions directly
+    if (isFirebaseEnabled()) initFirebase();
+    appContent.classList.remove("hidden");
+    authCard.classList.add("hidden");
+    loadQuestionList();
+    return;
+  }
+
+  // Deploy mode (v1 / v2): require Firebase auth
   if (isFirebaseEnabled()) {
     initFirebase();
     trySignInWithEmailLink().then(() => {
@@ -941,6 +1434,7 @@ function startApp() {
       });
     });
   } else {
+    // Firebase not configured — fallback (no auth, no sync)
     appContent.classList.remove("hidden");
     authCard.classList.add("hidden");
     const headerUser = document.querySelector(".header-user");

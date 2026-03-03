@@ -1,8 +1,11 @@
 fulfilled:
 - required objects shown:
+- ("cysticartery")
+- ("cysticduct")
 
 unfulfilled:
 - required objects missing:
-- ("cysticartery")
-- ("cysticduct")
 - ("dissected")
+- wrong:(cysticduct, separate, cysticartery, medium)
+- wrong:(connected tissue, attach, cysticartery, medium)
+- wrong:(neck, attach, cysticartery, high)

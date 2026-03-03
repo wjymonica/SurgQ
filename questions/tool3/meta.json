@@ -6,18 +6,9 @@
     "image": null
   },
   "options": [
+
     {
       "id": 0,
-      "text": "Apply clips to the cystic duct",
-      "image": null,
-      "answer": "N",
-      "feedback": {
-        "text": "Clip application is performed by the clip applier, not the grasper.",
-        "image": "035945_highlighted.jpg"
-      }
-    },
-    {
-      "id": 1,
       "text": "Provide traction and countertraction for exposure",
       "image": null,
       "answer": "Y",
@@ -27,7 +18,7 @@
       }
     },
     {
-      "id": 2,
+      "id": 1,
       "text": "Divide the cystic duct",
       "image": null,
       "answer": "N",
@@ -37,7 +28,7 @@
       }
     },
     {
-      "id": 3,
+      "id": 2,
       "text": "Perform electrocautery dissection",
       "image": null,
       "answer": "N",

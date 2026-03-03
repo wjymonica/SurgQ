@@ -7,6 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
 
+# Fallback API key for local use (env OPENAI_API_KEY takes precedence). Do not commit real keys.
+OPENAI_API_KEY_CODED = "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"
+
 app = FastAPI()
 
 app.add_middleware(
@@ -24,12 +27,18 @@ class GradeRequest(BaseModel):
     stem: dict[str, Any] = {}
 
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+_api_key = os.getenv("OPENAI_API_KEY") or OPENAI_API_KEY_CODED
+client = OpenAI(api_key=_api_key) if _api_key else None
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
 
 @app.post("/grade")
 def grade_answer(payload: GradeRequest) -> dict[str, str]:
+    if not client:
+        raise HTTPException(
+            status_code=503,
+            detail="Grading is disabled. Set OPENAI_API_KEY in the environment and restart the server.",
+        )
     if not payload.answer.strip():
         raise HTTPException(status_code=400, detail="Answer is required.")
 

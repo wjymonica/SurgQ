@@ -1,5 +1,7 @@
 fulfilled:
 - (cysticduct, separate, cysticartery, high)
+- (cysticduct, attach, neck, low)
+- (cysticartery, attach, neck, low)
 - (gall, , dissected, )
 - required objects shown:
 - ("cysticartery")

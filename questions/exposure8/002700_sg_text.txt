@@ -2,8 +2,7 @@ fulfilled:
 - (grasper1, retract, gall, true)
 - required objects shown:
 - ("gall")
+- ("neck")
+- (neck, attach, intestine, low)
 
 unfulfilled:
-- wrong:(gall, attach, intestine, high)
-- required objects missing:
-- ("neck")

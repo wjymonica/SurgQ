@@ -5,5 +5,9 @@ fulfilled:
 
 unfulfilled:
 - wrong:(cysticduct, separate, cysticartery, low)
+- wrong:(cysticduct, attach, connected tissue, 411)
+- wrong:(cysticduct, attach, neck, high)
+- wrong:(cysticartery, attach, connected tissue, 386)
+- wrong:(cysticartery, attach, neck, high)
 - required objects missing:
 - ("dissected")

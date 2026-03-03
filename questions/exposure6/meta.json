@@ -6,11 +6,10 @@
   },
   "rubric": [
     "no",
-    "wrong:(neck, attach, fat, high)",
     "missing:(grasper2, retract, gall, true)"
   ],
   "feedback": {
-    "text": "The answer is incorrect because, while the image shows the gallbladder and neck adequately attached to the intestine and fat, it lacks sufficient exposure for dissection due to the high attachment of the neck to fat and the absence of a second grasper to properly retract the gallbladder.",
+    "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u274c \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
     "image": "001049_feedback.jpg"
   }
 }

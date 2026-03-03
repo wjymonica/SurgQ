@@ -12,7 +12,7 @@
       "image": null,
       "answer": "Y",
       "feedback": {
-        "text": null,
+        "text": "gall",
         "image": null
       }
     },
@@ -22,7 +22,7 @@
       "image": null,
       "answer": "N",
       "feedback": {
-        "text": null,
+        "text": "fat",
         "image": null
       }
     },
@@ -32,7 +32,7 @@
       "image": null,
       "answer": "N",
       "feedback": {
-        "text": null,
+        "text": "intestine",
         "image": null
       }
     }

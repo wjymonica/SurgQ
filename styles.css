@@ -168,6 +168,15 @@ button.secondary {
   margin-top: 16px;
 }
 
+.options.options-4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.options.options-disabled {
+  pointer-events: none;
+  opacity: 0.85;
+}
+
 .mcq-hint {
   margin-top: 10px;
   font-size: 14px;
@@ -206,6 +215,7 @@ button.secondary {
 .option-feedback {
   font-size: 14px;
   color: #4a4f57;
+  white-space: pre-line;
 }
 
 .option-feedback.hidden {
@@ -328,12 +338,38 @@ button.secondary {
 .question-nav-info {
   font-size: 14px;
   color: #4a4f57;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.session-timer {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2c5282;
+}
+
+.session-timer.timer-warning {
+  color: #c53030;
+  animation: timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes timer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .nav-after-feedback {
   margin-top: 20px;
   padding-top: 16px;
   border-top: 1px solid #e8eaef;
+}
+
+.transition-card .transition-message {
+  margin: 16px 0 24px;
+  font-size: 16px;
+  color: #4a4f57;
+  line-height: 1.5;
 }
 
 /* Lightbox: enlarge image on click */
@@ -392,4 +428,82 @@ button.secondary {
 .feedback-image img,
 .option-card img {
   cursor: zoom-in;
+}
+
+/* ── Version badge (v1 / v2) ─────────────────────────────── */
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.version-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.version-badge.v1 {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.version-badge.v2 {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* ── Debug jump panel ─────────────────────────────────────── */
+.debug-panel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: #fffbeb;
+  border: 1.5px solid #f59e0b;
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+}
+
+.debug-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  background: #f59e0b;
+  color: #451a03;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.debug-jump {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.debug-jump label {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.debug-jump select {
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  max-width: 300px;
+}
+
+.debug-jump button {
+  font-size: 14px;
+  padding: 6px 14px;
 }

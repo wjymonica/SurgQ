@@ -12,7 +12,7 @@
       "image": "001376.jpg",
       "answer": "Y",
       "feedback": {
-        "text": "The answer is correct as the image shows adequate exposure for dissection, with the neck and gallbladder properly positioned and retracted, fulfilling all necessary conditions.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "001376_feedback.jpg"
       }
     },
@@ -22,7 +22,7 @@
       "image": "014248.jpg",
       "answer": "Y",
       "feedback": {
-        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are present, the scene does not indicate that there is enough exposure for dissection, which is essential for a successful laparoscopic cholecystectomy.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "014248_feedback.jpg"
       }
     }

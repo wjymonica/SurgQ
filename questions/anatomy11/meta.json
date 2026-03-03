@@ -2,7 +2,7 @@
   "question_type": "MCQ",
   "option_number": 3,
   "stem": {
-    "text": "Which structure is intestine in the following image?",
+    "text": "Which structure is gallbladder neck in the following image?",
     "image": "001261_question.jpg"
   },
   "options": [
@@ -12,7 +12,7 @@
       "image": null,
       "answer": "N",
       "feedback": {
-        "text": null,
+        "text": "gall",
         "image": null
       }
     },
@@ -20,9 +20,9 @@
       "id": 1,
       "text": "B",
       "image": null,
-      "answer": "N",
+      "answer": "Y",
       "feedback": {
-        "text": null,
+        "text": "neck",
         "image": null
       }
     },
@@ -30,9 +30,9 @@
       "id": 2,
       "text": "C",
       "image": null,
-      "answer": "Y",
+      "answer": "N",
       "feedback": {
-        "text": null,
+        "text": "intestine",
         "image": null
       }
     }

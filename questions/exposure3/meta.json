@@ -12,7 +12,7 @@
       "image": "000034.jpg",
       "answer": "N",
       "feedback": {
-        "text": "The answer is incorrect because, although the gallbladder is present, the exposure for dissection is inadequate due to the missing neck and the lack of a grasper to retract the gallbladder properly. Additionally, the attachment of fat is positioned too high, which further compromises the exposure needed for dissection.",
+        "text": "\u274c \u2022 Gallbladder neck clearly visible\n\u274c \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u274c \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
         "image": "000034_feedback.jpg"
       }
     },
@@ -20,9 +20,9 @@
       "id": 1,
       "text": null,
       "image": "000795.jpg",
-      "answer": "Y",
+      "answer": "N",
       "feedback": {
-        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are present, the scene does not provide sufficient exposure for dissection, which is essential for a successful laparoscopic cholecystectomy.",
+        "text": "\u274c \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
         "image": "000795_feedback.jpg"
       }
     },
@@ -32,7 +32,7 @@
       "image": "000986.jpg",
       "answer": "N",
       "feedback": {
-        "text": "The answer is incorrect because, although the required objects (gall and neck) are present, the exposure for dissection is inadequate due to the high attachment of the neck to fat and the absence of a grasper to properly retract the gallbladder.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u274c \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "000986_feedback.jpg"
       }
     },
@@ -42,7 +42,7 @@
       "image": "001376.jpg",
       "answer": "Y",
       "feedback": {
-        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are present, the scene does not indicate sufficient exposure for dissection, as there is no mention of proper visualization or clearance around the structures.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "001376_feedback.jpg"
       }
     }

@@ -1,3 +1,7 @@
 relevant scene graph:
 - (cysticartery, separate, cysticduct, high)
+- (connected tissue, attach, cysticartery, 194)
+- (connected tissue, attach, cysticduct, 0)
+- (cysticartery, attach, neck, high)
+- (cysticduct, attach, neck, high)
 source: lap1

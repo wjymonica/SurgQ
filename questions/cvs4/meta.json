@@ -5,16 +5,11 @@
     "image": "057315.jpg"
   },
   "rubric": [
-    "yes",
-    "(cysticduct, separate, cysticartery, high)",
-    "(gall, , dissected, )",
-    "required objects shown:",
-    "(\"cysticartery\")",
-    "(\"cysticduct\")",
-    "(\"dissected\")"
+    "no",
+    "wrong:(cysticartery, attach, neck, high)"
   ],
   "feedback": {
-    "text": "The answer is incorrect because while the image shows the cystic duct and cystic artery as separate and the gallbladder dissected, it does not fulfill the requirement of showing the complete context of CVS (cholecystectomy visualization system). Specifically, the scene graph lacks additional necessary elements that would confirm the presence of CVS.",
+    "text": "\u2705 \u2022 Hepatocystic triangle completely cleared of fat and fibrous tissue\n\u274c \u2022 Cystic duct and artery clearly identified and skeletonized\n\u2705 \u2022 Cystic artery is visible\n\u2705 \u2022 Cystic duct is visible\n\u2705 \u2022 Lower third of the gallbladder dissected off the liver bed",
     "image": "057315_feedback.jpg"
   }
 }

@@ -12,7 +12,7 @@
       "image": "003494.jpg",
       "answer": "Y",
       "feedback": {
-        "text": "The answer is incorrect because the image does not provide adequate exposure for dissection, as critical structures are obscured and visibility is limited. Proper exposure is essential for safe and effective dissection during a laparoscopic cholecystectomy.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "003494_feedback.jpg"
       }
     },
@@ -22,7 +22,7 @@
       "image": "009342.jpg",
       "answer": "Y",
       "feedback": {
-        "text": "The answer is incorrect because the scene graph text indicates that the exposure in image 009342.jpg is inadequate for safe dissection. Key elements such as visibility of critical structures and adequate space for instruments are not fulfilled in this image.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "009342_feedback.jpg"
       }
     }

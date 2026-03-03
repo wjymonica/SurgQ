@@ -5,11 +5,17 @@
     "image": "001125.jpg"
   },
   "rubric": [
-    "no",
-    "wrong:(neck, attach, fat, high)"
+    "yes",
+    "(gall, attach, fat, low)",
+    "(gall, attach, intestine, low)",
+    "(neck, attach, fat, low)",
+    "(neck, attach, intestine, low)",
+    "required objects shown:",
+    "(\"gall\")",
+    "(\"neck\")"
   ],
   "feedback": {
-    "text": "The answer is incorrect because, although the required objects (gall and neck) are present and attached to the intestine and fat, the neck is incorrectly shown as attaching to fat at a high position, which does not provide adequate exposure for dissection.",
+    "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
     "image": "001125_feedback.jpg"
   }
 }

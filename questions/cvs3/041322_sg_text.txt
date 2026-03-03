@@ -3,6 +3,7 @@ fulfilled:
 - ("cysticduct")
 
 unfulfilled:
+- wrong:(cysticduct, attach, neck, high)
 - required objects missing:
 - ("cysticartery")
 - ("dissected")

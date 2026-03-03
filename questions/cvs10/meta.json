@@ -6,12 +6,15 @@
   },
   "rubric": [
     "no",
+    "wrong:(fat, attach, cysticduct, 179)",
+    "wrong:(fat, attach, cysticartery, 0)",
+    "wrong:(cysticduct, attach, neck, high)",
     "wrong:(cysticduct, separate, cysticartery, low)",
     "required objects missing:",
     "(\"dissected\")"
   ],
   "feedback": {
-    "text": "The answer is incorrect because, although the cystic artery and cystic duct are present, the scene is missing the required object of a dissected area, which is essential for confirming CVS. Additionally, the positioning of the cystic duct and artery is not appropriate for the context.",
+    "text": "\u274c \u2022 Hepatocystic triangle completely cleared of fat and fibrous tissue\n\u274c \u2022 Cystic duct and artery clearly identified and skeletonized\n\u2705 \u2022 Cystic artery is visible\n\u2705 \u2022 Cystic duct is visible\n\u274c \u2022 Lower third of the gallbladder dissected off the liver bed",
     "image": "019034_feedback.jpg"
   }
 }

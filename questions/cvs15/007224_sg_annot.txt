@@ -1,4 +1,6 @@
 relevant scene graph:
 - (cysticduct, separate, cysticartery, high)
+- (cysticduct, attach, neck, low)
+- (cysticartery, attach, neck, low)
 - (gall, , dissected, )
 source: lap1

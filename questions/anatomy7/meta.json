@@ -2,7 +2,7 @@
   "question_type": "MCQ",
   "option_number": 3,
   "stem": {
-    "text": "Which structure is cysticduct in the following image?",
+    "text": "Which structure is cystic duct in the following image?",
     "image": "041322_question.jpg"
   },
   "options": [
@@ -12,7 +12,7 @@
       "image": null,
       "answer": "Y",
       "feedback": {
-        "text": null,
+        "text": "cystic duct",
         "image": null
       }
     },
@@ -22,7 +22,7 @@
       "image": null,
       "answer": "N",
       "feedback": {
-        "text": null,
+        "text": "gall",
         "image": null
       }
     },
@@ -32,7 +32,7 @@
       "image": null,
       "answer": "N",
       "feedback": {
-        "text": null,
+        "text": "neck",
         "image": null
       }
     }

@@ -7,4 +7,4 @@ fulfilled:
 unfulfilled:
 - wrong:(gall, attach, connected tissue, high)
 - wrong:(connected tissue, attach, neck, high)
-- wrong:(neck, attach, intestine, high)
+- missing:(grasper1, retract, gall, true)

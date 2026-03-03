@@ -10,9 +10,9 @@
       "id": 0,
       "text": null,
       "image": "002595.jpg",
-      "answer": "N",
+      "answer": "Y",
       "feedback": {
-        "text": "The answer is incorrect because, although the required objects \"gall\" and \"neck\" are present, the scene graph indicates that the neck is improperly attached to the intestine at a high position, which does not provide adequate exposure for dissection.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "002595_feedback.jpg"
       }
     },
@@ -22,7 +22,7 @@
       "image": "014248.jpg",
       "answer": "Y",
       "feedback": {
-        "text": "The answer is incorrect because, while the required objects \"gall\" and \"neck\" are shown, the scene does not indicate that there is sufficient exposure for dissection. Without clear visibility and access to the surgical area, the exposure cannot be deemed adequate.",
+        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u2705 \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u2705 \u2022 Duodenum and omentum cleared from the gallbladder\n\u2705 \u2022 Duodenum and omentum cleared from the neck",
         "image": "014248_feedback.jpg"
       }
     }

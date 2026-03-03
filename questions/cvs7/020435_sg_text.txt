@@ -3,6 +3,8 @@ fulfilled:
 - ("cysticduct")
 
 unfulfilled:
+- (cysticartery, attach, neck, high)
+- (gall, attach, connected tissue, high)
 - required objects missing:
 - ("cysticartery")
 - ("dissected")

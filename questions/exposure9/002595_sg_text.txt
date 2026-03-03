@@ -8,3 +8,4 @@ fulfilled:
 
 unfulfilled:
 - wrong:(neck, attach, intestine, high)
+- missing:(grasper1, retract, gall, true)

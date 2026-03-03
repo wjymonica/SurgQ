@@ -1,0 +1,44 @@
+{
+  "question_type": "MCQ",
+  "option_number": 3,
+  "stem": {
+    "text": "Which structure is the cystic artery in the following image?",
+    "image": "019034_question.jpg"
+  },
+  "options": [
+    {
+      "id": 0,
+      "text": "A",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "This is the cystic duct, which drains bile from the gallbladder.",
+        "image": null
+      }
+    },
+    {
+      "id": 1,
+      "text": "B",
+      "image": null,
+      "answer": "Y",
+      "feedback": {
+        "text": "Correct. The cystic artery supplies blood to the gallbladder.",
+        "image": null
+      }
+    },
+    {
+      "id": 2,
+      "text": "C",
+      "image": null,
+      "answer": "N",
+      "feedback": {
+        "text": "This is the gallbladder neck, the narrow part between the gallbladder fundus and the cystic duct.",
+        "image": null
+      }
+    }
+  ],
+  "feedback": {
+    "text": null,
+    "image": "019034_feedback.jpg"
+  }
+}
