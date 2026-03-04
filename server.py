@@ -7,8 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
 
-# Fallback API key for local use (env OPENAI_API_KEY takes precedence). Do not commit real keys.
-OPENAI_API_KEY_CODED = "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"
+OPENAI_API_KEY_CODED = os.environ.get("OPENAI_API_KEY", "")
 
 app = FastAPI()
 
