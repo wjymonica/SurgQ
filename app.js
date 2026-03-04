@@ -852,21 +852,36 @@ async function gradeOpenEnded(answer) {
   }
   setSubmitting(true);
   try {
-    const response = await fetch(GRADE_ENDPOINT, {
+    const apiKey = window.OPENAI_CONFIG?.apiKey;
+    if (!apiKey) throw new Error("OpenAI API key not configured.");
+    const model = window.OPENAI_CONFIG?.model || "gpt-4o-mini";
+    const rubric = currentMeta?.rubric ?? [];
+    const stemText = currentMeta?.stem?.text || "";
+    const rubricLines = rubric.length ? rubric.map((r) => `- ${r}`).join("\n") : "- (none)";
+    const systemPrompt = "You are a strict grader. Use the rubric to decide whether the answer aligns with expectations. Return JSON with keys: verdict (pass or fail) and reason (short).";
+    const userPrompt = `Question: ${stemText}\n\nRubric:\n${rubricLines}\n\nAnswer:\n${answer}\n\nEvaluate alignment with the rubric and respond with JSON only.`;
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        answer,
-        rubric: currentMeta?.rubric ?? [],
-        stem: currentMeta?.stem ?? {},
+        model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        temperature: 0,
       }),
     });
     if (!response.ok) {
       throw new Error("Unable to grade the answer.");
     }
-    const result = await response.json();
+    const raw = await response.json();
+    const content = raw.choices?.[0]?.message?.content || "";
+    let result;
+    try { result = JSON.parse(content); } catch { result = {}; }
     if (isPretestOrPosttest()) {
       correctAnswer.textContent = "";
       feedbackText.textContent = "";
