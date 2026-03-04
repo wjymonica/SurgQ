@@ -20,3 +20,4 @@ node_modules/
 *.pem
 firebase-config.js
 *.ipynb
+server.py
