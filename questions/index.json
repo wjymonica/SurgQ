@@ -1,15 +1,10 @@
 [
-  "pretest1", "pretest2", "pretest3", "pretest4", "pretest5", "pretest6", "pretest7", "pretest8", "pretest17",
-  "exposure1", "exposure2", "exposure3", "exposure4", "exposure5", "exposure6", "exposure7", "exposure8", "exposure9", "exposure10",
-  "exposure11", "exposure12", "exposure13", "exposure14", "exposure15", "exposure16", "exposure17", "exposure18", "exposure19", "exposure20",
-  "anatomy1", "anatomy2", "anatomy3", "anatomy4", "anatomy5", "anatomy6", "anatomy7", "anatomy8", "anatomy9", "anatomy10",
-  "anatomy11", "anatomy12", "anatomy13", "anatomy14", "anatomy15", "anatomy16", "anatomy17", "anatomy18", "anatomy19", "anatomy20",
-  "cvs1", "cvs2", "cvs3", "cvs4", "cvs5", "cvs6", "cvs7", "cvs8", "cvs9", "cvs10",
-  "cvs11", "cvs12", "cvs13", "cvs14", "cvs15", "cvs16", "cvs17", "cvs18", "cvs19", "cvs20",
-  "tool1", "tool2", "tool3", "tool4", "tool5", "tool6", "tool7", "tool8", "tool9", "tool10", "tool11", "tool12", "tool13",
-  "baselineanatomy1", "baselineanatomy2", "baselineanatomy3", "baselineanatomy4", "baselineanatomy5", "baselineanatomy6",
-  "baselinecvs1", "baselinecvs2", "baselinecvs3", "baselinecvs4", "baselinecvs5", "baselinecvs6", "baselinecvs7", "baselinecvs8",
-  "baselineexposure1", "baselineexposure2", "baselineexposure3", "baselineexposure4", "baselineexposure5", "baselineexposure6", "baselineexposure7", "baselineexposure8",
-  "baselinetool1", "baselinetool2", "baselinetool3", "baselinetool4", "baselinetool5", "baselinetool6",
-  "posttest1", "posttest2", "posttest3", "posttest4", "posttest5", "posttest6", "posttest7", "posttest8", "posttest9"
+  "pretest1", "posttest2", "pretest6", "pretest17", "pretest3", "pretest5", "pretest4", "posttest5",
+  "anatomy1", "anatomy2", "anatomy5", "anatomy6", "anatomy10", "anatomy11",
+  "tool1", "tool2", "tool3", "tool4", "tool8", "tool10",
+  "exposure1", "exposure4", "exposure8", "exposure9", "exposure12", "exposure13", "exposure19", "exposure20",
+  "anatomy3", "anatomy4", "anatomy7", "anatomy12", "anatomy13", "anatomy18",
+  "tool5", "tool6", "tool9", "tool11", "tool12", "tool13",
+  "cvs1", "cvs2", "cvs5", "cvs7", "cvs9", "cvs10", "cvs12", "cvs17",
+  "posttest4", "posttest6", "posttest1", "posttest9", "pretest8", "pretest7", "posttest3", "posttest7"
 ]

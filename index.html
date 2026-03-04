@@ -9,7 +9,7 @@
   <body>
     <main class="page">
       <!-- Login / Sign up (shown when not logged in) -->
-      <section id="authCard" class="card auth-card">
+      <section id="authCard" class="card auth-card hidden">
         <h2>Student Login</h2>
         <p class="auth-hint">Enter your email to continue. First time: you’re in right away. Returning: just enter the same email from any device.</p>
         <div id="authError" class="auth-error hidden"></div>
@@ -110,9 +110,6 @@
           <img id="feedbackImage" alt="Feedback visual" />
         </div>
         <div id="correctAnswer" class="correct-answer"></div>
-        <div class="actions nav-after-feedback">
-          <button type="button" id="nextQuestion">Next question</button>
-        </div>
       </section>
 
       <section id="transitionCard" class="card transition-card hidden">
