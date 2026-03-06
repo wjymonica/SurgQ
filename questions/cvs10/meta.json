@@ -6,15 +6,13 @@
   },
   "rubric": [
     "no",
-    "wrong:(fat, attach, cysticduct, 179)",
-    "wrong:(fat, attach, cysticartery, 0)",
+    "wrong:(fat, attach, cysticduct, high)",
     "wrong:(cysticduct, attach, neck, high)",
     "wrong:(cysticduct, separate, cysticartery, low)",
-    "required objects missing:",
-    "(\"dissected\")"
+    "required objects missing:(\"dissected\")"
   ],
   "feedback": {
-    "text": "\u274c \u2022 Hepatocystic triangle completely cleared of fat and fibrous tissue\n\u274c \u2022 Cystic duct and artery clearly identified and skeletonized\n\u2705 \u2022 Cystic artery is visible\n\u2705 \u2022 Cystic duct is visible\n\u274c \u2022 Lower third of the gallbladder dissected off the liver bed",
+    "text": "❌ • Cystic duct and artery clearly separated and skeletonized\n✅ • Cystic artery is visible\n✅ • Cystic duct is visible\n❌ • Lower third of the gallbladder dissected off the liver bed",
     "image": "019034_feedback.jpg"
   }
 }

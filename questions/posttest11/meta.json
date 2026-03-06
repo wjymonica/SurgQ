@@ -1,0 +1,14 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "What is the name of the anatomical structure indicated by the arrow?",
+    "image": "001615_question.jpg"
+  },
+  "rubric": [
+    "intestine"
+  ],
+  "feedback": {
+    "text": "The structure is the intestine (duodenum), which must be mobilized away from the gallbladder and neck to achieve safe exposure.",
+    "image": null
+  }
+}

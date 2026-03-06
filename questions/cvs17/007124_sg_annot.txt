@@ -1,4 +1,5 @@
 relevant scene graph:
 - (cysticartery, separate, cysticduct, high)
 - (gall, , dissected, )
+- (connected tissue, attach, cysticartery, medium)
 source: lap1

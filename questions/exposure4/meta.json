@@ -11,7 +11,7 @@
     "required objects missing:(\"neck\")"
   ],
   "feedback": {
-    "text": "\u274c \u2022 Gallbladder neck clearly visible\n\u274c \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u274c \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
+    "text": "❌ • Gallbladder neck clearly visible\n❌ • Gallbaldder and neck adequately retracted (lateral and inferior traction)\n❌ • Intestine, fat, and connected tissue adequately mobilize away from gallbladder and neck",
     "image": "000125_feedback.jpg"
   }
 }

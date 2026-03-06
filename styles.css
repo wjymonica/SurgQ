@@ -174,7 +174,15 @@ button.secondary {
 
 .options.options-disabled {
   pointer-events: none;
+}
+
+.options.options-disabled .option-card {
   opacity: 0.85;
+}
+
+.options.options-disabled .option-card img {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mcq-hint {
@@ -506,4 +514,19 @@ button.secondary {
 .debug-jump button {
   font-size: 14px;
   padding: 6px 14px;
+}
+
+.completion-card {
+  text-align: center;
+  padding: 48px 32px;
+}
+
+.completion-card h2 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.completion-message {
+  color: #6b7280;
+  font-size: 16px;
 }

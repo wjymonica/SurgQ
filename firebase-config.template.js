@@ -10,7 +10,7 @@ window.FIREBASE_CONFIG = {
 };
 
 window.APP_CONFIG = {
-  mode: "debug",
+  mode: "v1",
 };
 
 window.OPENAI_CONFIG = {

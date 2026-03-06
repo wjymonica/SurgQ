@@ -1,0 +1,14 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "What is the name of the metallic structure being applied to the vessel in this image?",
+    "image": "036745.jpg"
+  },
+  "rubric": [
+    "clip"
+  ],
+  "feedback": {
+    "text": "The metallic structure is a surgical clip (hemoclip), used to ligate the cystic duct or artery.",
+    "image": null
+  }
+}

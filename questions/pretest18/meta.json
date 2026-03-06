@@ -1,0 +1,14 @@
+{
+  "question_type": "open_ended",
+  "stem": {
+    "text": "What is the name of anatomical structure C?",
+    "image": "001283_question.jpg"
+  },
+  "rubric": [
+    "gallbladder"
+  ],
+  "feedback": {
+    "text": "Structure C is the gallbladder.",
+    "image": "001283_feedback.jpg"
+  }
+}

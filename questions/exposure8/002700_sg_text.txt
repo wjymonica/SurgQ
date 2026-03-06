@@ -1,8 +1,12 @@
 fulfilled:
 - (grasper1, retract, gall, true)
+- (neck, attach, intestine, low)
+- (neck, attach, fat, low)
+- (gall, attach, intestine, low)
+- (gall, attach, fat, low)
 - required objects shown:
 - ("gall")
 - ("neck")
-- (neck, attach, intestine, low)
+
 
 unfulfilled:

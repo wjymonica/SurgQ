@@ -12,7 +12,7 @@
       "image": "002168.jpg",
       "answer": "N",
       "feedback": {
-        "text": "\u274c \u2022 Gallbladder neck clearly visible\n\u274c \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u274c \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
+        "text": "❌ • Gallbladder neck clearly visible\n❌ • Gallbaldder and neck adequately retracted (lateral and inferior traction)\n❌ • Intestine, fat, and connected tissue adequately mobilize away from gallbladder and neck",
         "image": "002168_feedback.jpg"
       }
     },
@@ -22,7 +22,7 @@
       "image": "002420.jpg",
       "answer": "N",
       "feedback": {
-        "text": "\u2705 \u2022 Gallbladder neck clearly visible\n\u274c \u2022 Gallbaldder and neck adequately retracted (lateral and inferior traction)\n\u274c \u2022 Duodenum and omentum cleared from the gallbladder\n\u274c \u2022 Duodenum and omentum cleared from the neck",
+        "text": "✅ • Gallbladder neck clearly visible\n❌ • Gallbaldder and neck adequately retracted (lateral and inferior traction)\n❌ • Intestine, fat, and connected tissue adequately mobilize away from gallbladder and neck",
         "image": "002420_feedback.jpg"
       }
     }

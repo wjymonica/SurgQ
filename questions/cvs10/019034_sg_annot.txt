@@ -1,5 +1,4 @@
 relevant scene graph:
-- (neck, attach, cysticartery, low)
 - (fat, attach, cysticduct, high)
 - (cysticduct, attach, neck, high)
 - (cysticduct, separate, cysticartery, low)

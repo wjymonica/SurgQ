@@ -1,6 +1,5 @@
 fulfilled:
 - (cysticartery, separate, cysticduct, high)
-- (connected tissue, attach, cysticartery, low)
 - (connected tissue, attach, cysticduct, low)
 - (cysticartery, attach, neck, low)
 - (cysticduct, attach, neck, low)
@@ -12,3 +11,4 @@ fulfilled:
 - ("dissected")
 
 unfulfilled:
+- wrong:(connected tissue, attach, cysticartery, medium)

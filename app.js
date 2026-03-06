@@ -43,16 +43,33 @@ const transitionContinueBtn = document.getElementById("transitionContinue");
 const imageLightbox = document.getElementById("imageLightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const lightboxClose = document.getElementById("lightboxClose");
-const debugPanel = document.getElementById("debugPanel");
-const debugJumpSelect = document.getElementById("debugJumpSelect");
-const debugJumpGoBtn = document.getElementById("debugJumpGo");
+const completionCard = document.getElementById("completionCard");
+
+// Debug panel: only injected into the DOM in debug mode
+const _appMode = (window.APP_CONFIG && window.APP_CONFIG.mode) || "debug";
+let debugPanel = null, debugJumpSelect = null, debugJumpGoBtn = null;
+if (_appMode === "debug") {
+  const _dp = document.createElement("div");
+  _dp.id = "debugPanel";
+  _dp.className = "debug-panel";
+  _dp.innerHTML = `<span class="debug-badge">DEBUG MODE</span>
+    <div class="debug-jump">
+      <label for="debugJumpSelect">Jump to:</label>
+      <select id="debugJumpSelect"></select>
+      <button type="button" id="debugJumpGo">Go</button>
+    </div>`;
+  document.getElementById("appContent").insertBefore(_dp, document.getElementById("questionCard"));
+  debugPanel = _dp;
+  debugJumpSelect = document.getElementById("debugJumpSelect");
+  debugJumpGoBtn = document.getElementById("debugJumpGo");
+}
 const versionBadge = document.getElementById("versionBadge");
 const sessionTimerEl = document.getElementById("sessionTimer");
 const sessionTimerDisplayEl = document.getElementById("sessionTimerDisplay");
 
 const EMAIL_LINK_STORAGE_KEY = "surgQ_emailForSignIn";
 const PRETEST_COUNT = 8;
-const POSTTEST_COUNT = 8;
+const POSTTEST_COUNT = 10;
 const SESSION_DURATIONS_MS = { pretest: 10 * 60 * 1000, main: 30 * 60 * 1000, posttest: 10 * 60 * 1000 };
 const PASSWORD_STORAGE_PREFIX = "surgQ_pw_";
 const IMAGE_V = Date.now(); // cache-bust images on every page load
@@ -395,8 +412,6 @@ function updateModeUI() {
   }
   // Export PDF: debug only
   if (exportFeedbackPdfBtn) exportFeedbackPdfBtn.style.display = isDebugMode() ? "" : "none";
-  // Debug panel: hidden until questions load; hide entirely in non-debug modes
-  if (debugPanel && !isDebugMode()) debugPanel.classList.add("hidden");
   // In debug mode, hide auth controls (no login)
   if (isDebugMode()) {
     if (userEmailEl) userEmailEl.style.display = "none";
@@ -521,7 +536,7 @@ function onTimerExpired(session) {
   if (nextIndex < questionList.length) {
     if (questionCard) questionCard.classList.add("hidden");
     if (feedbackCard) feedbackCard.classList.add("hidden");
-    loadQuestionAtIndex(nextIndex);
+    showTransitionToNextSession(nextIndex);
   }
 }
 
@@ -761,16 +776,24 @@ function showFeedback(selectedIds) {
     const correctIndexes = correctOptions
       .map((opt) => currentMeta.options.findIndex((item) => item.id === opt.id))
       .filter((index) => index >= 0);
-    const correctLabel =
-      correctIndexes.length === 0
-        ? "No correct options."
-        : `Correct answer: ${correctIndexes
-            .map((index) => String.fromCharCode(65 + index))
-            .join(", ")}`;
+    const isCorrect =
+      correctIds.size === 0
+        ? true
+        : correctIds.size === selectedSet.size &&
+          [...correctIds].every((id) => selectedSet.has(id));
 
-    feedbackText.textContent =
-      currentMeta.feedback?.text ?? "General feedback not provided.";
-    correctAnswer.textContent = correctLabel;
+    if (!isCorrect) {
+      const correctLabel =
+        correctIndexes.length === 0
+          ? "No correct options."
+          : `The correct answer is ${correctIndexes
+              .map((index) => String.fromCharCode(65 + index))
+              .join(", ")}.`;
+      feedbackText.textContent = `Your answer is incorrect. ${correctLabel}`;
+    } else {
+      feedbackText.textContent = "Your answer is correct.";
+    }
+    correctAnswer.textContent = "";
 
     const hasGeneralFeedback =
       Boolean(currentMeta.feedback?.text) || Boolean(currentMeta.feedback?.image);
@@ -1018,9 +1041,15 @@ async function loadQuestionAtIndex(i) {
   if (debugJumpSelect) debugJumpSelect.value = String(i);
 }
 
+function showCompletion() {
+  [questionCard, feedbackCard, transitionCard, errorCard].forEach((el) => el && el.classList.add("hidden"));
+  if (completionCard) completionCard.classList.remove("hidden");
+  stopSessionTimer();
+}
+
 function goToNextQuestion() {
   const nextIndex = currentQuestionIndex + 1;
-  if (nextIndex >= questionList.length) return;
+  if (nextIndex >= questionList.length) { showCompletion(); return; }
   if (showTransitionToNextSession(nextIndex)) return;
   loadQuestionAtIndex(nextIndex);
 }
@@ -1085,6 +1114,11 @@ if (lightboxImage) {
 }
 if (lightboxClose) {
   lightboxClose.addEventListener("click", closeLightbox);
+}
+if (feedbackImage) {
+  feedbackImage.addEventListener("click", () => {
+    if (feedbackImage.src) openLightbox(feedbackImage.src);
+  });
 }
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && imageLightbox && !imageLightbox.classList.contains("hidden")) {
@@ -1166,14 +1200,7 @@ if (dontKnowButton) {
         showError(err && err.message ? err.message : "Failed to load next question.");
       }
     } else {
-      feedbackText.textContent = "";
-      correctAnswer.textContent = "";
-      feedbackImageWrapper.classList.add("hidden");
-      feedbackImage.removeAttribute("src");
-      feedbackCard.classList.add("no-feedback-content");
-      feedbackCard.classList.remove("hidden");
-      questionCard.classList.add("hidden");
-      updatePrevNextVisibility();
+      showCompletion();
     }
   });
 }

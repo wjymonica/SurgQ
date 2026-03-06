@@ -1,10 +1,10 @@
 [
-  "pretest1", "posttest2", "pretest6", "pretest17", "pretest3", "pretest5", "pretest4", "posttest5",
-  "anatomy1", "anatomy2", "anatomy5", "anatomy6", "anatomy10", "anatomy11",
-  "tool1", "tool2", "tool3", "tool4", "tool8", "tool10",
-  "exposure1", "exposure4", "exposure8", "exposure9", "exposure12", "exposure13", "exposure19", "exposure20",
-  "anatomy3", "anatomy4", "anatomy7", "anatomy12", "anatomy13", "anatomy18",
-  "tool5", "tool6", "tool9", "tool11", "tool12", "tool13",
-  "cvs1", "cvs2", "cvs5", "cvs7", "cvs9", "cvs10", "cvs12", "cvs17",
-  "posttest4", "posttest6", "posttest1", "posttest9", "pretest8", "pretest7", "posttest3", "posttest7"
+  "pretest1", "posttest2", "pretest6", "Pretest18", "pretest3", "pretest5", "pretest4", "posttest5",
+  "anatomy1", "anatomy2", "anatomy6", "anatomy10",
+  "tool1", "tool4", "tool8", "tool10",
+  "exposure1", "exposure8", "exposure9", "exposure13", "exposure19", "exposure20", "exposure4",
+  "anatomy3", "anatomy4", "anatomy13", "anatomy18",
+  "tool5", "tool6", "tool9", "tool13",
+  "cvs1", "cvs5", "cvs7", "cvs9", "cvs17", "cvs2", "cvs10",
+  "posttest4", "posttest6", "posttest11", "posttest9", "pretest8", "posttest10", "posttest3", "posttest7"
 ]
