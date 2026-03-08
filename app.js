@@ -69,7 +69,8 @@ const sessionTimerDisplayEl = document.getElementById("sessionTimerDisplay");
 
 const EMAIL_LINK_STORAGE_KEY = "surgQ_emailForSignIn";
 const PRETEST_COUNT = 8;
-const POSTTEST_COUNT = 10;
+const POSTTEST_COUNT = 10; // default fallback; overridden per-index via posttestCount field
+let currentPosttestCount = POSTTEST_COUNT;
 const SESSION_DURATIONS_MS = { pretest: 10 * 60 * 1000, main: 30 * 60 * 1000, posttest: 10 * 60 * 1000 };
 const PASSWORD_STORAGE_PREFIX = "surgQ_pw_";
 const IMAGE_V = Date.now(); // cache-bust images on every page load
@@ -91,7 +92,7 @@ let transitionNextIndex = 0;
 function getSessionBoundaries() {
   const n = questionList.length;
   const pretestEnd = Math.min(PRETEST_COUNT, n);
-  const mainEnd = Math.max(pretestEnd, n - POSTTEST_COUNT);
+  const mainEnd = Math.max(pretestEnd, n - currentPosttestCount);
   return { pretestEnd, mainEnd, posttestStart: mainEnd };
 }
 
@@ -406,6 +407,9 @@ function updateModeUI() {
     } else if (mode === "v2") {
       versionBadge.textContent = "Version 2";
       versionBadge.className = "version-badge v2";
+    } else if (mode === "review") {
+      versionBadge.textContent = "REVIEW";
+      versionBadge.className = "version-badge review";
     } else {
       versionBadge.className = "version-badge hidden";
     }
@@ -417,6 +421,143 @@ function updateModeUI() {
     if (userEmailEl) userEmailEl.style.display = "none";
     if (signOutButton) signOutButton.style.display = "none";
   }
+  // In review mode, hide quiz progress UI
+  if (mode === "review") {
+    const progressSessions = document.querySelector(".progress-sessions");
+    if (progressSessions) progressSessions.style.display = "none";
+    const questionNavInfo = document.querySelector(".question-nav-info");
+    if (questionNavInfo) questionNavInfo.style.display = "none";
+    if (exportFeedbackPdfBtn) exportFeedbackPdfBtn.style.display = "none";
+  }
+}
+
+// ── Review mode ────────────────────────────────────────────
+async function renderReviewReport() {
+  const reviewCard = document.getElementById("reviewCard");
+  const reviewLoading = document.getElementById("reviewLoading");
+  const reviewContent = document.getElementById("reviewContent");
+
+  [questionCard, feedbackCard, transitionCard, completionCard].forEach((el) => el && el.classList.add("hidden"));
+  if (reviewCard) reviewCard.classList.remove("hidden");
+
+  try {
+    const resp = await fetch("./questions/index.json");
+    const indexData = await resp.json();
+    const allQuestions = Array.isArray(indexData) ? indexData : indexData.questions;
+    const reviewPosttestCount = Array.isArray(indexData) ? POSTTEST_COUNT : (indexData.posttestCount ?? POSTTEST_COUNT);
+
+    const metas = {};
+    await Promise.all(allQuestions.map(async (qid) => {
+      try {
+        const r = await fetch(`./questions/${qid}/meta.json`);
+        if (r.ok) metas[qid] = await r.json();
+      } catch {}
+    }));
+
+    const snap = await db.ref("users").once("value");
+    const allUsers = snap.val() || {};
+    const userEntries = Object.entries(allUsers);
+
+    if (!userEntries.length) {
+      reviewContent.innerHTML = "<p class='review-empty'>No student data found.</p>";
+      reviewLoading.classList.add("hidden");
+      reviewContent.classList.remove("hidden");
+      return;
+    }
+
+    const n = allQuestions.length;
+    const pretestEnd = Math.min(PRETEST_COUNT, n);
+    const posttestStart = Math.max(pretestEnd, n - reviewPosttestCount);
+
+    // Summary table
+    let html = `<table class="review-summary">
+      <thead><tr>
+        <th>Student</th>
+        <th>Pretest (${pretestEnd})</th>
+        <th>Main (${posttestStart - pretestEnd})</th>
+        <th>Posttest (${n - posttestStart})</th>
+      </tr></thead><tbody>`;
+    for (const [uid, user] of userEntries) {
+      const email = user.email || uid;
+      const prog = user.progress || {};
+      const ptDone = allQuestions.slice(0, pretestEnd).filter((q) => prog[q]?.completed).length;
+      const mainDone = allQuestions.slice(pretestEnd, posttestStart).filter((q) => prog[q]?.completed).length;
+      const pstDone = allQuestions.slice(posttestStart).filter((q) => prog[q]?.completed).length;
+      html += `<tr><td><a href="#ru-${uid}">${email}</a></td><td>${ptDone}/${pretestEnd}</td><td>${mainDone}/${posttestStart - pretestEnd}</td><td>${pstDone}/${n - posttestStart}</td></tr>`;
+    }
+    html += "</tbody></table>";
+
+    // Per-user detail
+    const sections = [
+      { label: "Pretest", qs: allQuestions.slice(0, pretestEnd) },
+      { label: "Main", qs: allQuestions.slice(pretestEnd, posttestStart) },
+      { label: "Posttest", qs: allQuestions.slice(posttestStart) },
+    ];
+
+    for (const [uid, user] of userEntries) {
+      const email = user.email || uid;
+      const prog = user.progress || {};
+      html += `<div class="review-user" id="ru-${uid}"><h3>${email}</h3>
+        <table class="review-table"><thead><tr>
+          <th>Question</th><th>Type</th><th>Answer given</th><th>Result</th>
+        </tr></thead><tbody>`;
+
+      for (const { label, qs } of sections) {
+        html += `<tr class="review-section-row"><td colspan="4">${label}</td></tr>`;
+        for (const qid of qs) {
+          const p = prog[qid];
+          const meta = metas[qid];
+          if (!p?.completed) {
+            html += `<tr><td>${qid}</td><td>—</td><td class="rv-skip">Not answered</td><td>—</td></tr>`;
+            continue;
+          }
+          const type = meta?.question_type || "—";
+          let ansStr = "—", resStr = "—", resCls = "";
+          if (type === "open_ended") {
+            ansStr = p.openEndedAnswer?.trim() ? p.openEndedAnswer.trim() : "<em>(blank)</em>";
+          } else {
+            const selected = p.selectedOptionIds || [];
+            const correct = (meta?.options || []).filter((o) => o.answer === "Y").map((o) => o.id);
+            if (!selected.length) {
+              ansStr = "<em>(skipped)</em>";
+              resStr = "Skipped";
+              resCls = "rv-skip";
+            } else {
+              ansStr = selected.map((id) => String.fromCharCode(65 + id)).join(", ");
+              const isCorrect = selected.length === correct.length && selected.every((id) => correct.includes(id));
+              const correctLabel = correct.map((id) => String.fromCharCode(65 + id)).join(", ") || "—";
+              resStr = isCorrect ? "✓ Correct" : `✗ (correct: ${correctLabel})`;
+              resCls = isCorrect ? "rv-correct" : "rv-incorrect";
+            }
+          }
+          html += `<tr><td>${qid}</td><td>${type}</td><td>${ansStr}</td><td class="${resCls}">${resStr}</td></tr>`;
+        }
+      }
+      html += "</tbody></table></div>";
+    }
+
+    reviewContent.innerHTML = html;
+    reviewLoading.classList.add("hidden");
+    reviewContent.classList.remove("hidden");
+  } catch (err) {
+    if (reviewLoading) reviewLoading.textContent = "Error loading data: " + (err.message || err);
+  }
+}
+
+async function startReviewMode() {
+  initFirebase();
+  trySignInWithEmailLink().then(() => {
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user) {
+        appContent.classList.remove("hidden");
+        authCard.classList.add("hidden");
+        if (userEmailEl) userEmailEl.textContent = user.email || "";
+        await renderReviewReport();
+      } else {
+        showAuth();
+      }
+    });
+  });
 }
 
 async function loadQuestionList() {
@@ -425,10 +566,12 @@ async function loadQuestionList() {
     if (!response.ok) {
       throw new Error("Question index not found.");
     }
-    const list = await response.json();
+    const data = await response.json();
+    const list = Array.isArray(data) ? data : data.questions;
     if (!Array.isArray(list) || list.length === 0) {
       throw new Error("Question index is empty.");
     }
+    currentPosttestCount = Array.isArray(data) ? POSTTEST_COUNT : (data.posttestCount ?? POSTTEST_COUNT);
     questionList = list;
     updateProgressBar();
     buildDebugPanel();
@@ -881,8 +1024,8 @@ async function gradeOpenEnded(answer) {
     const rubric = currentMeta?.rubric ?? [];
     const stemText = currentMeta?.stem?.text || "";
     const rubricLines = rubric.length ? rubric.map((r) => `- ${r}`).join("\n") : "- (none)";
-    const systemPrompt = "You are a strict grader. Use the rubric to decide whether the answer aligns with expectations. Return JSON with keys: verdict (pass or fail) and reason (short).";
-    const userPrompt = `Question: ${stemText}\n\nRubric:\n${rubricLines}\n\nAnswer:\n${answer}\n\nEvaluate alignment with the rubric and respond with JSON only.`;
+    const systemPrompt = "You are a strict grader. For each rubric item, decide whether the student's answer correctly mentions and addresses it. Return JSON with two keys: \"verdict\" (\"pass\" if every rubric item is addressed correctly, otherwise \"fail\"), and \"missing\" (array of rubric item strings that were not addressed or were incorrect — empty array if verdict is pass).";
+    const userPrompt = `Question: ${stemText}\n\nRubric items:\n${rubricLines}\n\nStudent answer:\n${answer}\n\nRespond with JSON only.`;
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -916,14 +1059,24 @@ async function gradeOpenEnded(answer) {
       const verdictRaw =
         typeof result.verdict === "string" ? result.verdict.toLowerCase() : "";
       const isCorrect = verdictRaw === "pass";
-      correctAnswer.textContent = isCorrect ? "Correct" : "Wrong";
+      correctAnswer.textContent = "";
       if (isCorrect) {
-        feedbackText.textContent = result.reason ?? "Graded as correct.";
+        feedbackText.textContent = "Your response is correct.";
         feedbackImageWrapper.classList.add("hidden");
         feedbackImage.removeAttribute("src");
       } else {
-        feedbackText.textContent =
-          currentMeta?.feedback?.text ?? "Answer did not meet the rubric.";
+        const missing = Array.isArray(result.missing) && result.missing.length
+          ? result.missing
+          : rubric;
+        let msg;
+        if (missing.length === 1) {
+          msg = `Your response is incorrect — you did not mention ${missing[0]}.`;
+        } else {
+          const last = missing[missing.length - 1];
+          const rest = missing.slice(0, -1).join(", ");
+          msg = `Your response is incorrect — you did not mention ${rest} and ${last}.`;
+        }
+        feedbackText.textContent = msg;
         if (currentMeta?.feedback?.image) {
           feedbackImage.src = `./questions/${currentFolder}/${currentMeta.feedback.image}?v=${IMAGE_V}`;
           feedbackImageWrapper.classList.remove("hidden");
@@ -1458,6 +1611,11 @@ function startApp() {
     appContent.classList.remove("hidden");
     authCard.classList.add("hidden");
     loadQuestionList();
+    return;
+  }
+
+  if (getAppMode() === "review") {
+    startReviewMode();
     return;
   }
 
