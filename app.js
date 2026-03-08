@@ -1024,7 +1024,7 @@ async function gradeOpenEnded(answer) {
     const rubric = currentMeta?.rubric ?? [];
     const stemText = currentMeta?.stem?.text || "";
     const rubricLines = rubric.length ? rubric.map((r) => `- ${r}`).join("\n") : "- (none)";
-    const systemPrompt = "You are a strict grader. For each rubric item, decide whether the student's answer correctly mentions and addresses it. Return JSON with two keys: \"verdict\" (\"pass\" if every rubric item is addressed correctly, otherwise \"fail\"), and \"missing\" (array of rubric item strings that were not addressed or were incorrect — empty array if verdict is pass).";
+    const systemPrompt = "You are a surgical instructor giving feedback on a student's short answer. Evaluate whether the answer addresses every criterion. Return JSON with two keys: \"verdict\" (\"pass\" if all criteria are met, otherwise \"fail\"), and \"feedback\" (two to three sentences written as a helpful instructor — never use the word 'rubric'; if pass, briefly affirm what the student got right; if fail, write each unmet criterion as a complete hint sentence that guides the student toward the correct answer without giving it away, then encourage them to try again).";
     const userPrompt = `Question: ${stemText}\n\nRubric items:\n${rubricLines}\n\nStudent answer:\n${answer}\n\nRespond with JSON only.`;
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -1060,23 +1060,14 @@ async function gradeOpenEnded(answer) {
         typeof result.verdict === "string" ? result.verdict.toLowerCase() : "";
       const isCorrect = verdictRaw === "pass";
       correctAnswer.textContent = "";
+      const gradingFeedback = result.feedback?.trim() || (isCorrect ? "Your response is correct." : "Your response is incorrect. Please try again.");
       if (isCorrect) {
-        feedbackText.textContent = "Your response is correct.";
+        feedbackText.textContent = gradingFeedback;
         feedbackImageWrapper.classList.add("hidden");
         feedbackImage.removeAttribute("src");
       } else {
-        const missing = Array.isArray(result.missing) && result.missing.length
-          ? result.missing
-          : rubric;
-        let msg;
-        if (missing.length === 1) {
-          msg = `Your response is incorrect — you did not mention ${missing[0]}.`;
-        } else {
-          const last = missing[missing.length - 1];
-          const rest = missing.slice(0, -1).join(", ");
-          msg = `Your response is incorrect — you did not mention ${rest} and ${last}.`;
-        }
-        feedbackText.textContent = msg;
+        const metaFeedbackText = currentMeta?.feedback?.text?.trim();
+        feedbackText.textContent = metaFeedbackText ? `${gradingFeedback}\n\n${metaFeedbackText}` : gradingFeedback;
         if (currentMeta?.feedback?.image) {
           feedbackImage.src = `./questions/${currentFolder}/${currentMeta.feedback.image}?v=${IMAGE_V}`;
           feedbackImageWrapper.classList.remove("hidden");

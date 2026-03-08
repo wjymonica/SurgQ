@@ -6,9 +6,9 @@
   },
   "rubric": [
     "no",
-    "wrong:(fat, attach, gall, medium)",
-    "missing:(grasper2, retract, gall, true)",
-    "required objects missing:(\"neck\")"
+    "Fat is still occluding the gallbladder",
+    "Neck is not visible yet",
+    "Grasper is not used to retract the gallbladder or neck."
   ],
   "feedback": {
     "text": "❌ • Gallbladder neck clearly visible\n❌ • Gallbaldder and neck adequately retracted (lateral and inferior traction)\n❌ • Intestine, fat, and connected tissue adequately mobilize away from gallbladder and neck",
