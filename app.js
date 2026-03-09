@@ -1017,6 +1017,8 @@ async function gradeOpenEnded(answer) {
     return;
   }
   setSubmitting(true);
+  feedbackCard.classList.add("hidden");
+  feedbackText.textContent = "";
   try {
     const apiKey = window.OPENAI_CONFIG?.apiKey;
     if (!apiKey) throw new Error("OpenAI API key not configured.");
@@ -1024,7 +1026,7 @@ async function gradeOpenEnded(answer) {
     const rubric = currentMeta?.rubric ?? [];
     const stemText = currentMeta?.stem?.text || "";
     const rubricLines = rubric.length ? rubric.map((r) => `- ${r}`).join("\n") : "- (none)";
-    const systemPrompt = "You are a surgical instructor giving feedback on a student's short answer. Evaluate whether the answer addresses every criterion. Return JSON with two keys: \"verdict\" (\"pass\" if all criteria are met, otherwise \"fail\"), and \"feedback\" (two to three sentences written as a helpful instructor — never use the word 'rubric'; if pass, briefly affirm what the student got right; if fail, write each unmet criterion as a complete hint sentence that guides the student toward the correct answer without giving it away, then encourage them to try again).";
+    const systemPrompt = "You are a generous surgical instructor giving feedback on a student's short answer. Evaluate whether the answer addresses every criterion. Be extremely lenient: if the student's answer covers any part of a criterion's meaning, or touches on the relevant concept even partially, mark that criterion as met. Only mark a criterion unmet if the answer shows no connection to it whatsoever. Return JSON with two keys: \"verdict\" (\"pass\" if all criteria are met, otherwise \"fail\"), and \"feedback\" (two to three sentences written as a helpful instructor — never use the word 'rubric'; if pass, briefly affirm what the student got right; if fail, write each unmet criterion as a complete hint sentence that guides the student toward the correct answer without giving it away, then encourage them to try again).";
     const userPrompt = `Question: ${stemText}\n\nRubric items:\n${rubricLines}\n\nStudent answer:\n${answer}\n\nRespond with JSON only.`;
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -1048,6 +1050,8 @@ async function gradeOpenEnded(answer) {
     const content = raw.choices?.[0]?.message?.content || "";
     let result;
     try { result = JSON.parse(content); } catch { result = {}; }
+    const verdictRaw = typeof result.verdict === "string" ? result.verdict.toLowerCase() : "";
+    const isCorrect = verdictRaw === "pass";
     if (isPretestOrPosttest()) {
       correctAnswer.textContent = "";
       feedbackText.textContent = "";
@@ -1056,11 +1060,8 @@ async function gradeOpenEnded(answer) {
       feedbackCard.classList.add("no-feedback-content");
     } else {
       feedbackCard.classList.remove("no-feedback-content");
-      const verdictRaw =
-        typeof result.verdict === "string" ? result.verdict.toLowerCase() : "";
-      const isCorrect = verdictRaw === "pass";
       correctAnswer.textContent = "";
-      const gradingFeedback = result.feedback?.trim() || (isCorrect ? "Your response is correct." : "Your response is incorrect. Please try again.");
+      const gradingFeedback = (typeof result.feedback === "string" ? result.feedback.trim() : "") || (isCorrect ? "Your response is correct." : "Your response is incorrect. Please try again.");
       if (isCorrect) {
         feedbackText.textContent = gradingFeedback;
         feedbackImageWrapper.classList.add("hidden");
@@ -1080,16 +1081,17 @@ async function gradeOpenEnded(answer) {
 
     feedbackCard.classList.remove("hidden");
 
-    userProgress[currentFolder] = { ...userProgress[currentFolder], completed: true, openEndedAnswer: answer };
-    updateProgressBar();
-    updatePrevNextVisibility();
-
-    const user = getCurrentUser();
-    if (user && currentFolder) {
-      saveProgress(user.uid, currentFolder, {
-        completed: true,
-        openEndedAnswer: answer,
-      }).catch((e) => console.warn("Firebase save failed", e));
+    if (isCorrect) {
+      userProgress[currentFolder] = { ...userProgress[currentFolder], completed: true, openEndedAnswer: answer };
+      updateProgressBar();
+      showNextQuestionButton();
+      const user = getCurrentUser();
+      if (user && currentFolder) {
+        saveProgress(user.uid, currentFolder, { completed: true, openEndedAnswer: answer })
+          .catch((e) => console.warn("Firebase save failed", e));
+      }
+    } else {
+      if (nextQuestionInCard) nextQuestionInCard.classList.add("hidden");
     }
   } catch (error) {
     showError(error.message);
@@ -1163,7 +1165,11 @@ function updateQuestionPosition() {
 function updatePrevNextVisibility() {
   const hasNext = currentQuestionIndex < questionList.length - 1;
   if (nextButton) nextButton.style.display = hasNext ? "" : "none";
-  if (nextQuestionInCard) nextQuestionInCard.style.display = hasNext ? "" : "none";
+}
+
+function showNextQuestionButton() {
+  const hasNext = currentQuestionIndex < questionList.length - 1;
+  if (nextQuestionInCard) nextQuestionInCard.classList.toggle("hidden", !hasNext);
 }
 
 function updateDontKnowVisibility() {

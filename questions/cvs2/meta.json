@@ -6,13 +6,8 @@
   },
   "rubric": [
     "no",
-    "wrong:(cysticduct, separate, cysticartery, low)",
-    "wrong:(cysticduct, attach, connected tissue, high)",
-    "wrong:(cysticduct, attach, neck, high)",
-    "wrong:(cysticartery, attach, connected tissue, high)",
-    "wrong:(cysticartery, attach, neck, high)",
-    "required objects missing:",
-    "(\"dissected\")"
+    "Cystic duct and artery are not clearly separated and skeletonized",
+    "The lower third of the gallbladder is not dissected off the liver bed"
   ],
   "feedback": {
     "text": "❌ • Cystic duct and artery clearly separated and skeletonized\n✅ • Cystic artery is visible\n✅ • Cystic duct is visible\n❌ • Lower third of the gallbladder dissected off the liver bed",
