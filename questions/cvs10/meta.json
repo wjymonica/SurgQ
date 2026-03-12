@@ -9,7 +9,7 @@
     "Bottom third of the gallbladder is not dissected off the liver bed"
   ],
   "feedback": {
-        "text": "✅ • Cystic duct and artery clearly separated and skeletonized\n✅ • Cystic artery is visible\n✅ • Cystic duct is visible\n❌ • Lower third of the gallbladder dissected off the liver bed",
+        "text": "✅ • Cystic duct and artery clearly separated and skeletonized -> the hepatocystic triangle is clear of all fibrofatty tissue\n✅ • Cystic artery is visible\n✅ • Cystic duct is visible\n❌ • Lower third of the gallbladder dissected off the liver bed",
         "image": "003985_feedback.jpg"
       }
   

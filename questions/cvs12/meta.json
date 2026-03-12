@@ -11,7 +11,7 @@
     "wrong:(cysticartery, attach, neck, high)"
   ],
   "feedback": {
-    "text": "❌ • Cystic duct and artery clearly separated and skeletonized\n✅ • Cystic artery is visible\n✅ • Cystic duct is visible\n✅ • Lower third of the gallbladder dissected off the liver bed",
+    "text": "❌ • Cystic duct and artery clearly separated and skeletonized -> the hepatocystic triangle is clear of all fibrofatty tissue\n✅ • Cystic artery is visible\n✅ • Cystic duct is visible\n✅ • Lower third of the gallbladder dissected off the liver bed",
     "image": "024387_feedback.jpg"
   }
 }

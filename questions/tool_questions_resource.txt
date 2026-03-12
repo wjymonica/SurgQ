@@ -60,13 +60,13 @@ Which instrument action is most appropriate to improve exposure of the gallbladd
   Option 0 (answer=N): Grasping the gallbladder fundus and pulling it inferiorly
     Related tools: grasper
     Related targets: gallbladder
-    Feedback text: This describes retracting the fundus (upper part), not the neck; neck retraction is needed to expose Calot's triangle.
+    Feedback text: This describes retracting the fundus (upper part), not the neck; neck retraction is needed to expose Calot's triangle (neck region).
     Feedback image: lap1/lap1_label/000082.jpg
 
   Option 1 (answer=Y): Grasping the gallbladder neck and retracting it laterally and inferiorly
     Related tools: grasper
     Related targets: neck
-    Feedback text: Proper neck retraction opens Calot's triangle and exposes the dissection plane.
+    Feedback text: Proper neck retraction opens Calot's triangle (neck region) and exposes the dissection plane.
     Feedback image: lap2/lap2_label/001376.jpg
 
   Option 2 (answer=N): Using a hook to push the gallbladder toward the liver

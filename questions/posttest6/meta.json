@@ -1,7 +1,7 @@
 {
   "question_type": "open_ended",
   "stem": {
-    "text": "Based on the image below, is there adequate exposure to begin dissection of the triangle of Calot? Explain why or why not.",
+    "text": "Based on the image below, is there adequate exposure to begin dissection of the triangle of Calot (neck region)? Explain why or why not.",
     "image": "002280.jpg"
   },
   "rubric": [
