@@ -1,4 +1,5 @@
 {
+  "pretestCount": 8,
   "posttestCount": 10,
   "questions": [
     "pretest1", "posttest2", "pretest6", "pretest17", "pretest3", "pretest5", "pretest4", "posttest5",

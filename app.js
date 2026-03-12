@@ -44,6 +44,8 @@ const imageLightbox = document.getElementById("imageLightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const lightboxClose = document.getElementById("lightboxClose");
 const completionCard = document.getElementById("completionCard");
+const backToSummaryBtn = document.getElementById("backToSummary");
+const responseHistoryEl = document.getElementById("responseHistory");
 
 // Debug panel: only injected into the DOM in debug mode
 const _appMode = (window.APP_CONFIG && window.APP_CONFIG.mode) || "debug";
@@ -69,9 +71,10 @@ const sessionTimerDisplayEl = document.getElementById("sessionTimerDisplay");
 
 const EMAIL_LINK_STORAGE_KEY = "surgQ_emailForSignIn";
 const PRETEST_COUNT = 8;
-const POSTTEST_COUNT = 10; // default fallback; overridden per-index via posttestCount field
+const POSTTEST_COUNT = 10; // default fallbacks; overridden per-index
+let currentPretestCount = PRETEST_COUNT;
 let currentPosttestCount = POSTTEST_COUNT;
-const SESSION_DURATIONS_MS = { pretest: 10 * 60 * 1000, main: 30 * 60 * 1000, posttest: 10 * 60 * 1000 };
+const SESSION_DURATIONS_MS = { pretest: 5 * 60 * 1000, main: 15 * 60 * 1000, posttest: 5 * 60 * 1000 };
 const PASSWORD_STORAGE_PREFIX = "surgQ_pw_";
 const IMAGE_V = Date.now(); // cache-bust images on every page load
 
@@ -84,36 +87,70 @@ function getIndexUrl() {
   const m = getAppMode();
   if (m === "v1") return "./questions/index_v1.json";
   if (m === "v2") return "./questions/index_v2.json";
+  if (m === "v3") return "./questions/index_v3.json";
+  if (m === "combined") return "./questions/index_combined.json";
   return "./questions/index.json";
 }
 
 let transitionNextIndex = 0;
+let sectionBoundaries = null; // null for single-section; [{label,start,pretestEnd,mainEnd,posttestEnd}] for multi
+
+function getCurrentSection() {
+  if (!sectionBoundaries) return null;
+  const i = currentQuestionIndex;
+  for (const sec of sectionBoundaries) {
+    if (i >= sec.start && i < sec.posttestEnd) return sec;
+  }
+  return sectionBoundaries[sectionBoundaries.length - 1];
+}
 
 function getSessionBoundaries() {
+  if (sectionBoundaries) {
+    const sec = getCurrentSection();
+    return { pretestEnd: sec.pretestEnd, mainEnd: sec.mainEnd, posttestStart: sec.mainEnd };
+  }
   const n = questionList.length;
-  const pretestEnd = Math.min(PRETEST_COUNT, n);
+  const pretestEnd = Math.min(currentPretestCount, n);
   const mainEnd = Math.max(pretestEnd, n - currentPosttestCount);
   return { pretestEnd, mainEnd, posttestStart: mainEnd };
 }
 
+function _doTransition(title, message, nextIndex) {
+  if (transitionTitle) transitionTitle.textContent = title;
+  if (transitionMessage) transitionMessage.textContent = message;
+  transitionNextIndex = nextIndex;
+  if (transitionCard) transitionCard.classList.remove("hidden");
+  if (questionCard) questionCard.classList.add("hidden");
+  if (feedbackCard) feedbackCard.classList.add("hidden");
+}
+
 function showTransitionToNextSession(nextIndex) {
+  if (sectionBoundaries) {
+    for (let i = 0; i < sectionBoundaries.length; i++) {
+      const sec = sectionBoundaries[i];
+      const n = i + 1;
+      if (nextIndex === sec.pretestEnd) {
+        _doTransition(`Section ${n}: Pretest complete`, `You have finished the Section ${n} pretest. Click Continue to start the main session.`, nextIndex);
+        return true;
+      }
+      if (nextIndex === sec.mainEnd) {
+        _doTransition(`Section ${n}: Main session complete`, `You have finished the Section ${n} main session. Click Continue to start the posttest.`, nextIndex);
+        return true;
+      }
+      if (i < sectionBoundaries.length - 1 && nextIndex === sec.posttestEnd) {
+        _doTransition(`Section ${n} complete`, `You have completed Section ${n}. Click Continue to begin Section ${n + 1}.`, nextIndex);
+        return true;
+      }
+    }
+    return false;
+  }
   const { pretestEnd, posttestStart } = getSessionBoundaries();
   if (nextIndex === pretestEnd) {
-    if (transitionTitle) transitionTitle.textContent = "Pretest complete";
-    if (transitionMessage) transitionMessage.textContent = "You have finished the pretest. Click Continue to start the main session.";
-    transitionNextIndex = nextIndex;
-    if (transitionCard) transitionCard.classList.remove("hidden");
-    if (questionCard) questionCard.classList.add("hidden");
-    if (feedbackCard) feedbackCard.classList.add("hidden");
+    _doTransition("Pretest complete", "You have finished the pretest. Click Continue to start the main session.", nextIndex);
     return true;
   }
   if (nextIndex === posttestStart) {
-    if (transitionTitle) transitionTitle.textContent = "Main session complete";
-    if (transitionMessage) transitionMessage.textContent = "You have finished the main session. Click Continue to start the posttest.";
-    transitionNextIndex = nextIndex;
-    if (transitionCard) transitionCard.classList.remove("hidden");
-    if (questionCard) questionCard.classList.add("hidden");
-    if (feedbackCard) feedbackCard.classList.add("hidden");
+    _doTransition("Main session complete", "You have finished the main session. Click Continue to start the posttest.", nextIndex);
     return true;
   }
   return false;
@@ -121,6 +158,23 @@ function showTransitionToNextSession(nextIndex) {
 
 function isPretestOrPosttest() {
   return currentFolder && (currentFolder.startsWith("pretest") || currentFolder.startsWith("posttest"));
+}
+
+function isAnatomyQuestion() {
+  return currentFolder && currentFolder.startsWith("anatomy");
+}
+
+function scrollToFeedback() {
+  const hasImage = feedbackImageWrapper && !feedbackImageWrapper.classList.contains("hidden") && feedbackImage.src;
+  if (hasImage) {
+    if (feedbackImage.complete) {
+      feedbackImage.scrollIntoView({ behavior: "smooth", block: "end" });
+    } else {
+      feedbackImage.onload = () => feedbackImage.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  } else if (feedbackCard) {
+    feedbackCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function storageKeyForEmail(email) {
@@ -182,6 +236,7 @@ let currentFolder = null;
 let currentQuestionIndex = 0;
 let questionList = []; // order from index.json
 let isSubmitting = false;
+let isOwnReviewMode = false;
 let showingFeedbackImages = false;
 let userProgress = {}; // { questionId: { completed, selectedOptionIds?, openEndedAnswer?, submittedAt? } }
 let firebaseReady = false;
@@ -289,6 +344,21 @@ async function loadUserProgress(uid) {
   }
 }
 
+async function recordQuestionStart(uid, questionId) {
+  if (!uid || !db) return;
+  // Only record once — don't overwrite if already set
+  if (userProgress[questionId]?.startedAt) return;
+  const now = firebase.database.ServerValue.TIMESTAMP;
+  userProgress[questionId] = { ...userProgress[questionId], startedAt: Date.now() };
+  try {
+    await db.ref(`users/${uid}/progress/${questionId}/startedAt`).transaction((current) => {
+      return current === null ? now : undefined; // only write if not already set
+    });
+  } catch (e) {
+    console.warn("recordQuestionStart failed", e);
+  }
+}
+
 async function saveProgress(uid, questionId, data) {
   if (!uid) return;
   if (!db) {
@@ -296,7 +366,7 @@ async function saveProgress(uid, questionId, data) {
     return;
   }
   try {
-    await db.ref("users/" + uid + "/progress/" + questionId).set({
+    await db.ref("users/" + uid + "/progress/" + questionId).update({
       ...data,
       updatedAt: firebase.database.ServerValue.TIMESTAMP,
     });
@@ -313,21 +383,44 @@ function getCurrentUser() {
 function updateProgressBar() {
   const n = questionList.length;
   if (n === 0) return;
-  const { pretestEnd, mainEnd, posttestStart } = getSessionBoundaries();
-  const pretestTotal = pretestEnd;
-  const mainTotal = mainEnd - pretestEnd;
-  const posttestTotal = n - posttestStart;
 
-  const completedInPretest = questionList.slice(0, pretestEnd).filter((id) => userProgress[id] && userProgress[id].completed).length;
-  const completedInMain = mainTotal > 0 ? questionList.slice(pretestEnd, mainEnd).filter((id) => userProgress[id] && userProgress[id].completed).length : 0;
-  const completedInPosttest = posttestTotal > 0 ? questionList.slice(posttestStart).filter((id) => userProgress[id] && userProgress[id].completed).length : 0;
-
-  if (progressPretestCount) progressPretestCount.textContent = `${completedInPretest}/${pretestTotal}`;
-  if (progressPretestFill) progressPretestFill.style.width = pretestTotal ? (100 * completedInPretest / pretestTotal) + "%" : "0%";
-  if (progressMainCount) progressMainCount.textContent = `${completedInMain}/${mainTotal}`;
-  if (progressMainFill) progressMainFill.style.width = mainTotal ? (100 * completedInMain / mainTotal) + "%" : "0%";
-  if (progressPosttestCount) progressPosttestCount.textContent = `${completedInPosttest}/${posttestTotal}`;
-  if (progressPosttestFill) progressPosttestFill.style.width = posttestTotal ? (100 * completedInPosttest / posttestTotal) + "%" : "0%";
+  if (sectionBoundaries) {
+    sectionBoundaries.forEach((sec, i) => {
+      const suffix = i === 0 ? "" : String(i + 1);
+      const ptotal = sec.pretestEnd - sec.start;
+      const mtotal = sec.mainEnd - sec.pretestEnd;
+      const pototal = sec.posttestEnd - sec.mainEnd;
+      const pcomp = questionList.slice(sec.start, sec.pretestEnd).filter(id => userProgress[id]?.completed).length;
+      const mcomp = questionList.slice(sec.pretestEnd, sec.mainEnd).filter(id => userProgress[id]?.completed).length;
+      const pocomp = questionList.slice(sec.mainEnd, sec.posttestEnd).filter(id => userProgress[id]?.completed).length;
+      const pcEl = document.getElementById(`progressPretest${suffix}Count`);
+      const pfEl = document.getElementById(`progressPretest${suffix}Fill`);
+      const mcEl = document.getElementById(`progressMain${suffix}Count`);
+      const mfEl = document.getElementById(`progressMain${suffix}Fill`);
+      const pocEl = document.getElementById(`progressPosttest${suffix}Count`);
+      const pofEl = document.getElementById(`progressPosttest${suffix}Fill`);
+      if (pcEl) pcEl.textContent = `${pcomp}/${ptotal}`;
+      if (pfEl) pfEl.style.width = ptotal ? (100 * pcomp / ptotal) + "%" : "0%";
+      if (mcEl) mcEl.textContent = `${mcomp}/${mtotal}`;
+      if (mfEl) mfEl.style.width = mtotal ? (100 * mcomp / mtotal) + "%" : "0%";
+      if (pocEl) pocEl.textContent = `${pocomp}/${pototal}`;
+      if (pofEl) pofEl.style.width = pototal ? (100 * pocomp / pototal) + "%" : "0%";
+    });
+  } else {
+    const { pretestEnd, mainEnd, posttestStart } = getSessionBoundaries();
+    const pretestTotal = pretestEnd;
+    const mainTotal = mainEnd - pretestEnd;
+    const posttestTotal = n - posttestStart;
+    const completedInPretest = questionList.slice(0, pretestEnd).filter((id) => userProgress[id] && userProgress[id].completed).length;
+    const completedInMain = mainTotal > 0 ? questionList.slice(pretestEnd, mainEnd).filter((id) => userProgress[id] && userProgress[id].completed).length : 0;
+    const completedInPosttest = posttestTotal > 0 ? questionList.slice(posttestStart).filter((id) => userProgress[id] && userProgress[id].completed).length : 0;
+    if (progressPretestCount) progressPretestCount.textContent = `${completedInPretest}/${pretestTotal}`;
+    if (progressPretestFill) progressPretestFill.style.width = pretestTotal ? (100 * completedInPretest / pretestTotal) + "%" : "0%";
+    if (progressMainCount) progressMainCount.textContent = `${completedInMain}/${mainTotal}`;
+    if (progressMainFill) progressMainFill.style.width = mainTotal ? (100 * completedInMain / mainTotal) + "%" : "0%";
+    if (progressPosttestCount) progressPosttestCount.textContent = `${completedInPosttest}/${posttestTotal}`;
+    if (progressPosttestFill) progressPosttestFill.style.width = posttestTotal ? (100 * completedInPosttest / posttestTotal) + "%" : "0%";
+  }
   syncDebugPanel();
 }
 
@@ -407,6 +500,12 @@ function updateModeUI() {
     } else if (mode === "v2") {
       versionBadge.textContent = "Version 2";
       versionBadge.className = "version-badge v2";
+    } else if (mode === "v3") {
+      versionBadge.textContent = "Version 3";
+      versionBadge.className = "version-badge v2";
+    } else if (mode === "combined") {
+      versionBadge.textContent = "Combined";
+      versionBadge.className = "version-badge v1";
     } else if (mode === "review") {
       versionBadge.textContent = "REVIEW";
       versionBadge.className = "version-badge review";
@@ -432,6 +531,71 @@ function updateModeUI() {
 }
 
 // ── Review mode ────────────────────────────────────────────
+let _reviewData = null; // { allQuestions, metas, userEntries }
+
+function _reviewAnswerForUser(prog, qid, meta) {
+  const p = prog[qid];
+  if (!p?.completed) return { ansStr: "Not answered", resStr: "—", resCls: "rv-skip" };
+  const type = meta?.question_type || "—";
+  let ansStr = "—", resStr = "—", resCls = "";
+  if (type === "open_ended") {
+    ansStr = p.openEndedAnswer?.trim() || "(blank)";
+  } else {
+    const selected = p.selectedOptionIds || [];
+    const correct = (meta?.options || []).filter((o) => o.answer === "Y").map((o) => o.id);
+    if (!selected.length) {
+      ansStr = "(skipped)"; resStr = "Skipped"; resCls = "rv-skip";
+    } else {
+      ansStr = selected.map((id) => String.fromCharCode(65 + id)).join(", ");
+      const isCorrect = selected.length === correct.length && selected.every((id) => correct.includes(id));
+      const correctLabel = correct.map((id) => String.fromCharCode(65 + id)).join(", ") || "—";
+      resStr = isCorrect ? "✓ Correct" : `✗ (correct: ${correctLabel})`;
+      resCls = isCorrect ? "rv-correct" : "rv-incorrect";
+    }
+  }
+  return { ansStr, resStr, resCls };
+}
+
+function openReviewQuestionModal(qid) {
+  if (!_reviewData) return;
+  const { metas, userEntries } = _reviewData;
+  const meta = metas[qid];
+  const stem = meta?.stem?.text || qid;
+
+  const selectedUids = new Set(
+    Array.from(document.querySelectorAll(".rv-user-check:checked")).map((cb) => cb.dataset.uid)
+  );
+
+  const modal = document.getElementById("reviewModal");
+  const modalTitle = document.getElementById("reviewModalTitle");
+  const modalStem = document.getElementById("reviewModalStem");
+  const modalContent = document.getElementById("reviewModalContent");
+
+  modalTitle.textContent = qid;
+  modalStem.textContent = stem;
+
+  let rows = "";
+  for (const [uid, user] of userEntries) {
+    if (!selectedUids.has(uid)) continue;
+    const email = user.email || uid;
+    const prog = user.progress || {};
+    const { ansStr, resStr, resCls } = _reviewAnswerForUser(prog, qid, meta);
+    const p = prog[qid];
+    let timeStr = "—";
+    if (p?.startedAt && p?.updatedAt && p.updatedAt > p.startedAt) {
+      const secs = Math.round((p.updatedAt - p.startedAt) / 1000);
+      const m = Math.floor(secs / 60), s = secs % 60;
+      timeStr = m > 0 ? `${m}m ${s}s` : `${s}s`;
+    }
+    rows += `<tr><td>${email}</td><td>${ansStr}</td><td class="${resCls}">${resStr}</td><td>${timeStr}</td></tr>`;
+  }
+  modalContent.innerHTML = rows
+    ? `<table class="review-table"><thead><tr><th>Student</th><th>Answer</th><th>Result</th><th>Time spent</th></tr></thead><tbody>${rows}</tbody></table>`
+    : "<p class='review-empty'>No selected students answered this question.</p>";
+
+  modal.classList.remove("hidden");
+}
+
 async function renderReviewReport() {
   const reviewCard = document.getElementById("reviewCard");
   const reviewLoading = document.getElementById("reviewLoading");
@@ -465,17 +629,16 @@ async function renderReviewReport() {
       return;
     }
 
+    _reviewData = { allQuestions, metas, userEntries };
+
     const n = allQuestions.length;
     const pretestEnd = Math.min(PRETEST_COUNT, n);
     const posttestStart = Math.max(pretestEnd, n - reviewPosttestCount);
 
-    // Summary table
+    // Summary table with checkboxes
     let html = `<table class="review-summary">
-      <thead><tr>
-        <th>Student</th>
-        <th>Pretest (${pretestEnd})</th>
-        <th>Main (${posttestStart - pretestEnd})</th>
-        <th>Posttest (${n - posttestStart})</th>
+      <thead><tr><th><input type="checkbox" id="rvSelectAll" checked title="Select all"> Student</th>
+        <th>Pretest (${pretestEnd})</th><th>Main (${posttestStart - pretestEnd})</th><th>Posttest (${n - posttestStart})</th>
       </tr></thead><tbody>`;
     for (const [uid, user] of userEntries) {
       const email = user.email || uid;
@@ -483,11 +646,14 @@ async function renderReviewReport() {
       const ptDone = allQuestions.slice(0, pretestEnd).filter((q) => prog[q]?.completed).length;
       const mainDone = allQuestions.slice(pretestEnd, posttestStart).filter((q) => prog[q]?.completed).length;
       const pstDone = allQuestions.slice(posttestStart).filter((q) => prog[q]?.completed).length;
-      html += `<tr><td><a href="#ru-${uid}">${email}</a></td><td>${ptDone}/${pretestEnd}</td><td>${mainDone}/${posttestStart - pretestEnd}</td><td>${pstDone}/${n - posttestStart}</td></tr>`;
+      html += `<tr>
+        <td><input type="checkbox" class="rv-user-check" data-uid="${uid}" checked> <a href="#ru-${uid}">${email}</a></td>
+        <td>${ptDone}/${pretestEnd}</td><td>${mainDone}/${posttestStart - pretestEnd}</td><td>${pstDone}/${n - posttestStart}</td>
+      </tr>`;
     }
     html += "</tbody></table>";
 
-    // Per-user detail
+    // Per-user detail tables with clickable question cells
     const sections = [
       { label: "Pretest", qs: allQuestions.slice(0, pretestEnd) },
       { label: "Main", qs: allQuestions.slice(pretestEnd, posttestStart) },
@@ -505,32 +671,13 @@ async function renderReviewReport() {
       for (const { label, qs } of sections) {
         html += `<tr class="review-section-row"><td colspan="4">${label}</td></tr>`;
         for (const qid of qs) {
-          const p = prog[qid];
           const meta = metas[qid];
-          if (!p?.completed) {
-            html += `<tr><td>${qid}</td><td>—</td><td class="rv-skip">Not answered</td><td>—</td></tr>`;
-            continue;
-          }
           const type = meta?.question_type || "—";
-          let ansStr = "—", resStr = "—", resCls = "";
-          if (type === "open_ended") {
-            ansStr = p.openEndedAnswer?.trim() ? p.openEndedAnswer.trim() : "<em>(blank)</em>";
-          } else {
-            const selected = p.selectedOptionIds || [];
-            const correct = (meta?.options || []).filter((o) => o.answer === "Y").map((o) => o.id);
-            if (!selected.length) {
-              ansStr = "<em>(skipped)</em>";
-              resStr = "Skipped";
-              resCls = "rv-skip";
-            } else {
-              ansStr = selected.map((id) => String.fromCharCode(65 + id)).join(", ");
-              const isCorrect = selected.length === correct.length && selected.every((id) => correct.includes(id));
-              const correctLabel = correct.map((id) => String.fromCharCode(65 + id)).join(", ") || "—";
-              resStr = isCorrect ? "✓ Correct" : `✗ (correct: ${correctLabel})`;
-              resCls = isCorrect ? "rv-correct" : "rv-incorrect";
-            }
-          }
-          html += `<tr><td>${qid}</td><td>${type}</td><td>${ansStr}</td><td class="${resCls}">${resStr}</td></tr>`;
+          const { ansStr, resStr, resCls } = _reviewAnswerForUser(prog, qid, meta);
+          html += `<tr>
+            <td><button class="rv-qid-btn" data-qid="${qid}">${qid}</button></td>
+            <td>${type}</td><td>${ansStr}</td><td class="${resCls}">${resStr}</td>
+          </tr>`;
         }
       }
       html += "</tbody></table></div>";
@@ -539,6 +686,18 @@ async function renderReviewReport() {
     reviewContent.innerHTML = html;
     reviewLoading.classList.add("hidden");
     reviewContent.classList.remove("hidden");
+
+    // Select-all checkbox
+    document.getElementById("rvSelectAll")?.addEventListener("change", (e) => {
+      document.querySelectorAll(".rv-user-check").forEach((cb) => { cb.checked = e.target.checked; });
+    });
+
+    // Question click → modal
+    reviewContent.addEventListener("click", (e) => {
+      const btn = e.target.closest(".rv-qid-btn");
+      if (btn) openReviewQuestionModal(btn.dataset.qid);
+    });
+
   } catch (err) {
     if (reviewLoading) reviewLoading.textContent = "Error loading data: " + (err.message || err);
   }
@@ -567,16 +726,50 @@ async function loadQuestionList() {
       throw new Error("Question index not found.");
     }
     const data = await response.json();
-    const list = Array.isArray(data) ? data : data.questions;
-    if (!Array.isArray(list) || list.length === 0) {
-      throw new Error("Question index is empty.");
+
+    if (data.sections && Array.isArray(data.sections)) {
+      // Multi-section format
+      sectionBoundaries = [];
+      const list = [];
+      let offset = 0;
+      for (const sec of data.sections) {
+        const qs = sec.questions || [];
+        const pc = sec.pretestCount ?? 0;
+        const potc = sec.posttestCount ?? 0;
+        sectionBoundaries.push({
+          label: sec.label || `Section ${sectionBoundaries.length + 1}`,
+          start: offset,
+          pretestEnd: offset + pc,
+          mainEnd: offset + qs.length - potc,
+          posttestEnd: offset + qs.length,
+        });
+        list.push(...qs);
+        offset += qs.length;
+      }
+      if (list.length === 0) throw new Error("Question index is empty.");
+      questionList = list;
+      currentPretestCount = data.sections[0].pretestCount ?? PRETEST_COUNT;
+      currentPosttestCount = data.sections[0].posttestCount ?? POSTTEST_COUNT;
+      // Show section 2 progress group and section labels
+      const group2 = document.getElementById("progressGroup2");
+      const sec1Label = document.getElementById("progressSection1Label");
+      if (group2) group2.classList.remove("hidden");
+      if (sec1Label) sec1Label.classList.remove("hidden");
+    } else {
+      sectionBoundaries = null;
+      const list = Array.isArray(data) ? data : data.questions;
+      if (!Array.isArray(list) || list.length === 0) {
+        throw new Error("Question index is empty.");
+      }
+      currentPretestCount = Array.isArray(data) ? PRETEST_COUNT : (data.pretestCount ?? PRETEST_COUNT);
+      currentPosttestCount = Array.isArray(data) ? POSTTEST_COUNT : (data.posttestCount ?? POSTTEST_COUNT);
+      questionList = list;
     }
-    currentPosttestCount = Array.isArray(data) ? POSTTEST_COUNT : (data.posttestCount ?? POSTTEST_COUNT);
-    questionList = list;
+
     updateProgressBar();
     buildDebugPanel();
-    const firstIncomplete = list.findIndex((id) => !userProgress[id]?.completed);
-    const resumeIndex = firstIncomplete === -1 ? list.length - 1 : firstIncomplete;
+    const firstIncomplete = questionList.findIndex((id) => !userProgress[id]?.completed);
+    const resumeIndex = firstIncomplete === -1 ? questionList.length - 1 : firstIncomplete;
     loadQuestionAtIndex(resumeIndex);
   } catch (error) {
     showError(`${error.message} Check the question index file.`);
@@ -623,6 +816,11 @@ function resetFeedback() {
   }
   if (openEndedAnswer) {
     openEndedAnswer.value = "";
+    openEndedAnswer.disabled = false;
+  }
+  if (responseHistoryEl) {
+    responseHistoryEl.innerHTML = "";
+    responseHistoryEl.classList.add("hidden");
   }
 }
 
@@ -634,10 +832,20 @@ function isDisplayQuestion(meta) {
   return meta?.question_type === "display";
 }
 
-// ── Session timers (v1/v2 only) ───────────────────────────
+// ── Session timers ────────────────────────────────────────
 function isTimedMode() {
   const m = getAppMode();
-  return m === "v1" || m === "v2";
+  return m === "v1" || m === "v2" || m === "combined";
+}
+
+// In multi-section mode, key timers per section so each section gets a fresh countdown
+function getTimerKey(session) {
+  if (sectionBoundaries) {
+    const sec = getCurrentSection();
+    const idx = sectionBoundaries.indexOf(sec);
+    return `s${idx + 1}_${session}`;
+  }
+  return session;
 }
 
 function getCurrentSessionName() {
@@ -673,33 +881,45 @@ function onTimerExpired(session) {
     nextIndex = pretestEnd;
   } else if (session === "main") {
     nextIndex = posttestStart;
+  } else if (session === "posttest" && sectionBoundaries) {
+    // In multi-section mode, advance to next section if one exists
+    const curSec = getCurrentSection();
+    const secIdx = sectionBoundaries.indexOf(curSec);
+    if (secIdx < sectionBoundaries.length - 1) {
+      nextIndex = curSec.posttestEnd;
+    } else {
+      return; // last section done
+    }
   } else {
-    return; // posttest end — nothing to advance to
+    return; // posttest end in single-section — nothing to advance to
   }
+  if (questionCard) questionCard.classList.add("hidden");
+  if (feedbackCard) feedbackCard.classList.add("hidden");
   if (nextIndex < questionList.length) {
-    if (questionCard) questionCard.classList.add("hidden");
-    if (feedbackCard) feedbackCard.classList.add("hidden");
     showTransitionToNextSession(nextIndex);
+  } else {
+    showCompletion();
   }
 }
 
 function startSessionTimer(session) {
-  if (activeTimerSession === session && sessionTimerInterval !== null) return;
+  const key = getTimerKey(session);
+  if (activeTimerSession === key && sessionTimerInterval !== null) return;
 
   if (sessionTimerInterval !== null) {
     clearInterval(sessionTimerInterval);
     sessionTimerInterval = null;
   }
 
-  if (!sessionTimerEndMs[session]) {
-    sessionTimerEndMs[session] = Date.now() + SESSION_DURATIONS_MS[session];
+  if (!sessionTimerEndMs[key]) {
+    sessionTimerEndMs[key] = Date.now() + SESSION_DURATIONS_MS[session];
   }
 
-  activeTimerSession = session;
+  activeTimerSession = key;
   if (sessionTimerEl) sessionTimerEl.classList.remove("hidden");
 
   function tick() {
-    const remaining = sessionTimerEndMs[session] - Date.now();
+    const remaining = sessionTimerEndMs[key] - Date.now();
     if (sessionTimerDisplayEl) sessionTimerDisplayEl.textContent = formatTime(remaining);
     if (sessionTimerEl) sessionTimerEl.classList.toggle("timer-warning", remaining < 60 * 1000);
     if (remaining <= 0) {
@@ -962,6 +1182,7 @@ function showFeedback(selectedIds) {
   }
 
   feedbackCard.classList.remove("hidden");
+  if (isAnatomyQuestion()) scrollToFeedback();
 
   optionsGrid.classList.add("options-disabled");
   optionsGrid.querySelectorAll("input[name=\"answer\"]").forEach((input) => {
@@ -1052,6 +1273,19 @@ async function gradeOpenEnded(answer) {
     try { result = JSON.parse(content); } catch { result = {}; }
     const verdictRaw = typeof result.verdict === "string" ? result.verdict.toLowerCase() : "";
     const isCorrect = verdictRaw === "pass";
+
+    // Log every attempt for main session open-ended questions
+    if (!isPretestOrPosttest()) {
+      const user = getCurrentUser();
+      if (user && currentFolder && db) {
+        db.ref(`users/${user.uid}/progress/${currentFolder}/responses`).push({
+          answer,
+          verdict: isCorrect ? "pass" : "fail",
+          timestamp: firebase.database.ServerValue.TIMESTAMP,
+        }).catch(e => console.warn("Save response attempt failed", e));
+      }
+    }
+
     if (isPretestOrPosttest()) {
       correctAnswer.textContent = "";
       feedbackText.textContent = "";
@@ -1064,8 +1298,14 @@ async function gradeOpenEnded(answer) {
       const gradingFeedback = (typeof result.feedback === "string" ? result.feedback.trim() : "") || (isCorrect ? "Your response is correct." : "Your response is incorrect. Please try again.");
       if (isCorrect) {
         feedbackText.textContent = gradingFeedback;
-        feedbackImageWrapper.classList.add("hidden");
-        feedbackImage.removeAttribute("src");
+        // For anatomy questions, force-show the feedback image even on correct answer
+        if (isAnatomyQuestion() && currentMeta?.feedback?.image) {
+          feedbackImage.src = `./questions/${currentFolder}/${currentMeta.feedback.image}?v=${IMAGE_V}`;
+          feedbackImageWrapper.classList.remove("hidden");
+        } else {
+          feedbackImageWrapper.classList.add("hidden");
+          feedbackImage.removeAttribute("src");
+        }
       } else {
         const metaFeedbackText = currentMeta?.feedback?.text?.trim();
         feedbackText.textContent = metaFeedbackText ? `${gradingFeedback}\n\n${metaFeedbackText}` : gradingFeedback;
@@ -1080,6 +1320,7 @@ async function gradeOpenEnded(answer) {
     }
 
     feedbackCard.classList.remove("hidden");
+    if (isAnatomyQuestion()) scrollToFeedback();
 
     if (isCorrect) {
       userProgress[currentFolder] = { ...userProgress[currentFolder], completed: true, openEndedAnswer: answer };
@@ -1126,11 +1367,18 @@ async function loadQuestionByFolder(folder) {
     currentMeta = meta;
     currentFolder = folder;
     renderQuestion(meta, folder);
+
+    if (isOwnReviewMode) {
+      applyOwnReviewUI(meta, folder);
+      return;
+    }
+
+    const user = getCurrentUser();
+    if (user) recordQuestionStart(user.uid, folder);
     if (isDisplayQuestion(meta)) {
       userProgress[folder] = { ...userProgress[folder], completed: true };
       updateProgressBar();
       updatePrevNextVisibility();
-      const user = getCurrentUser();
       if (user) {
         saveProgress(user.uid, folder, { completed: true }).catch((e) => console.warn("Firebase save failed", e));
       }
@@ -1141,23 +1389,155 @@ async function loadQuestionByFolder(folder) {
   }
 }
 
+function applyOwnReviewUI(meta, folder) {
+  // Hide interactive controls
+  if (submitButton) submitButton.classList.add("hidden");
+  if (dontKnowButton) dontKnowButton.classList.add("hidden");
+  if (nextQuestionInCard) nextQuestionInCard.classList.add("hidden");
+  if (backToSummaryBtn) backToSummaryBtn.classList.remove("hidden");
+  if (responseHistoryEl) responseHistoryEl.classList.add("hidden");
+
+  const prog = userProgress[folder];
+
+  if (isOpenEndedQuestion(meta)) {
+    // Show textarea with last submitted answer, disabled
+    if (openEndedAnswer) {
+      openEndedAnswer.value = prog?.openEndedAnswer || "";
+      openEndedAnswer.disabled = true;
+    }
+    // Show full response history
+    const responses = prog?.responses;
+    if (responses && responseHistoryEl) {
+      const entries = Object.values(responses).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+      if (entries.length) {
+        responseHistoryEl.innerHTML = "";
+        const heading = document.createElement("div");
+        heading.className = "response-history-label";
+        heading.textContent = `Your ${entries.length} response${entries.length > 1 ? "s" : ""}`;
+        responseHistoryEl.appendChild(heading);
+        entries.forEach((entry, i) => {
+          const item = document.createElement("div");
+          item.className = `response-history-item ${entry.verdict || ""}`;
+          const lbl = document.createElement("div");
+          lbl.className = "response-history-label";
+          lbl.textContent = `Attempt ${i + 1} — ${entry.verdict === "pass" ? "Correct" : "Incorrect"}`;
+          const txt = document.createElement("div");
+          txt.className = "response-history-text";
+          txt.textContent = entry.answer || "(no answer)";
+          item.appendChild(lbl);
+          item.appendChild(txt);
+          responseHistoryEl.appendChild(item);
+        });
+        responseHistoryEl.classList.remove("hidden");
+      }
+    }
+  } else if (!isDisplayQuestion(meta)) {
+    // MCQ: pre-select previous answer and disable
+    const selectedIds = prog?.selectedOptionIds || [];
+    optionsGrid.classList.add("options-disabled");
+    optionsGrid.querySelectorAll("input[type=checkbox]").forEach(cb => {
+      cb.checked = selectedIds.includes(Number(cb.value));
+    });
+    // Show correct/incorrect marking and feedback
+    markOptions(selectedIds);
+
+    // Show feedback card (without saving progress again)
+    const correctOptions = findCorrectOptions(meta);
+    const correctIds = new Set(correctOptions.map((opt) => opt.id));
+    const selectedSet = new Set(selectedIds);
+    const isCorrect = correctIds.size === 0
+      ? true
+      : correctIds.size === selectedSet.size && [...correctIds].every((id) => selectedSet.has(id));
+    if (!isCorrect) {
+      const correctIndexes = correctOptions
+        .map((opt) => meta.options.findIndex((item) => item.id === opt.id))
+        .filter((index) => index >= 0);
+      const correctLabel = correctIndexes.length === 0
+        ? "No correct options."
+        : `The correct answer is ${correctIndexes.map((index) => String.fromCharCode(65 + index)).join(", ")}.`;
+      feedbackText.textContent = `Your answer is incorrect. ${correctLabel}`;
+    } else {
+      feedbackText.textContent = "Your answer is correct.";
+    }
+
+    // Show feedback image if available
+    if (meta.feedback?.image) {
+      feedbackImage.src = `./questions/${folder}/${meta.feedback.image}?v=${IMAGE_V}`;
+      feedbackImageWrapper.classList.remove("hidden");
+    } else {
+      feedbackImageWrapper.classList.add("hidden");
+      feedbackImage.removeAttribute("src");
+    }
+
+    // Show option feedback images
+    const optionCards = optionsGrid.querySelectorAll(".option-card");
+    optionCards.forEach((card, index) => {
+      const option = meta.options[index];
+      const feedbackName = option.feedback?.image ?? null;
+      if (!feedbackName) return;
+      const feedbackSrc = `./questions/${folder}/${feedbackName}?v=${IMAGE_V}`;
+      let img = card.querySelector("img");
+      if (!img) {
+        img = document.createElement("img");
+        img.dataset.originalSrc = "";
+        img.dataset.hasOriginal = "false";
+        card.appendChild(img);
+      }
+      img.dataset.feedbackSrc = feedbackSrc;
+      img.src = feedbackSrc;
+      img.classList.remove("hidden");
+    });
+
+    feedbackCard.classList.remove("hidden");
+    feedbackCard.classList.remove("no-feedback-content");
+  }
+
+  // For open-ended questions, show the feedback card with grading result
+  if (isOpenEndedQuestion(meta) && prog?.completed) {
+    const lastResponse = prog?.responses
+      ? Object.values(prog.responses).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))[0]
+      : null;
+    const isCorrect = lastResponse?.verdict === "pass";
+    const gradingFeedback = lastResponse
+      ? (isCorrect ? "Your response is correct." : "Your response is incorrect.")
+      : "";
+    if (gradingFeedback) {
+      const metaFeedbackText = meta?.feedback?.text?.trim();
+      feedbackText.textContent = metaFeedbackText && !isCorrect
+        ? `${gradingFeedback}\n\n${metaFeedbackText}`
+        : gradingFeedback;
+      if (meta?.feedback?.image) {
+        feedbackImage.src = `./questions/${folder}/${meta.feedback.image}?v=${IMAGE_V}`;
+        feedbackImageWrapper.classList.remove("hidden");
+      }
+      feedbackCard.classList.remove("hidden");
+      feedbackCard.classList.remove("no-feedback-content");
+    }
+  }
+}
+
 function updateQuestionPosition() {
   if (!questionPositionEl || questionList.length === 0) return;
   const { pretestEnd, mainEnd, posttestStart } = getSessionBoundaries();
   const i = currentQuestionIndex;
   let pos, total, label;
+  const curSec = getCurrentSection();
+  const secStart = curSec ? curSec.start : 0;
+  const secPosttestEnd = curSec ? curSec.posttestEnd : questionList.length;
+  const secPrefix = (sectionBoundaries && sectionBoundaries.length > 1 && curSec)
+    ? `${curSec.label} ` : "";
   if (i < pretestEnd) {
-    pos = i + 1;
-    total = pretestEnd;
-    label = "pretest questions";
+    pos = i - secStart + 1;
+    total = pretestEnd - secStart;
+    label = `${secPrefix}pretest questions`;
   } else if (i < posttestStart) {
     pos = i - pretestEnd + 1;
     total = mainEnd - pretestEnd;
-    label = "main session questions";
+    label = `${secPrefix}main session questions`;
   } else {
     pos = i - posttestStart + 1;
-    total = questionList.length - posttestStart;
-    label = "posttest questions";
+    total = secPosttestEnd - posttestStart;
+    label = `${secPrefix}posttest questions`;
   }
   questionPositionEl.textContent = `Question ${pos} of ${total} ${label}`;
 }
@@ -1185,16 +1565,72 @@ async function loadQuestionAtIndex(i) {
   await loadQuestionByFolder(folder);
   updateQuestionPosition();
   updateProgressBar();
-  updatePrevNextVisibility();
-  updateDontKnowVisibility();
-  updateSessionTimer();
+  if (!isOwnReviewMode) {
+    updatePrevNextVisibility();
+    updateDontKnowVisibility();
+    updateSessionTimer();
+  }
   if (debugJumpSelect) debugJumpSelect.value = String(i);
 }
 
 function showCompletion() {
+  isOwnReviewMode = false;
   [questionCard, feedbackCard, transitionCard, errorCard].forEach((el) => el && el.classList.add("hidden"));
   if (completionCard) completionCard.classList.remove("hidden");
   stopSessionTimer();
+  buildCompletionReview();
+}
+
+function buildCompletionReview() {
+  const container = document.getElementById("completionReview");
+  if (!container || !questionList.length) return;
+  container.innerHTML = "";
+
+  // Collect all main session question indices across all sections
+  const sections = sectionBoundaries
+    ? sectionBoundaries.map(sec => ({ label: sec.label, questions: questionList.slice(sec.pretestEnd, sec.mainEnd), startIndex: sec.pretestEnd }))
+    : [{ label: null, questions: questionList.slice(0, questionList.length - (currentPosttestCount || 0)), startIndex: 0 }];
+
+  const mainQuestions = sectionBoundaries
+    ? sectionBoundaries.flatMap(sec => questionList.slice(sec.pretestEnd, sec.mainEnd).map((q, i) => ({ q, idx: sec.pretestEnd + i })))
+    : [];
+
+  if (!mainQuestions.length) return;
+
+  const heading = document.createElement("h3");
+  heading.textContent = "Review main session questions";
+  container.appendChild(heading);
+
+  if (sectionBoundaries) {
+    sectionBoundaries.forEach(sec => {
+      const group = document.createElement("div");
+      group.className = "completion-section-group";
+      const lbl = document.createElement("div");
+      lbl.className = "completion-section-label";
+      lbl.textContent = sec.label;
+      group.appendChild(lbl);
+      const grid = document.createElement("div");
+      grid.className = "completion-q-grid";
+      for (let i = sec.pretestEnd; i < sec.mainEnd; i++) {
+        const btn = document.createElement("button");
+        btn.className = "completion-q-btn";
+        btn.textContent = questionList[i];
+        btn.addEventListener("click", () => enterOwnReview(i));
+        grid.appendChild(btn);
+      }
+      group.appendChild(grid);
+      container.appendChild(group);
+    });
+  }
+
+  container.classList.remove("hidden");
+}
+
+async function enterOwnReview(questionIndex) {
+  isOwnReviewMode = true;
+  if (completionCard) completionCard.classList.add("hidden");
+  if (questionCard) questionCard.classList.remove("hidden");
+  await loadQuestionAtIndex(questionIndex);
 }
 
 function goToNextQuestion() {
@@ -1228,6 +1664,21 @@ if (transitionContinueBtn) {
     loadQuestionAtIndex(transitionNextIndex);
   });
 }
+
+if (backToSummaryBtn) {
+  backToSummaryBtn.addEventListener("click", () => {
+    isOwnReviewMode = false;
+    if (openEndedAnswer) openEndedAnswer.disabled = false;
+    if (questionCard) questionCard.classList.add("hidden");
+    if (backToSummaryBtn) backToSummaryBtn.classList.add("hidden");
+    showCompletion();
+  });
+}
+
+const reviewModal = document.getElementById("reviewModal");
+const reviewModalClose = document.getElementById("reviewModalClose");
+if (reviewModalClose) reviewModalClose.addEventListener("click", () => reviewModal?.classList.add("hidden"));
+if (reviewModal) reviewModal.addEventListener("click", (e) => { if (e.target === reviewModal) reviewModal.classList.add("hidden"); });
 
 function openLightbox(imgSrc) {
   if (!lightboxImage || !imageLightbox) return;

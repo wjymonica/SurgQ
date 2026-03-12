@@ -45,21 +45,46 @@
               <button id="signOut" type="button" class="secondary">Sign out</button>
             </div>
           </div>
-          <div class="progress-sessions">
-            <div class="progress-segment" id="progressPretest" title="Pretest">
-              <span class="progress-label">Pretest</span>
-              <span class="progress-count" id="progressPretestCount">0/8</span>
-              <div class="progress-bar"><div class="progress-fill" id="progressPretestFill"></div></div>
+          <div class="progress-sessions" id="progressSessions">
+            <div class="progress-section-group" id="progressGroup1">
+              <div class="progress-section-header hidden" id="progressSection1Label">Section 1</div>
+              <div class="progress-section-bars">
+                <div class="progress-segment" id="progressPretest" title="Pretest">
+                  <span class="progress-label">Pretest</span>
+                  <span class="progress-count" id="progressPretestCount">0/8</span>
+                  <div class="progress-bar"><div class="progress-fill" id="progressPretestFill"></div></div>
+                </div>
+                <div class="progress-segment" id="progressMain" title="Main">
+                  <span class="progress-label">Main</span>
+                  <span class="progress-count" id="progressMainCount">0/0</span>
+                  <div class="progress-bar"><div class="progress-fill" id="progressMainFill"></div></div>
+                </div>
+                <div class="progress-segment" id="progressPosttest" title="Posttest">
+                  <span class="progress-label">Posttest</span>
+                  <span class="progress-count" id="progressPosttestCount">0/10</span>
+                  <div class="progress-bar"><div class="progress-fill" id="progressPosttestFill"></div></div>
+                </div>
+              </div>
             </div>
-            <div class="progress-segment" id="progressMain" title="Main">
-              <span class="progress-label">Main</span>
-              <span class="progress-count" id="progressMainCount">0/0</span>
-              <div class="progress-bar"><div class="progress-fill" id="progressMainFill"></div></div>
-            </div>
-            <div class="progress-segment" id="progressPosttest" title="Posttest">
-              <span class="progress-label">Posttest</span>
-              <span class="progress-count" id="progressPosttestCount">0/10</span>
-              <div class="progress-bar"><div class="progress-fill" id="progressPosttestFill"></div></div>
+            <div class="progress-section-group hidden" id="progressGroup2">
+              <div class="progress-section-header">Section 2</div>
+              <div class="progress-section-bars">
+                <div class="progress-segment" id="progressPretest2" title="Pretest">
+                  <span class="progress-label">Pretest</span>
+                  <span class="progress-count" id="progressPretest2Count">0/4</span>
+                  <div class="progress-bar"><div class="progress-fill" id="progressPretest2Fill"></div></div>
+                </div>
+                <div class="progress-segment" id="progressMain2" title="Main">
+                  <span class="progress-label">Main</span>
+                  <span class="progress-count" id="progressMain2Count">0/15</span>
+                  <div class="progress-bar"><div class="progress-fill" id="progressMain2Fill"></div></div>
+                </div>
+                <div class="progress-segment" id="progressPosttest2" title="Posttest">
+                  <span class="progress-label">Posttest</span>
+                  <span class="progress-count" id="progressPosttest2Count">0/4</span>
+                  <div class="progress-bar"><div class="progress-fill" id="progressPosttest2Fill"></div></div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="question-nav-info">
@@ -88,10 +113,12 @@
             Show Feedback Images
           </button>
         </div>
+        <div id="responseHistory" class="response-history hidden"></div>
         <div class="actions">
           <button id="submitAnswer" type="button">Submit Answer</button>
           <button id="nextQuestionInCard" type="button" class="hidden">Next question</button>
           <button id="dontKnowButton" type="button" class="secondary">I don't know, next question</button>
+          <button id="backToSummary" type="button" class="secondary hidden">← Back to summary</button>
         </div>
       </section>
 
@@ -121,11 +148,22 @@
       <section id="completionCard" class="card completion-card hidden">
         <h2>You're finished!</h2>
         <p class="completion-message">You have completed all sections. Thank you for participating.</p>
+        <div id="completionReview" class="completion-review hidden"></div>
       </section>
 
       <section id="errorCard" class="card error hidden"></section>
       </div>
     </main>
+
+    <!-- Review question modal -->
+    <div id="reviewModal" class="review-modal-overlay hidden" aria-modal="true">
+      <div class="review-modal-box">
+        <button type="button" id="reviewModalClose" class="review-modal-close" aria-label="Close">×</button>
+        <p id="reviewModalTitle" class="review-modal-qid"></p>
+        <p id="reviewModalStem" class="review-modal-stem"></p>
+        <div id="reviewModalContent"></div>
+      </div>
+    </div>
 
     <!-- Lightbox: click any image to enlarge -->
     <div id="imageLightbox" class="lightbox hidden" aria-hidden="true">
@@ -137,6 +175,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    <script src="./app.js?v=10"></script>
+    <script src="./app.js?v=12"></script>
   </body>
 </html>

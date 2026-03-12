@@ -4,4 +4,5 @@ relevant scene graph:
 - (cysticduct, attach, neck, high)
 - (cysticartery, attach, connected tissue, high)
 - (cysticartery, attach, neck, high)
+- (gall bottom, attach, liver, high)
 source: lap1

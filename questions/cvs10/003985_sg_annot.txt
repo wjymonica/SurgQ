@@ -1,0 +1,4 @@
+relevant scene graph:
+- (cysticduct, separate, cysticartery, high)
+- (gall bottom, attach, liver, high)
+source: lap1

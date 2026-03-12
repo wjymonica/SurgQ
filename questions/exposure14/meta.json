@@ -6,10 +6,9 @@
   },
   "rubric": [
     "no",
-    "wrong:(gall, attach, fat, high)",
-    "missing:(grasper1, retract, gall, true)",
-    "required objects missing:",
-    "(\"neck\")"
+    "neck is not visible",
+    "fat is attached to the gallbladder",
+    "gallbladder or neck is not retracted"
   ],
   "feedback": {
     "text": "❌ • Gallbladder neck clearly visible\n❌ • Gallbaldder and neck adequately retracted (lateral and inferior traction)\n❌ • Intestine, fat, and connected tissue adequately mobilize away from gallbladder and neck",

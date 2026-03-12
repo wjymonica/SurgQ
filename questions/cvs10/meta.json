@@ -1,16 +1,16 @@
 {
   "question_type": "open_ended",
   "stem": {
-    "text": "Does the following image show CVS? Explain your answer.",
-    "image": "019034.jpg"
+    "text": "Does the image below demonstrate achievement of the Critical View of Safety? Explain why or why not.",
+    "image": "003985.jpg"
   },
   "rubric": [
     "no",
-    "Cystic duct and artery are not separated and skeletonized enough",
-    "The lower third of the gallbladder is not dissected off the liver bed"
+    "Bottom third of the gallbladder is not dissected off the liver bed"
   ],
   "feedback": {
-    "text": "❌ • Cystic duct and artery clearly separated and skeletonized\n✅ • Cystic artery is visible\n✅ • Cystic duct is visible\n❌ • Lower third of the gallbladder dissected off the liver bed",
-    "image": "019034_feedback.jpg"
-  }
+        "text": "✅ • Cystic duct and artery clearly separated and skeletonized\n✅ • Cystic artery is visible\n✅ • Cystic duct is visible\n❌ • Lower third of the gallbladder dissected off the liver bed",
+        "image": "003985_feedback.jpg"
+      }
+  
 }

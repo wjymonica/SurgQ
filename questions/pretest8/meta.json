@@ -6,7 +6,7 @@
     "image": "001565.jpg"
   },
   "options": [
-    {"id": 0, "text": "Sharp dissection with scissors", "image": null, "answer": "N", "feedback": {"text": null, "image": null}},
+    {"id": 0, "text": "Sharp dissection with scissors", "image": null, "answer": "Y", "feedback": {"text": null, "image": null}},
     {"id": 1, "text": "Electrocautery dissection with hook", "image": null, "answer": "N", "feedback": {"text": null, "image": null}},
     {"id": 2, "text": "Blunt dissection", "image": null, "answer": "Y", "feedback": {"text": null, "image": null}},
     {"id": 3, "text": "Clip application", "image": null, "answer": "N", "feedback": {"text": null, "image": null}}

@@ -1,7 +1,7 @@
 {
   "question_type": "open_ended",
   "stem": {
-    "text": "What is the name of the anatomical structure indicated by the arrow?",
+    "text": "What is the name of the anatomical structure outlined in the box?",
     "image": "001615_question.jpg"
   },
   "rubric": [

@@ -1,8 +1,8 @@
 {
   "question_type": "open_ended",
   "stem": {
-    "text": "What is the name of the metallic structure being applied to the vessel in this image?",
-    "image": "036745.jpg"
+    "text": "What is the name of the white plastic structure outlined in the box?",
+    "image": "002425_question.jpg"
   },
   "rubric": [
     "clip"
