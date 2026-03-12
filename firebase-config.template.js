@@ -10,7 +10,7 @@ window.FIREBASE_CONFIG = {
 };
 
 window.APP_CONFIG = {
-  mode: "v3",
+  mode: "combined",
 };
 
 window.OPENAI_CONFIG = {
