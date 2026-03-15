@@ -1,7 +1,7 @@
 {
   "question_type": "open_ended",
   "stem": {
-    "text": "Does the following image show CVS? Explain your answer.",
+    "text": "Does the following image show CVS (Critical View of Safety)? Explain your answer.",
     "image": "019034.jpg"
   },
   "rubric": [
