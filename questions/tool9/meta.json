@@ -20,10 +20,10 @@
       "id": 1,
       "text": "Atraumatic grasper",
       "image": null,
-      "answer": "Y",
+      "answer": "N",
       "feedback": {
-        "text": "Correct. An atraumatic grasper can gently separate tissue planes.",
-        "image": "005275_highlighted.jpg"
+        "text": "The primary purpose of an atraumatic grasper is to securely hold, retract, and manipulate delicate tissues.",
+        "image": null
       }
     },
     {
@@ -33,17 +33,17 @@
       "answer": "N",
       "feedback": {
         "text": "Hook electrocautery (or hook diathermy) is not primarily designed for blunt dissection because its working principle is based on active thermal energy (cutting and coagulating), whereas blunt dissection requires an atraumatic, non-energy, or cold approach to separate tissues.",
-        "image": "frame_45-26_0013_highlighted.jpg"
+        "image": null
       }
     },
     {
       "id": 3,
       "text": "Scissors",
       "image": null,
-      "answer": "Y",
+      "answer": "N",
       "feedback": {
-        "text": "Scissors are commonly used for controlled division.",
-        "image": "001496_highlighted.jpg"
+        "text": "Scissors are commonly used for controlled division and sharp cutting.",
+        "image": null
       }
     }
   ],
